@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BirdTrading.Interface\BirdTrading.Interface.csproj" />
+  </ItemGroup>
+
 </Project>

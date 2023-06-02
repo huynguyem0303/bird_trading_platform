@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33403.182
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTradingApp", "BirdTradingApp\BirdTradingApp.csproj", "{4BFA50DC-69D1-4813-B208-24ED9BCDC155}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTradingApp", "BirdTradingApp\BirdTradingApp.csproj", "{4BFA50DC-69D1-4813-B208-24ED9BCDC155}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.DataAccess", "BirdTrading.DataAccess\BirdTrading.DataAccess.csproj", "{FB609EAE-6021-4DA0-9B80-20AE952F29DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.DataAccess", "BirdTrading.DataAccess\BirdTrading.DataAccess.csproj", "{FB609EAE-6021-4DA0-9B80-20AE952F29DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.Repository", "BirdTrading.Repository\BirdTrading.Repository.csproj", "{54D3CE9A-9E4B-43B4-BB3C-19D6AD0AE792}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.Repository", "BirdTrading.Repository\BirdTrading.Repository.csproj", "{54D3CE9A-9E4B-43B4-BB3C-19D6AD0AE792}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.Interface", "BirdTrading.Interface\BirdTrading.Interface.csproj", "{3D0B252D-1830-40C6-83EF-636FE91CD50A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.Interface", "BirdTrading.Interface\BirdTrading.Interface.csproj", "{3D0B252D-1830-40C6-83EF-636FE91CD50A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.Domain", "BirdTrading.Domain\BirdTrading.Domain.csproj", "{9A84FCE7-874D-45A3-947A-87D9D42FA1D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.Domain", "BirdTrading.Domain\BirdTrading.Domain.csproj", "{9A84FCE7-874D-45A3-947A-87D9D42FA1D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.ViewModel", "BirdTrading.ViewModel\BirdTrading.ViewModel.csproj", "{0DE95A7D-DC4C-43CE-B840-D960870A553F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.ViewModel", "BirdTrading.ViewModel\BirdTrading.ViewModel.csproj", "{0DE95A7D-DC4C-43CE-B840-D960870A553F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.Utils", "BirdTrading.Utils\BirdTrading.Utils.csproj", "{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{0DE95A7D-DC4C-43CE-B840-D960870A553F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DE95A7D-DC4C-43CE-B840-D960870A553F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DE95A7D-DC4C-43CE-B840-D960870A553F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
