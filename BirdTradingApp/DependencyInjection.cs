@@ -15,12 +15,21 @@ namespace BirdTradingApp
             //
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            //
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IShippingInformationRepository, ShippingInformationRepository>();
+            services.AddTransient<IShippingSessionRepository, ShippingSessionRepository>();
+            services.AddTransient<IShopRepository, ShopRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
         }
 
         public static void InjectService(this IServiceCollection services)
         {
             // Add services to the container.
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorRuntimeCompilation();
         }
     }
 }
