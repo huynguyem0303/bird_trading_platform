@@ -12,6 +12,11 @@ namespace BirdTrading.Domain.Models
         public bool IsBlocked { get; set; }
         public float Rating { get; set; }
         public string AvatarUrl { get; set; }
+        //
         public int UserId { get; set; }
+        //
+        public User User { get; set; }
+        public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
     }
 }

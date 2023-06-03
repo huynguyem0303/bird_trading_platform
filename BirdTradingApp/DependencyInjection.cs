@@ -11,10 +11,16 @@ namespace BirdTradingApp
     {
         public static void InjectInfracstucture(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<AppDbContext>(x => x.UseSqlServer(configuration.GetConnectionString("")));
+            services.AddDbContext<AppDbContext>(x => x.UseSqlServer(configuration.GetConnectionString("AppDb")));
             //
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+        }
+
+        public static void InjectService(this IServiceCollection services)
+        {
+            // Add services to the container.
+            services.AddRazorPages();
         }
     }
 }

@@ -9,6 +9,8 @@ namespace BirdTrading.Domain.Models
         public string City { get; set; }
         public string Country { get; set; }
         public string Phone { get; set; }
-        public bool isDefaultAddress { get; set; }
+        public bool IsDefaultAddress { get; set; }
+        //
+        public IEnumerable<User> Users { get; set; }
     }
 }

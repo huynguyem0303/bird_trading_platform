@@ -1,7 +1,9 @@
+using BirdTradingApp;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.InjectService();
+builder.Services.InjectInfracstucture(builder.Configuration);
 
 var app = builder.Build();
 

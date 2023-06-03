@@ -14,6 +14,11 @@ namespace BirdTrading.Domain.Models
         public string AvatarURL { get; set; }
         public bool IsTempUser { get; set; }
         public bool IsBlocked { get; set; }
+        //
         public int ShippingInforId { get; set; }
+        //
+        public IEnumerable<ShippingInformation> ShippingInformations { get; set; }
+        public Shop Shop { get; set; } = null;
+        public IEnumerable<Order> Orders { get; set; }
     }
 }
