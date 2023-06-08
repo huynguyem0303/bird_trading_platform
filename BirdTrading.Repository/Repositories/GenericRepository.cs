@@ -14,27 +14,27 @@ namespace BirdTrading.Repository.Repositories
             _context = context;
         }
 
-        public async Task AddAsync(TModel model)
+        public virtual async Task AddAsync(TModel model)
         {
             await _context.Set<TModel>().AddAsync(model);
         }
 
-        public void Delete(TModel model)
+        public virtual void Delete(TModel model)
         {
             _context.Remove(model);
         }
 
-        public async Task<TModel?> GetByIdAsync(int id)
+        public virtual async Task<TModel?> GetByIdAsync(int id)
         {
             return await _context.Set<TModel>().FindAsync(id);
         }
 
-        public async Task<IEnumerable<TModel>> GetListAsync()
+        public virtual async Task<IEnumerable<TModel>> GetListAsync()
         {
             return await _context.Set<TModel>().ToListAsync();
         }
 
-        public async Task<Pagination<TModel>> GetPaginationsAsync(int pageIndex, int pageSize)
+        public virtual async Task<Pagination<TModel>> GetPaginationsAsync(int pageIndex, int pageSize)
         {
             var totalCount = await _context.Set<TModel>().CountAsync();
             var items = await _context.Set<TModel>().AsNoTracking()
@@ -50,7 +50,7 @@ namespace BirdTrading.Repository.Repositories
             return result;
         }
 
-        public void Update(TModel model)
+        public virtual void Update(TModel model)
         {
             _context.Set<TModel>().Update(model);
         }

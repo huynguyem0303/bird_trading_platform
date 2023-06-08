@@ -5,6 +5,7 @@ namespace BirdTrading.Interface
     public interface IUnitOfWork
     {
         ICategoryRepository CategoryRepository { get; }
+        ICategoryTypeRepository CategoryTypeRepository { get; }
         IOrderDetailRepository OrderDetailRepository { get; }
         IOrderRepository OrderRepository { get; }
         IProductRepository ProductRepository { get; }

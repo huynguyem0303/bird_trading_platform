@@ -17,6 +17,7 @@ namespace BirdTradingApp
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //
             services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ICategoryTypeRepository, CategoryTypeRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();

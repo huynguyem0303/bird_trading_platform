@@ -8,6 +8,7 @@ namespace BirdTrading.Repository
     {
         private readonly AppDbContext context;
         private readonly ICategoryRepository categoryRepository;
+        private readonly ICategoryTypeRepository categoryTypeRepository;
         private readonly IOrderRepository orderRepository;
         private readonly IOrderDetailRepository ordersDetailRepository;
         private readonly IProductRepository productRepository;
@@ -17,6 +18,7 @@ namespace BirdTrading.Repository
         private readonly IUserRepository userRepository;
 
         public UnitOfWork(AppDbContext context, ICategoryRepository categoryRepository,
+            ICategoryTypeRepository categoryTypeRepository,
             IOrderRepository orderRepository, IOrderDetailRepository ordersDetailRepository,
             IProductRepository productRepository, IShippingInformationRepository shippingInformationRepository,
             IShippingSessionRepository shippingSessionRepository, IShopRepository shopRepository,
@@ -24,6 +26,7 @@ namespace BirdTrading.Repository
         {
             this.context = context;
             this.categoryRepository = categoryRepository;
+            this.categoryTypeRepository = categoryTypeRepository;
             this.orderRepository = orderRepository;
             this.ordersDetailRepository = ordersDetailRepository;
             this.productRepository = productRepository;
@@ -39,9 +42,11 @@ namespace BirdTrading.Repository
         public IProductRepository ProductRepository => productRepository;
         public IShippingInformationRepository ShippingInformationRepository => shippingInformationRepository;
         public IShippingSessionRepository ShippingSessionRepository => shippingSessionRepository;
-        public IShopRepository ShopRepository => ShopRepository;
+        public IShopRepository ShopRepository => shopRepository;
 
-        public IUserRepository UserRepository => UserRepository;
+        public IUserRepository UserRepository => userRepository;
+
+        public ICategoryTypeRepository CategoryTypeRepository => categoryTypeRepository;
 
         public async Task<bool> SaveChangeAsync()
         {

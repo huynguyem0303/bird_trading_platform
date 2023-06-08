@@ -34,9 +34,35 @@ namespace BirdTrading.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TypeId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("BirdTrading.Domain.Models.CategoryType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CategoryType");
                 });
 
             modelBuilder.Entity("BirdTrading.Domain.Models.Order", b =>
@@ -344,6 +370,17 @@ namespace BirdTrading.DataAccess.Migrations
                     b.ToTable("ShippingInformationUser");
                 });
 
+            modelBuilder.Entity("BirdTrading.Domain.Models.Category", b =>
+                {
+                    b.HasOne("BirdTrading.Domain.Models.CategoryType", "Type")
+                        .WithMany("Categories")
+                        .HasForeignKey("TypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Type");
+                });
+
             modelBuilder.Entity("BirdTrading.Domain.Models.Order", b =>
                 {
                     b.HasOne("BirdTrading.Domain.Models.ShippingInformation", "ShippingInformation")
@@ -445,6 +482,11 @@ namespace BirdTrading.DataAccess.Migrations
             modelBuilder.Entity("BirdTrading.Domain.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("BirdTrading.Domain.Models.CategoryType", b =>
+                {
+                    b.Navigation("Categories");
                 });
 
             modelBuilder.Entity("BirdTrading.Domain.Models.Order", b =>
