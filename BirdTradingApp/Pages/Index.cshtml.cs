@@ -17,6 +17,7 @@ namespace BirdTradingApp.Pages
 
         public IEnumerable<CategoryType> CategoryTypes { get; set; }
         public IEnumerable<Product> Products { get; set; }
+        public IEnumerable<Product> RecentProducts { get; set; }
         public IEnumerable<Shop> Shops { get; set; }
 
         public async Task OnGetAsync()
@@ -24,6 +25,8 @@ namespace BirdTradingApp.Pages
             CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();
             Products = await _unitOfWork.ProductRepository.GetListAsync();
             Shops = await _unitOfWork.ShopRepository.GetListAsync();
+            RecentProducts = Products.OrderByDescending(x => x.Id)
+                .Take(8).ToList();
         }
     }
 }
