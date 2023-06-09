@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BirdTrading.Repository\BirdTrading.Repository.csproj" />
+    <ProjectReference Include="..\BirdTrading.ViewModel\BirdTrading.ViewModel.csproj" />
   </ItemGroup>
 
   <ItemGroup>

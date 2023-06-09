@@ -20,5 +20,6 @@ namespace BirdTrading.Domain.Models
         public IEnumerable<ShippingInformation> ShippingInformations { get; set; }
         public Shop Shop { get; set; } = null;
         public IEnumerable<Order> Orders { get; set; }
+        public IEnumerable<Cart> Carts { get; set; }
     }
 }

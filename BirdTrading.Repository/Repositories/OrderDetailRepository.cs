@@ -1,6 +1,7 @@
 ﻿using BirdTrading.DataAccess;
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BirdTrading.Repository.Repositories
 {
@@ -8,6 +9,35 @@ namespace BirdTrading.Repository.Repositories
     {
         public OrderDetailRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public async Task<IEnumerable<int>> GetTop8PopularProducts()
+        {
+            var products = await _context.Set<OrderDetail>()
+                .GroupBy(x => x.ProductId)
+                .Select(x => new
+                {
+                    ProductsId = x.Key,
+                    Counts = x.Count(),
+                })
+                .Take(8)
+                .OrderByDescending(x => x.Counts)
+                .ToListAsync();
+            var productIds = new List<int>();
+            foreach (var item in products)
+            {
+                productIds.Add(item.ProductsId);
+            }
+            return productIds;
+        }
+
+        public async Task<IEnumerable<OrderDetail>> GetUserCartsAsync(int id)
+        {
+            return await _context.Set<OrderDetail>()
+                .Where(x => x.Order.UserId == id)
+                .Include(x => x.Order)
+                .Include(x => x.Product)
+                .ToListAsync();
         }
     }
 }

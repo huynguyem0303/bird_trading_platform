@@ -14,10 +14,12 @@ namespace BirdTradingApp.Pages.Products
         }
 
         public Product? Product { get; set; }
+        public IEnumerable<Product> OtherProducts { get; set; }
 
         public async Task OnGet(int id)
         {
             Product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
+            OtherProducts = await _unitOfWork.ProductRepository.GetTop4RelateProductAsync(Product.Category.TypeId, Product.Id);
         }
     }
 }

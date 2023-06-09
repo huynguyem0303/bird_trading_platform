@@ -6,7 +6,6 @@ namespace BirdTrading.Domain.Models
     {
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
-        public bool IsPaid { get; set; }
         public string ShipperCode { get; set; } = null;
         public string CompanyName { get; set; } = null;
         public string ShipperPhone { get; set; } = null;

@@ -4,6 +4,7 @@ using BirdTrading.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BirdTrading.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230609060025_addCartAndCartDetail")]
+    partial class addCartAndCartDetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,55 +24,6 @@ namespace BirdTrading.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("BirdTrading.Domain.Models.Cart", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("BirdTrading.Domain.Models.CartDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartDetails");
-                });
 
             modelBuilder.Entity("BirdTrading.Domain.Models.Category", b =>
                 {
@@ -111,7 +65,7 @@ namespace BirdTrading.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CategoryTypes");
+                    b.ToTable("CategoryType");
                 });
 
             modelBuilder.Entity("BirdTrading.Domain.Models.Order", b =>
@@ -416,44 +370,6 @@ namespace BirdTrading.DataAccess.Migrations
                     b.ToTable("ShippingInformationUser");
                 });
 
-            modelBuilder.Entity("BirdTrading.Domain.Models.Cart", b =>
-                {
-                    b.HasOne("BirdTrading.Domain.Models.Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BirdTrading.Domain.Models.User", "User")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BirdTrading.Domain.Models.CartDetail", b =>
-                {
-                    b.HasOne("BirdTrading.Domain.Models.Cart", "Cart")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BirdTrading.Domain.Models.Product", "Product")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("BirdTrading.Domain.Models.Category", b =>
                 {
                     b.HasOne("BirdTrading.Domain.Models.CategoryType", "Type")
@@ -563,11 +479,6 @@ namespace BirdTrading.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BirdTrading.Domain.Models.Cart", b =>
-                {
-                    b.Navigation("CartDetails");
-                });
-
             modelBuilder.Entity("BirdTrading.Domain.Models.Category", b =>
                 {
                     b.Navigation("Products");
@@ -587,8 +498,6 @@ namespace BirdTrading.DataAccess.Migrations
 
             modelBuilder.Entity("BirdTrading.Domain.Models.Product", b =>
                 {
-                    b.Navigation("CartDetails");
-
                     b.Navigation("OrderDetails");
                 });
 
@@ -601,8 +510,6 @@ namespace BirdTrading.DataAccess.Migrations
 
             modelBuilder.Entity("BirdTrading.Domain.Models.User", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Orders");
 
                     b.Navigation("Shop")

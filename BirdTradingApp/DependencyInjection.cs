@@ -16,6 +16,8 @@ namespace BirdTradingApp
             services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             //
+            services.AddTransient<ICartRepository, CartRepository>();
+            services.AddTransient<ICartDetailRepository, CartDetailRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<ICategoryTypeRepository, CategoryTypeRepository>();
             services.AddTransient<IOrderDetailRepository, OrderDetailRepository>();
@@ -31,6 +33,11 @@ namespace BirdTradingApp
         {
             // Add services to the container.
             services.AddRazorPages().AddRazorRuntimeCompilation();
+            //
+            services.AddSession(opt =>
+            {
+                opt.IdleTimeout = TimeSpan.FromMinutes(60);
+            });
         }
     }
 }

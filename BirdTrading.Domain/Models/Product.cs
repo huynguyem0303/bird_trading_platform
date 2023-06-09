@@ -15,5 +15,6 @@ namespace BirdTrading.Domain.Models
         public Category Category { get; set; }
         public Shop Shop { get; set; }
         public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public IEnumerable<CartDetail> CartDetails { get; set; }
     }
 }

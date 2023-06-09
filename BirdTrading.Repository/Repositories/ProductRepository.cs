@@ -12,6 +12,23 @@ namespace BirdTrading.Repository.Repositories
         {
         }
 
+        public override async Task<Product?> GetByIdAsync(int id)
+        {
+            return await _context.Set<Product>()
+                .Include(x => x.Shop)
+                .Include(x => x.Category)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<IEnumerable<Product>> GetTop4RelateProductAsync(int categoryType, int productId)
+        {
+            return await _context.Set<Product>()
+                .Include(x => x.Shop)
+                .Include(x => x.Category)
+                .Where(x => x.Category.TypeId == categoryType && x.Id != productId)
+                .Take(4).ToListAsync();
+        }
+
         public async Task<Pagination<Product>> SearchProductPagingAsync(string search, int pageIndex, int pageSize)
         {
             var products = _context.Set<Product>()
