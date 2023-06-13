@@ -1,6 +1,7 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
 using BirdTrading.Utils.Pagination;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BirdTradingApp.Pages.Products
@@ -16,11 +17,17 @@ namespace BirdTradingApp.Pages.Products
 
         public IEnumerable<CategoryType> CategoryTypes { get; set; }
         public Pagination<Product> ProductPaging { get; set; }
+        public int CurrentPageIndex { get; set; }
+        public string CurrentFilter { get; set; }
+        public int CurrentPageSize { get; set; }
 
-        public async Task OnGetAsync(int pageIndex = 0, int pageSize = 9)
+        public async Task OnGetAsync(int pageIndex = 0, int pageSize = 9, string filterType = "")
         {
             CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();
             ProductPaging = await _unitOfWork.ProductRepository.GetPaginationsAsync(pageIndex, pageSize);
+            CurrentPageIndex = ProductPaging.TotalPagesCount;
+            CurrentPageSize = pageSize;
+            if (filterType == "Latest") await OnGetFilterAsync(filterType, pageIndex, pageSize);
         }
 
         #region Search
@@ -39,16 +46,22 @@ namespace BirdTradingApp.Pages.Products
         #endregion
 
         #region Filter
-        public async Task OnGetFilterAsync(string category, int pageIndex = 0, int pageSize = 9)
+        public async Task OnGetFilterAsync(string filterType, int pageIndex = 0, int pageSize = 9)
         {
-            if (category is null)
+            if (filterType is null)
             {
                 await OnGetAsync(pageIndex, pageSize);
             }
             else
             {
-                CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();
-                ProductPaging = await _unitOfWork.ProductRepository.SearchProductPagingAsync(category, pageIndex, pageSize);
+                CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();;
+                if (filterType.Equals("Latest"))
+                {
+                    ProductPaging = await _unitOfWork.ProductRepository.GetDescendingPaginationAsync(x => x.Id, pageIndex, pageSize);
+                    CurrentPageIndex = ProductPaging.TotalPagesCount;
+                }
+                CurrentFilter = filterType;
+                CurrentPageSize = pageSize;
             }
         }
         #endregion

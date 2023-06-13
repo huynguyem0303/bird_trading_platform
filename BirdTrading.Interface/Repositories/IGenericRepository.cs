@@ -1,4 +1,5 @@
 ﻿using BirdTrading.Utils.Pagination;
+using System.Linq.Expressions;
 
 namespace BirdTrading.Interface.Repositories
 {
@@ -6,6 +7,7 @@ namespace BirdTrading.Interface.Repositories
     {
         Task<IEnumerable<TModel>> GetListAsync();
         Task<Pagination<TModel>> GetPaginationsAsync(int pageIndex, int pageSize);
+        Task<Pagination<TModel>> GetDescendingPaginationAsync(Expression<Func<TModel, int>> keySelector, int pageIndex, int pageSize);
         Task<TModel?> GetByIdAsync(int id);
         Task AddAsync(TModel model);
         void Update(TModel model);

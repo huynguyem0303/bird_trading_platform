@@ -1,0 +1,42 @@
+﻿@using BirdTrading.Domain.Models
+@model IEnumerable<Product>
+@using BirdTrading.Utils.Others
+
+@foreach (var item in Model)
+{
+    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+        <div class="product-item bg-light mb-4">
+            <div class="product-img position-relative overflow-hidden">
+                @if (item.ImageUrl.StartsWith("img"))
+                {
+                    <img class="img-fluid w-100" src="~/@item.ImageUrl" alt="">
+                }
+                else
+                {
+                    <img class="img-fluid w-100" src="@item.ImageUrl" alt="" style="width: 200px; height: 200px;">
+                }
+                <div class="product-action">
+                    <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id"
+                   asp-page="Index" asp-page-handler="AddToCart"><i class="fa fa-shopping-cart"></i></a>
+                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                    <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id" asp-page="Details"><i class="fa fa-search"></i></a>
+                </div>
+            </div>
+            <div class="text-center py-4">
+                <a class="h6 text-decoration-none text-truncate text-wrap" asp-route-id="@item.Id" asp-page="Details">@item.Name</a>
+                <div class="d-flex align-items-center justify-content-center mt-2">
+                    <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                </div>
+                <div class="d-flex align-items-center justify-content-center mb-1">
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small class="fa fa-star text-primary mr-1"></small>
+                    <small>(@item.Quantity)</small>
+                </div>
+            </div>
+        </div>
+    </div>
+}

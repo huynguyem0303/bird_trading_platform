@@ -12,6 +12,9 @@ namespace BirdTrading.Domain.Models
         public string Description { get; set; }
         public bool IsRemoved { get; set; }
         //
+        public int CategoryId { get; set; }
+        public int ShopId { get; set; }
+        //
         public Category Category { get; set; }
         public Shop Shop { get; set; }
         public IEnumerable<OrderDetail> OrderDetails { get; set; }

@@ -20,6 +20,50 @@ namespace BirdTrading.Repository.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Pagination<Product>> GetProductPagingByCategoryAsync(int category, int pageIndex, int pageSize)
+        {
+            var products = _context.Set<Product>()
+                .Where(x => x.CategoryId == category && x.IsRemoved == false)
+                .Include(x => x.Category)
+                .AsQueryable();
+            //
+            var totalCount = await products.CountAsync();
+            var items = await products.AsNoTracking()
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize).ToListAsync();
+
+            var result = new Pagination<Product>()
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount
+            };
+            return result;
+        }
+
+        public async Task<Pagination<Product>> GetProductPagingByCategoryTypeAsync(int categoryType, int pageIndex, int pageSize)
+        {
+            var products = _context.Set<Product>()
+                .Where(x => x.Category.TypeId == categoryType && x.IsRemoved == false)
+                .Include(x => x.Category)
+                .AsQueryable();
+            //
+            var totalCount = await products.CountAsync();
+            var items = await products.AsNoTracking()
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize).ToListAsync();
+
+            var result = new Pagination<Product>()
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount
+            };
+            return result;
+        }
+
         public async Task<IEnumerable<Product>> GetTop4RelateProductAsync(int categoryType, int productId)
         {
             return await _context.Set<Product>()

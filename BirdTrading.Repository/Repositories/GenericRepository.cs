@@ -2,6 +2,7 @@
 using BirdTrading.Interface.Repositories;
 using BirdTrading.Utils.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BirdTrading.Repository.Repositories
 {
@@ -38,6 +39,23 @@ namespace BirdTrading.Repository.Repositories
         {
             var totalCount = await _context.Set<TModel>().CountAsync();
             var items = await _context.Set<TModel>().AsNoTracking()
+                .Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+
+            var result = new Pagination<TModel>()
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount
+            };
+            return result;
+        }
+
+        public async Task<Pagination<TModel>> GetDescendingPaginationAsync(Expression<Func<TModel, int>> keySelector, int pageIndex, int pageSize)
+        {
+            var totalCount = await _context.Set<TModel>().CountAsync();
+            var tempItems = _context.Set<TModel>().OrderByDescending(keySelector).AsQueryable();
+            var items = await tempItems.AsNoTracking()
                 .Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
 
             var result = new Pagination<TModel>()

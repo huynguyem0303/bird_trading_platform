@@ -1,0 +1,23 @@
+﻿<script type="text/javascript">
+    $(document).ready(function () {
+        $('input[name="categoryCheckBox"]').on('change', function () {
+            if ($(this).is(':checked')) {
+                $('input[name="categoryCheckBox"]').not(this).prop('checked', false);
+                var categoryType = $('input[name="categoryCheckBox"]:checked').val();
+                $.ajax({
+                    type: "GET",
+                    URL: "/Products/Category",
+                    success: function() {
+                        window.location.href = "/Products/Category?categoryType=" + categoryType;
+                    },
+                    failure: function() {
+                        console.log('failed redirect.');
+                    }
+                });
+            } else {
+                // Checkbox is not checked
+                console.log('Checkbox is not checked.');
+            }
+        });
+    });
+</script>
