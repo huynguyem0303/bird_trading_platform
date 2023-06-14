@@ -1,6 +1,129 @@
-﻿@page
+﻿@page "{handler?}"
 @model BirdTradingApp.Pages.Orders.CheckoutModel
+@using BirdTrading.Utils.Others
+@using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "Checkout";
+    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role")))
+    {
+        Response.Redirect("/Login");
+        return;
+    }
 }
 
+<div class="container-fluid">
+
+    <!-- Address line start -->
+    <div class="address-line shadow-sm bg-light">
+        <h5 class="text-danger pt-4 pl-3">Shipping Address</h5>
+        <div class="row p-3">
+            <div class="col-6 text-black">
+                <b>@Model.ShippingInformation.Name</b>
+            </div>
+            <div class="col-4">
+                <p>@Model.ShippingInformation.Address</p>
+            </div>
+            <div class="col-2">
+                Change
+            </div>
+        </div>
+    </div>
+    <!-- Address line end -->
+    <!-- Products start -->
+    <div class="product-list shadow-sm mt-4 bg-light">
+        <div class="table row pt-5 pl-3">
+            <div class="table-header col-12 row">
+                <div class="col-6 pl-4">
+                    <b>Products</b>
+                </div>
+                <div class="col-2 text-center">
+                    <b>Price</b>
+                </div>
+                <div class="col-2 text-center">
+                    <b>Quantity</b>
+                </div>
+                <div class="col-2 text-center">
+                    <b>Total</b>
+                </div>
+            </div>
+            <hr class="col-11" />
+            <div class="table-shop-row p-3 pl-4">
+                Shop: You & me
+            </div>
+            <hr class="col-11" />
+            @foreach (var item in Model.CartDetails)
+            {
+                <div class="table-product-row row col-12 p-3">
+                    <div class="col-6 pl-4">
+                        @if (item.Product.ImageUrl.StartsWith("img"))
+                        {
+                            <img src="~/@item.Product.ImageUrl" alt="" style="width: 75px;">
+                        }
+                        else
+                        {
+                            <img class="img-fluid w-50" src="@item.Product.ImageUrl" alt="" style="width: 200px; height: 200px;">
+                        }
+                        @item.Product.Name
+                    </div>
+                    <div class="col-2 text-center">
+                        @StringUtils.FormatCurrency(item.Product.OriginalPrice)
+                    </div>
+                    <div class="col-2 text-center">
+                        @item.Quantity
+                    </div>
+                    <div class="col-2 text-center">
+                        @StringUtils.FormatCurrency(item.Product.OriginalPrice * item.Quantity)
+                    </div>
+                </div>
+            }
+            <hr class="col-11"/>
+            <div class="col-12 text-end pr-5 p-3" style="text-align: right;">
+                Shipping By: GHN
+            </div>
+            <hr class="col-11"/>
+            <div class="col-12 text-end pr-5 pb-4" style="text-align: right;">
+                <h5>Total (@Model.CartDetails.Count() products): <span class="text-danger">@StringUtils.FormatCurrency(Model.CurrentTotal)</span></h5>
+            </div>
+        </div>
+    </div>
+    <!-- Products end -->
+    <!-- Checkout start -->
+    <div class="checkout-container mt-5 shadow-sm bg-light">
+        <div class="row p-4">
+            <div class="col-8">
+                <h5>Payment</h5>
+            </div>
+            <div class="col-3 pr-4" style="text-align: right;">
+                Momo
+            </div>
+        </div>
+        <hr />
+        <div class="p-30 mb-5">
+            <div class="border-bottom pb-2">
+                <div class="d-flex justify-content-between mb-3">
+                    <h6>Subtotal</h6>
+                    <h6>@StringUtils.FormatCurrency(Model.CurrentTotal)</h6>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h6 class="font-weight-medium">Shipping</h6>
+                    <h6 class="font-weight-medium">$10</h6>
+                </div>
+            </div>
+            <div class="pt-2">
+                <div class="pt-2">
+                    <div class="d-flex justify-content-between mt-2">
+                        <h5>Total</h5>
+                        <h5>@StringUtils.FormatCurrency(Model.CurrentTotal + 10)</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="border-1 row p-4">
+            <div class="col-11 pr-4" style="text-align: right;">
+                <a class="btn btn-danger border-1" asp-page-handler="Payment" asp-route-cartDetailsId="@Request.Query["cartDetailsId"]">Checkout</a>
+            </div>
+        </div>
+    </div>
+    <!-- Checkout end -->
+</div>

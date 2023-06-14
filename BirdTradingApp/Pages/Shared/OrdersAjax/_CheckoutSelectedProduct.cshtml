@@ -1,0 +1,67 @@
+﻿<script type="text/javascript">
+    $(function () {
+        $("input[name='checkoutCheckbox']").on('change', function () {
+            if ($(this).is(":checked")) {
+                var cartDetailsId = $('input[name="checkoutCheckbox"]:checked').val();
+                $.ajax({
+                    type: "GET",
+                    url: "/Orders/Checkout/Total",
+                    data: {
+                        "cartDetailsId": cartDetailsId,
+                        "currentTotalStr": $("#subtotal").html(),
+                        "isChecked" : "true"
+                    },
+                    success: function (e) {
+                        $("#checkout-container").html(e);
+                    },
+                    failure: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+            else {
+                var cartDetailsId = $(this).val();
+                $.ajax({
+                    type: "GET",
+                    url: "/Orders/Checkout/Total",
+                    data: {
+                        "cartDetailsId": cartDetailsId,
+                        "currentTotalStr": $("#subtotal").html(),
+                        "isChecked": "false"
+                    },
+                    success: function (e) {
+                        $("#checkout-container").html(e);
+                    },
+                    failure: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        });
+    });
+
+    //
+
+    $(function () {
+        $("#checkoutBtn").on('click', function () {
+            var cartChecked = $('input[name="checkoutCheckbox"]:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            var resultString = "";
+            for (var i in cartChecked) {
+                resultString += cartChecked[i] + ";";
+            }
+
+            $.ajax({
+                type: "GET",
+                success: function() {
+                    window.location.href = "/Orders/Checkout?cartDetailsId=" + resultString;
+                },
+                failure: function(e) {
+                    console.log(e);
+                }
+            });
+        });
+    });
+</script>

@@ -12,5 +12,6 @@ namespace BirdTrading.Interface.Repositories
         Task AddAsync(TModel model);
         void Update(TModel model);
         void Delete(TModel model);
+        void DeleteRange(List<TModel> model);
     }
 }

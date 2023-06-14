@@ -4,5 +4,6 @@ namespace BirdTrading.Interface.Repositories
 {
     public interface IShippingInformationRepository : IGenericRepository<ShippingInformation>
     {
+        Task<ShippingInformation?> GetDefaultShippingInformationAsync(int userId);
     }
 }

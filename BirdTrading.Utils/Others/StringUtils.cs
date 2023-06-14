@@ -6,8 +6,8 @@ namespace BirdTrading.Utils.Others
     {
         public static string FormatCurrency(decimal currency)
         {
-            CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
-            return currency.ToString("#,### ₫", cul.NumberFormat);
+            CultureInfo cul = CultureInfo.GetCultureInfo("en-US");
+            return currency.ToString("C", cul.NumberFormat);
         }
     }
 }

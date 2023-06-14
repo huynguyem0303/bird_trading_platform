@@ -6,7 +6,6 @@
                 var categoryType = $('input[name="categoryCheckBox"]:checked').val();
                 $.ajax({
                     type: "GET",
-                    URL: "/Products/Category",
                     success: function() {
                         window.location.href = "/Products/Category?categoryType=" + categoryType;
                     },

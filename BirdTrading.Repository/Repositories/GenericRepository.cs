@@ -72,5 +72,10 @@ namespace BirdTrading.Repository.Repositories
         {
             _context.Set<TModel>().Update(model);
         }
+
+        public virtual void DeleteRange(List<TModel> model)
+        {
+            _context.Set<TModel>().RemoveRange(model);
+        }
     }
 }

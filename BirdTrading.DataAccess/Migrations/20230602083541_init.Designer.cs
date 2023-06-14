@@ -50,7 +50,7 @@ namespace BirdTrading.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("AddressId")
+                    b.Property<int?>("ShippingInformationId")
                         .HasColumnType("int");
 
                     b.Property<string>("CompanyName")

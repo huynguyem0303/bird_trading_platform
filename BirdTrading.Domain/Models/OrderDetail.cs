@@ -6,7 +6,7 @@ namespace BirdTrading.Domain.Models
         public int Id { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
         public float? Rating { get; set; } = null;
         //
         public int OrderId { get; set; }
