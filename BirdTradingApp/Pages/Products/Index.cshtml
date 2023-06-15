@@ -173,8 +173,7 @@
                                         <img class="img-fluid w-100" src="@item.ImageUrl" alt="" style="width: 200px; height: 200px;">
                                     }
                                     <div class="product-action">
-                                        <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id"
-                                       asp-page="Index" asp-page-handler="AddToCart"><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square addToCart" data-id="@item.Id"><i class="fa fa-shopping-cart"></i></a>
                                         <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
                                         <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
                                         <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id" asp-page="Details"><i class="fa fa-search"></i></a>
@@ -271,4 +270,5 @@
 <!-- Shop End -->
 @section Scripts {
     <partial name="ProductAjax/_FilterByCategory" />
+    <partial name="ProductAjax/_AddToCart" />
 }

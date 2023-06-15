@@ -67,7 +67,7 @@ namespace BirdTradingApp.Pages.Products
         #endregion
 
         #region AddToCartHandle
-        public async Task OnGetAddToCartAsync(int id, int quantity = 1)
+        public async Task<IActionResult> OnGetAddToCartAsync(int id, int quantity = 1)
         {
             var userId = HttpContext.Session.GetInt32("Id");
             if (userId is not null)
@@ -80,8 +80,7 @@ namespace BirdTradingApp.Pages.Products
                     {
                         if (await CreateNewCartAsync((int)userId, product, quantity))
                         {
-                            TempData["success"] = "Add to cart";
-                            await OnGetAsync();
+                            return new JsonResult("Add to cart");
                         }
                     }
                     else
@@ -91,21 +90,19 @@ namespace BirdTradingApp.Pages.Products
                         {
                             if (await UpdateCartDetailAsync(details, quantity))
                             {
-                                TempData["success"] = "Add to cart";
-                                await OnGetAsync();
-                                return;
+                                return new JsonResult("Add to cart");
                             }
                         }
                         //
                         if (await CreateNewCartDetailAsync((int)userId, product, quantity, cart.Id))
                         {
-                            TempData["success"] = "Add to cart";
-                            await OnGetAsync();
-                            return;
+                            return new JsonResult("Add to cart");
                         }
                     }
                 }
             }
+            //
+            return RedirectToPage("/Products/Index");
         }
 
         /// <summary>

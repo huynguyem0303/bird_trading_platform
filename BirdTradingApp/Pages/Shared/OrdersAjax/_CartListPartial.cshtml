@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Cart>
+@using BirdTrading.Domain.Models;
+@using BirdTrading.Utils.Others;
+
+<partial name="_Notification" />
+<table class="table table-light table-borderless table-hover text-center mb-0">
+    <thead class="thead-dark">
+        <tr>
+            <th></th>
+            <th>Products</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th>Remove</th>
+        </tr>
+    </thead>
+    <tbody class="align-middle">
+        @if (Model.Count() == 0)
+        {
+            <tr>
+                <td colspan="6">
+                    <partial name="OrdersAjax/_EmptyCartPartial" />
+                </td>
+            </tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr class="align-middle" style="border-bottom: 5px solid #f5f5f5">
+                    <td></td>
+                    <td colspan="5" class="text-left">
+                        <span class="material-symbols-outlined">
+                            storefront &nbsp; @item.Shop.Name
+                        </span>
+                    </td>
+                </tr>
+                @foreach (var details in item.CartDetails)
+                {
+                    <tr>
+                        <td class="text-left"><input type="checkbox" name="checkoutCheckbox" value="@details.Id" /></td>
+                        <td class="align-middle"><img src="~/@details.Product.ImageUrl" alt="" style="width: 75px;"> @details.Product.Name</td>
+                        <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice)</td>
+                        <td class="align-middle">
+                            <div class="input-group quantity mx-auto" style="width: 100px;">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-minus">
+                                        <i class="fa fa-minus"></i>
+                                    </button>
+                                </div>
+                                <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="@details.Quantity">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-sm btn-primary btn-plus">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice * details.Quantity)</td>
+                        <td class="align-middle"><a class="btn btn-sm btn-danger remove-from-cart" data-id="@details.Id"><i class="fa fa-times"></i></a></td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

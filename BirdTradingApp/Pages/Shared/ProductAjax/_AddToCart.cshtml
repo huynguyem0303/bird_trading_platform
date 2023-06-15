@@ -1,3 +1,28 @@
-﻿<script type="text/javascript">
-
+﻿<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".addToCart").on('click', function() {
+            $.ajax({
+                type: "GET",
+                url: "/Products/AddToCart",
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                data: {
+                    id: $(this).data("id")
+                },
+                success: function (e) {
+                    console.log("succeed");
+                    toastr.success(e);
+                },
+                failure: function (e) {
+                    console.log(e);
+                },
+                error: function(xhr, textStatus, error){
+                    console.log(xhr.statusText);
+                    console.log(textStatus);
+                    console.log(error);
+                }
+            });
+        });
+    });
 </script>

@@ -1,0 +1,20 @@
+﻿<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".remove-from-cart").on('click', function () {
+            $.ajax({
+                type: "GET",
+                url: "/Orders/Remove",
+                data: {
+                    detailsId: $(this).data("id")
+                },
+                success: function (e) {
+                    $("#cart-content").html(e);
+                },
+                failure: function (e) {
+                    console.log(e);
+                }
+            });
+        });
+    });
+</script>
