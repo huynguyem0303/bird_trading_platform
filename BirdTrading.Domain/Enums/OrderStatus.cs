@@ -5,6 +5,7 @@
         WaitingForConfirm,
         WaitingForDelivery,
         OnDelelivering,
-        Delivered
+        Delivered,
+        Cancel
     }
 }

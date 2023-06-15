@@ -21,6 +21,7 @@
                     <tr>
                         <th></th>
                         <th>Products</th>
+                        <th></th>
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Total</th>
@@ -31,7 +32,7 @@
                     @if (Model.Carts.Count() == 0)
                     {
                         <tr>
-                            <td colspan="6">
+                            <td colspan="7">
                                 <partial name="OrdersAjax/_EmptyCartPartial" />
                             </td>
                         </tr>
@@ -42,17 +43,30 @@
                         {
                             <tr class="align-middle" style="border-bottom: 5px solid #f5f5f5">
                                 <td></td>
-                                <td colspan="5" class="text-left">
+                                <td colspan="5" class="text-left text-danger">
                                     <span class="material-symbols-outlined">
-                                        storefront &nbsp; @item.Shop.Name
+                                        storefront &nbsp;
                                     </span>
+                                    <span class="font-weight-bold">@item.Shop.Name</span>
                                 </td>
                             </tr>
                             @foreach (var details in item.CartDetails)
                             {
-                                <tr>
-                                    <td class="text-left"><input type="checkbox" name="checkoutCheckbox" value="@details.Id" /></td>
-                                    <td class="align-middle"><img src="~/@details.Product.ImageUrl" alt="" style="width: 75px;"> @details.Product.Name</td>
+                                <tr class="detail-container">
+                                    <td class="align-middle align-content-center">
+                                        <input type="checkbox" name="checkoutCheckbox" value="@details.Id" onclick="checkedButton()" />
+                                        </td>
+                                    <td class="align-middle text-left" colspan="2">
+                                        @if (details.Product.ImageUrl.StartsWith("img"))
+                                        {
+                                            <img src="~/@details.Product.ImageUrl" alt="" style="width: 75px;">
+                                        }
+                                        else
+                                        {
+                                            <img src="@details.Product.ImageUrl" alt="" style="width: 75px;">
+                                        }
+                                        @details.Product.Name
+                                    </td>
                                     <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice)</td>
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
@@ -70,7 +84,7 @@
                                         </div>
                                     </td>
                                     <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice * details.Quantity)</td>
-                                    <td class="align-middle"><a class="btn btn-sm btn-danger remove-from-cart" data-id="@details.Id"><i class="fa fa-times"></i></a></td>
+                                    <td class="align-middle"><a class="btn btn-sm btn-danger" data-id="@details.Id" onclick="removeFromCart('@details.Id')"><i class="fa fa-times"></i></a></td>
                                 </tr>
                             }
                         }
@@ -79,14 +93,14 @@
             </table>
         </div>
         <div class="col-lg-12">
-            <form class="mb-30" action="">
+            @*<form class="mb-30" action="">
                 <div class="input-group">
                     <input type="text" class="form-control border-0 p-4" placeholder="Coupon Code">
                     <div class="input-group-append">
                         <button class="btn btn-primary">Apply Coupon</button>
                     </div>
                 </div>
-            </form>
+            </form>*@
             <h5 class="section-title position-relative text-uppercase mb-3"><span class="bg-secondary pr-3">Cart Summary</span></h5>
             <div class="bg-light p-30 mb-5" id="checkout-container">
                 <div class="border-bottom pb-2">
@@ -113,7 +127,7 @@
                     <button class="btn btn-block btn-primary font-weight-bold my-3 py-3 w-25">Proceed To Checkout</button>
                 }
                 else
-                {  
+                {
                     <button class="btn btn-block btn-primary font-weight-bold my-3 py-3 w-25" id="checkoutBtn">Proceed To Checkout</button>
                 }
             </div>

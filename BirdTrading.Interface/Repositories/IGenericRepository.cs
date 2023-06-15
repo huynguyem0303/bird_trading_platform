@@ -10,6 +10,7 @@ namespace BirdTrading.Interface.Repositories
         Task<Pagination<TModel>> GetDescendingPaginationAsync(Expression<Func<TModel, int>> keySelector, int pageIndex, int pageSize);
         Task<TModel?> GetByIdAsync(int id);
         Task AddAsync(TModel model);
+        Task AddRangeAsync(IEnumerable<TModel> models);
         void Update(TModel model);
         void Delete(TModel model);
         void DeleteRange(List<TModel> model);

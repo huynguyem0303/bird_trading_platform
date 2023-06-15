@@ -1,5 +1,5 @@
 ﻿<script type="text/javascript">
-    $(function () {
+    function checkedButton() {
         $("input[name='checkoutCheckbox']").on('change', function () {
             if ($(this).is(":checked")) {
                 var cartDetailsId = $('input[name="checkoutCheckbox"]:checked').val();
@@ -9,7 +9,7 @@
                     data: {
                         "cartDetailsId": cartDetailsId,
                         "currentTotalStr": $("#subtotal").html(),
-                        "isChecked" : "true"
+                        "isChecked": "true"
                     },
                     success: function (e) {
                         $("#checkout-container").html(e);
@@ -38,13 +38,13 @@
                 });
             }
         });
-    });
+    }
 
     //
 
     $(function () {
         $("#checkoutBtn").on('click', function () {
-            var cartChecked = $('input[name="checkoutCheckbox"]:checked').map(function() {
+            var cartChecked = $('input[name="checkoutCheckbox"]:checked').map(function () {
                 return $(this).val();
             }).get();
 
@@ -53,15 +53,20 @@
                 resultString += cartChecked[i] + ";";
             }
 
-            $.ajax({
-                type: "GET",
-                success: function() {
-                    window.location.href = "/Orders/Checkout?cartDetailsId=" + resultString;
-                },
-                failure: function(e) {
-                    console.log(e);
-                }
-            });
+            if (resultString.length >= 1) {
+                $.ajax({
+                    type: "GET",
+                    success: function () {
+                        window.location.href = "/Orders/Checkout?cartDetailsId=" + resultString;
+                    },
+                    failure: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+            else {
+                toastr.warning('Checkout error. You have not select any product.');
+            }
         });
     });
 </script>

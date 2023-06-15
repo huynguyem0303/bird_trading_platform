@@ -2,7 +2,6 @@ using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NuGet.Protocol;
 
 namespace BirdTradingApp.Pages.Orders
 {
@@ -23,7 +22,7 @@ namespace BirdTradingApp.Pages.Orders
         {
             if (cartDetailsId is null) return;
             //
-            CartDetails = await GenerateOrdersAsync(cartDetailsId);
+            CartDetails = await GenerateDetailListAsync(cartDetailsId);
             var shippingInformation = await GetShippingInformationAsync();
             if (shippingInformation is not null) ShippingInformation = shippingInformation;
         }
@@ -53,8 +52,9 @@ namespace BirdTradingApp.Pages.Orders
         public async Task<IActionResult> OnGetPaymentAsync(string cartDetailsId)
         {
             if (string.IsNullOrEmpty(cartDetailsId)) return RedirectToPage("Index");
-            var cartDetails = await GenerateOrdersAsync(cartDetailsId);
-            await UpdateOrderAsync(cartDetails);
+            var cartDetails = await GenerateDetailListAsync(cartDetailsId);
+            var orderList = await GenerateListOrderAsync(cartDetails);
+            await UpdateOrderAsync(orderList);
             await RemoveCartAsync(cartDetails);
             TempData["success"] = "Succeed";
             return RedirectToPage("Index");
@@ -74,7 +74,7 @@ namespace BirdTradingApp.Pages.Orders
             return shippingInformation;
         }
 
-        public async Task<IEnumerable<CartDetail>> GenerateOrdersAsync(string cartDetailsId)
+        public async Task<IEnumerable<CartDetail>> GenerateDetailListAsync(string cartDetailsId)
         {
             var detailIdsArr = cartDetailsId.Split(';');
             var detailList = new List<CartDetail>();
@@ -95,48 +95,71 @@ namespace BirdTradingApp.Pages.Orders
             return detailList;
         }
 
-        public async Task<bool> UpdateOrderAsync(IEnumerable<CartDetail> detailCheckout)
+        public async Task<IEnumerable<Order>> GenerateListOrderAsync(IEnumerable<CartDetail> detailCheckout)
         {
-            var orderDetails = new List<OrderDetail>();
-            foreach (var item in detailCheckout)
+            var numOfOrder = detailCheckout.Select(x => x.Product.ShopId).Distinct();
+            var listOrder = new List<Order>();
+            decimal total = 0;
+            foreach (var item in numOfOrder)
             {
-                var detail = new OrderDetail
+                var orderDetails = new List<OrderDetail>();
+                foreach (var cartDetail in detailCheckout)
                 {
-                    Quantity = item.Quantity,
-                    Price = item.Product.OriginalPrice,
-                    ProductId = item.ProductId,
-                };
-                orderDetails.Add(detail);
+                    if (cartDetail.Product.ShopId == item)
+                    {
+                        var detail = new OrderDetail
+                        {
+                            Quantity = cartDetail.Quantity,
+                            Price = cartDetail.Product.OriginalPrice,
+                            ProductId = cartDetail.ProductId,
+                        };
+                        orderDetails.Add(detail);
+                    }
+                    total += cartDetail.Product.OriginalPrice * cartDetail.Quantity;
+                }
+                //
+                var shippingInfor = await GetShippingInformationAsync();
+                var shippingStatus = new List<ShippingSession> { CreateShippingStatus() };
+                if (shippingInfor is not null) {
+
+                    var order = new Order
+                    {
+                        OrderDate = DateTime.Now,
+                        CompanyName = "GHN",
+                        UserId = GetCurrentUserId(),
+                        ShippingInformationId = shippingInfor.Id,
+                        OrderDetails = orderDetails,
+                        ShippingSessions = shippingStatus,
+                        Total = total
+                    };
+                    //1
+                    listOrder.Add(order);
+                }
             }
-            //
-            var shippingInfor = await GetShippingInformationAsync();
-            var shippingStatus = new List<ShippingSession> { CreateShippingStatus()};
-            if (shippingInfor is null) return false;
-            var order = new Order
-            {
-                OrderDate = DateTime.Now,
-                CompanyName = "GHN",
-                UserId = GetCurrentUserId(),
-                ShippingInformationId = shippingInfor.Id,
-                OrderDetails = orderDetails,
-                ShippingSessions = shippingStatus,
-            };
-            //
-            await _unitOfWork.OrderRepository.AddAsync(order);
+
+            return listOrder;
+        }
+
+        public async Task<bool> UpdateOrderAsync(IEnumerable<Order> orders)
+        {
+            await _unitOfWork.OrderRepository.AddRangeAsync(orders);
             return await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<bool> RemoveCartAsync(IEnumerable<CartDetail> cartDetails)
         {
-            var cartId = cartDetails.First().CartId;
+            var cartIds = cartDetails.Select(x => x.CartId).Distinct();
             _unitOfWork.CartDetailRepository.DeleteRange(cartDetails.ToList());
             //
             if (await _unitOfWork.SaveChangeAsync())
             {
-                var cart = await _unitOfWork.CartRepository.GetByIdAsync(cartId);
-                if (cart is null) return false;
-                //
-                if (cart.CartDetails.Count() == 0) _unitOfWork.CartRepository.Delete(cart);
+                foreach (var item in cartIds)
+                {
+                    var cart = await _unitOfWork.CartRepository.GetByIdAsync(item);
+                    if (cart is null) return false;
+                    //
+                    if (cart.CartDetails.Count() == 0) _unitOfWork.CartRepository.Delete(cart);
+                }
                 return await _unitOfWork.SaveChangeAsync();
             }
             return false;

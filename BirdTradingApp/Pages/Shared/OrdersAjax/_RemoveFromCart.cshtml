@@ -1,20 +1,34 @@
 ﻿<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript">
-    $(function () {
-        $(".remove-from-cart").on('click', function () {
-            $.ajax({
-                type: "GET",
-                url: "/Orders/Remove",
-                data: {
-                    detailsId: $(this).data("id")
-                },
-                success: function (e) {
-                    $("#cart-content").html(e);
-                },
-                failure: function (e) {
-                    console.log(e);
-                }
-            });
+    function removeFromCart(id) {
+        //$(".remove-from-cart").on('click', function () {
+        //var deleteArea = $(this);
+        $.ajax({
+            type: "GET",
+            url: "/Orders/Remove",
+            data: {
+                detailsId: id
+            },
+            success: function (e) {
+                //deleteArea.closest(".detail-container").remove();
+                $("#cart-content").html(e);
+                $.ajax({
+                    type: "GET",
+                    url: "/Orders/Checkout/Total",
+                    data: {
+                        "cartDetailsId": id,
+                        "currentTotalStr": $("#subtotal").html(),
+                        "isChecked": "false"
+                    },
+                    success: function (e) {
+                        $("#checkout-container").html(e);
+                    },
+                });
+            },
+            failure: function (e) {
+                console.log(e);
+            }
         });
-    });
+        //});
+    }
 </script>

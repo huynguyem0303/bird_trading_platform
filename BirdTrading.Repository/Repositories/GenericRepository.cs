@@ -2,6 +2,7 @@
 using BirdTrading.Interface.Repositories;
 using BirdTrading.Utils.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System.Formats.Asn1;
 using System.Linq.Expressions;
 
 namespace BirdTrading.Repository.Repositories
@@ -18,6 +19,11 @@ namespace BirdTrading.Repository.Repositories
         public virtual async Task AddAsync(TModel model)
         {
             await _context.Set<TModel>().AddAsync(model);
+        }
+
+        public virtual async Task AddRangeAsync(IEnumerable<TModel> models)
+        {
+            await _context.Set<TModel>().AddRangeAsync(models);
         }
 
         public virtual void Delete(TModel model)
