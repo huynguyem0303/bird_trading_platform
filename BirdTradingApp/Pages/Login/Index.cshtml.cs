@@ -25,9 +25,11 @@ namespace BirdTradingApp.Pages.Login
                     .GetUserByEmailOrPhoneAndPasswordAsync(LoginModel.UserName, LoginModel.Password);
                 if (login is not null)
                 {
+                    var cart = await _unitOfWork.CartDetailRepository.GetUserCartsAsync(login.Id);
                     HttpContext.Session.SetString("Role", login.Role.ToString());
                     HttpContext.Session.SetInt32("Id", login.Id);
                     HttpContext.Session.SetString("Name", login.Name);
+                    HttpContext.Session.SetInt32("CartCount", cart.Count());
                     TempData["success"] = "Login Succeed";
                     return RedirectToPage("/Index");
                 }

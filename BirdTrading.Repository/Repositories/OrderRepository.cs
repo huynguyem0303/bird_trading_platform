@@ -52,5 +52,16 @@ namespace BirdTrading.Repository.Repositories
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
+
+        public override async Task<Order?> GetByIdAsync(int id)
+        {
+            return await _context.Set<Order>()
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.Product)
+                .Include(x => x.User)
+                .Include(x => x.ShippingInformation)
+                .Include(x => x.ShippingSessions)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
     }
 }

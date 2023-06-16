@@ -1,6 +1,7 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
 using BirdTrading.Utils.Pagination;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -80,6 +81,8 @@ namespace BirdTradingApp.Pages.Products
                     {
                         if (await CreateNewCartAsync((int)userId, product, quantity))
                         {
+                            var cartCount = HttpContext.Session.GetInt32("CartCount");
+                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int) cartCount + 1);
                             return new JsonResult(new
                             {
                                 Status = StatusCodes.Status200OK,
@@ -104,6 +107,8 @@ namespace BirdTradingApp.Pages.Products
                         //
                         if (await CreateNewCartDetailAsync((int)userId, product, quantity, cart.Id))
                         {
+                            var cartCount = HttpContext.Session.GetInt32("CartCount");
+                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int) cartCount + 1);
                             return new JsonResult(new
                             {
                                 Status = StatusCodes.Status200OK,
@@ -121,7 +126,10 @@ namespace BirdTradingApp.Pages.Products
                 });
             }
 
-            return RedirectToPage("/Login");
+            return new JsonResult(new
+            {
+                Url = "/Login"
+            });
         }
 
         /// <summary>

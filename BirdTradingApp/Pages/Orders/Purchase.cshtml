@@ -67,14 +67,16 @@
         {
             @foreach (var item in Model.Orders)
             {
-                <div class="bg-light shadow-sm orders-detail-content">
+                <div class="bg-light shadow-sm orders-detail-content border-bottom mb-3">
                     <div class="table-shop-row pl-4 pt-3 row">
                         <div class="col-8 text-danger font-weight-bold lead">
                             <i class="fa-solid fa-store"></i> &nbsp;
                             @item.OrderDetails.First().Product.Shop.Name
                         </div>
                         <div class="col-4 pr-5 text-danger" style="text-align: right;">
-                            @item.ShippingSessions.Last().Status.ToString().FormatEnumString()
+                            <a class="text-decoration-none text-danger" asp-page="/Orders/Details" asp-route-detailId="@item.Id" asp-route-type="@Request.Query["type"]">
+                                @item.ShippingSessions.Last().Status.ToString().FormatEnumString()
+                            </a>
                         </div>
                     </div>
                     <hr class="col-11" />
@@ -105,8 +107,13 @@
                         </div>
                     }
                     <hr class="col-11" />
-                    <div class="pr-5" style="text-align: right;">
-                        Totals: <span class="text-danger font-weight-bold" style="font-size: 20px">$@item.Total</span>
+                    <div class="row">
+                        <div class="col-6 pl-5 text-dark font-weight-bold">
+                            Order Date: @item.OrderDate.ToString("dd-MM-yyyy HH:mm")
+                        </div>
+                        <div class="col-6 pr-5" style="text-align: right;">
+                            Totals: <span class="text-danger font-weight-bold" style="font-size: 20px">$@item.Total</span>
+                        </div>
                     </div>
                     <div class="pt-3 pr-4 pb-3" style="text-align: right;">
                         @if (item.ShippingSessions.Last().Status == BirdTrading.Domain.Enums.OrderStatus.Delivered)
@@ -116,7 +123,7 @@
                         }
                         else
                         {
-                            <button class="btn btn-primary pl-5 pr-5 m-3">Details</button>
+                            <a class="btn btn-primary pl-5 pr-5 m-3" asp-page="/Orders/Details" asp-route-detailId="@item.Id" asp-route-type="@Request.Query["type"]">Details</a>
                         }
                     </div>
                 </div>

@@ -77,11 +77,11 @@
                     </div>
                 </div>
             }
-            <hr class="col-11"/>
+            <hr class="col-11" />
             <div class="col-12 text-end pr-5 p-3" style="text-align: right;">
                 Shipping By: GHN
             </div>
-            <hr class="col-11"/>
+            <hr class="col-11" />
             <div class="col-12 text-end pr-5 pb-4" style="text-align: right;">
                 <h5>Total (@Model.CartDetails.Count() products): <span class="text-danger">@StringUtils.FormatCurrency(Model.CurrentTotal)</span></h5>
             </div>
@@ -99,7 +99,7 @@
             </div>
         </div>
         <hr />
-        <div class="p-30 mb-5">
+        <div class="p-30 mb-3">
             <div class="border-bottom pb-2">
                 <div class="d-flex justify-content-between mb-3">
                     <h6>Subtotal</h6>
@@ -111,11 +111,9 @@
                 </div>
             </div>
             <div class="pt-2">
-                <div class="pt-2">
-                    <div class="d-flex justify-content-between mt-2">
-                        <h5>Total</h5>
-                        <h5>@StringUtils.FormatCurrency(Model.CurrentTotal + 10)</h5>
-                    </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <h5>Total</h5>
+                    <h5>@StringUtils.FormatCurrency(Model.CurrentTotal + 10)</h5>
                 </div>
             </div>
         </div>

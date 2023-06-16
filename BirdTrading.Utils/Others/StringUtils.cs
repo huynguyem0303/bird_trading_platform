@@ -27,5 +27,11 @@ namespace BirdTrading.Utils.Others
             return newText.ToString();
         }
 
+        public static string FormatPhoneNumber(this string phoneNumber)
+        {
+            var result = phoneNumber.Substring(1);
+            result = result.Substring(0, 3) + " " + result.Substring(3, 3) + " " + result.Substring(6);
+            return "(+84) " + result;
+        }
     }
 }

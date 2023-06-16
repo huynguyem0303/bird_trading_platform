@@ -1,0 +1,123 @@
+﻿@page "{detailId?}"
+@model BirdTradingApp.Pages.Orders.DetailsModel
+@using BirdTrading.Utils.Others
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div class="container bg-light p-4">
+    <div class="header row pl-4 pb-3 border-bottom">
+        <div class="col-4">
+            <a class="text-decoration-none text-dark" asp-page="/Orders/Purchase" asp-route-type="@Request.Query["type"]">
+                <i class="fa-solid fa-arrow-left"></i> &nbsp; Back
+            </a>
+        </div>
+        <div class="col 8" style="text-align: right;">
+            Order ID: <b>#@(Model.Details.OrderDate.ToString("MMddyy") + "OD" + Model.Details.Id)</b> |
+            <span class="text-danger">
+                @Model.Details.ShippingSessions.Last().Status.ToString().FormatEnumString().ToUpper()
+            </span>
+        </div>
+    </div>
+    <!-- Detail Start -->
+    <div class="detail-content row pt-3 pb-3">
+        @foreach (var item in Model.Details.OrderDetails)
+        {
+            <div class="table-product-row row col-12 p-3">
+                <a class="text-decoration-none text-dark col-10 row" asp-page="/Products/Details" asp-route-id="@item.ProductId">
+                    <div class="col-2 pl-4 text-center">
+                        @if (item.Product.ImageUrl.StartsWith("img"))
+                        {
+                            <img src="~/@item.Product.ImageUrl" alt="" class="w-75">
+                        }
+                        else
+                        {
+                            <img src="@item.Product.ImageUrl" alt="" class="w-75">
+                        }
+                    </div>
+                    <div class="col-8">
+                        <span>
+                            <span class="text-dark">@item.Product.Name </span><br>
+                            <span class="text-sm-left">x @item.Quantity</span>
+                        </span>
+                    </div>
+                </a>
+                <div class="col-2 text-center">
+                    @StringUtils.FormatCurrency(item.Product.OriginalPrice)
+                </div>
+            </div>
+            <hr class="col-11" />
+        }
+    </div>
+    <!-- Detail End -->
+    <!-- Address Line Start -->
+    <div class="address-line row p-4 border-bottom">
+        <div class="address-header pb-3 col-12">
+            <h5>Shipping Information</h5>
+        </div>
+        <div class="address-content row col-12">
+            <div class="col-6 border-right border-5 border-dark">
+                <span class="font-weight-bold">@Model.Details.ShippingInformation.Name</span> <br />
+                <small>@Model.Details.ShippingInformation.Phone.FormatPhoneNumber()</small> <br />
+                <small>@Model.Details.ShippingInformation.Address</small>
+            </div>
+            <div class="vr"></div>
+            <div class="col-6">
+                @foreach (var item in Model.Details.ShippingSessions)
+                {
+                    <div class="status-details row">
+                        <div class="status-datetime col-4">
+                            @item.SessionDate.ToString("HH:mm dd-MM-yyyy")
+                        </div>
+                        <div class="col-8" style="color: #03c04a">
+                            <b>@item.Status.ToString().FormatEnumString()</b> <br />
+                            @(item.Description ?? "No Description")
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <!-- Address Line End -->
+    <!-- Total Start -->
+    <div class="total-container">
+        <div class="product-totals row">
+            <div class="col-8 border-right border-bottom pt-2 pb-2" style="text-align: right">
+                <small>Product totals</small>
+            </div>
+            <div class="col-4 border-bottom pt-2 pb-2" style="text-align: right">
+                <small>$49.99</small>
+            </div>
+        </div>
+        <div class="product-shipping-fee row">
+            <div class="col-8 border-right border-bottom pt-2 pb-2" style="text-align: right">
+                <small>Shipping Fee</small>
+            </div>
+            <div class="col-4 border-bottom pt-2 pb-2" style="text-align: right">
+                <small>$10.00</small>
+            </div>
+        </div>
+        <div class="orders-total row">
+            <div class="col-8 border-right border-bottom pt-2 pb-2" style="text-align: right">
+                <small>Total</small>
+            </div>
+            <div class="col-4 border-bottom pt-2 pb-2" style="text-align: right">
+                <small>$59.99</small>
+            </div>
+        </div>
+        <div class="payment-type row">
+            <div class="col-8 border-right pt-2 pb-2" style="text-align: right">
+                <small>Payment type</small>
+            </div>
+            <div class="col-4 pt-2 pb-2" style="text-align: right">
+                <small>Momo</small>
+            </div>
+        </div>
+    </div>
+    <!-- Total End -->
+    <div class="pt-3 pr-4 pb-3" style="text-align: right;">
+        <button class="btn btn-primary pl-5 pr-5 m-3">Rating</button>
+        <button class="btn btn-dark pl-5 pr-5 m-3">Buy again</button>
+    </div>
+</div>

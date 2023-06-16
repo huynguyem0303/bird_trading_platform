@@ -122,7 +122,7 @@
                 </div>
                 <div class="col-lg-4 col-6 text-right">
                     <p class="m-0">Customer Service</p>
-                    <h5 class="m-0">+012 345 6789</h5>
+                    <h5 class="m-0">+84 988 123 123</h5>
                 </div>
             </div>
         </div>
@@ -152,16 +152,27 @@
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a href="/Index" class="nav-item nav-link active">Home</a>
-                                <a href="~/Products/Index" class="nav-item nav-link">Shopping</a>
-                                <div class="nav-item dropdown">
+                                @{
+                                    string IsActive(string currentUrl)
+                                    {
+                                        var queryString = Context.Request.Path.ToString().Substring(Context.Request.PathBase.ToString().Length);
+                                        if (queryString == "/") queryString = "/Index";
+                                        else if (queryString == "/Orders/Purchase") queryString = "/Purchase";
+                                        var result = queryString.Contains(currentUrl) ? "active" : "";
+                                        return result;
+                                    }
+                                }
+                                <a asp-page="/Index" class="nav-item nav-link @IsActive("/Index") ">Home</a>
+                                <a asp-page="/Products/Index" class="nav-item nav-link @IsActive("/Products") ">Shopping</a>
+                                <a asp-page="/Orders/Index" class="nav-item nav-link @IsActive("/Orders") " >Shopping Cart</a>
+                                @*<div class="nav-item dropdown">
                                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages <i class="fa fa-angle-down mt-1"></i></a>
                                     <div class="dropdown-menu bg-primary rounded-0 border-0 m-0">
                                         <a asp-page="/Orders/Index" class="dropdown-item">Shopping Cart</a>
                                         <a href="checkout.html" class="dropdown-item">Checkout</a>
                                     </div>
-                                </div>
-                                <a asp-page="/Orders/Purchase" class="nav-item nav-link">Orders</a>
+                                </div>*@
+                                <a asp-page="/Orders/Purchase" class="nav-item nav-link @IsActive("/Purchase") ">Orders</a>
                             </div>
                             <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
                                 @*<a href="" class="btn px-0">
@@ -170,7 +181,7 @@
                                 </a>*@
                                 <a asp-page="/Orders/Index" class="btn px-0 ml-3">
                                     <i class="fas fa-shopping-cart text-primary"></i>
-                                    <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
+                                    <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">@(Context.Session.GetInt32("CartCount") ?? 0)</span>
                                 </a>
                             </div>
                         </div>
