@@ -1,0 +1,54 @@
+﻿<script type="text/javascript">
+    function updateQuantity(detailId, inputQuantity, type) {
+        var newQuantity = $("#" + inputQuantity).val();
+        if (type == 'minus') newQuantity -= 1;
+        else if (type == 'plus') newQuantity = parseInt(newQuantity) + 1;
+        $.ajax({
+            type: "GET",
+            url: "Orders/UpdateQuantity",
+            data: {
+                detailId: detailId,
+                quantity: newQuantity
+            },
+            success: function (e) {
+                if (e.status == 200) 
+                {
+                    console.log(e.message);
+                    var total = parseFloat(e.productPrice) * parseFloat(e.quantity);
+                    $("#cart-total-" + detailId).html("$" + total.toFixed(2));
+                    //
+                    $('input[name="checkoutCheckbox"]').prop('checked', false);
+                    //
+                    $.ajax({
+                        type: "GET",
+                        url: "/Orders/Checkout/Total",
+                        data: {
+                            "cartDetailsId": detailId,
+                            "currentTotalStr": "$0",
+                            "isChecked": "false"
+                        },
+                        success: function (e) {
+                            $("#checkout-container").html(e);
+                        },
+                        failure: function (e) {
+                            console.log(e);
+                        }
+                    });
+                } 
+                else if (e.status == 400) 
+                {
+                    toastr.warning(e.message);
+                    setTimeout( function() {
+                        window.location.reload()
+                    }, 1000);
+                }
+            },
+            failure: function () {
+                console.log("error");
+            },
+            error: function(x, e) {
+                console.log(e);
+            }
+        });
+    }
+</script>

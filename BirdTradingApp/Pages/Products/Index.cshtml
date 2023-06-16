@@ -174,23 +174,39 @@
                                     }
                                     <div class="product-action">
                                         <a class="btn btn-outline-dark btn-square addToCart" data-id="@item.Id"><i class="fa fa-shopping-cart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                        @*<a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>*@
                                         <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id" asp-page="Details"><i class="fa fa-search"></i></a>
                                     </div>
                                 </div>
                                 <div class="text-center py-4">
                                     <a class="h6 text-decoration-none text-truncate text-wrap" asp-route-id="@item.Id" asp-page="Details">@item.Name</a>
                                     <div class="d-flex align-items-center justify-content-center mt-2">
-                                        <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                        <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
+                                        <h6 class="text-muted ml-2">
+                                            Qty: @item.Quantity
+                                        </h6>
                                     </div>
                                     <div class="d-flex align-items-center justify-content-center mb-1">
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small class="fa fa-star text-primary mr-1"></small>
-                                        <small>(@item.Quantity)</small>
+                                        @{
+                                            var averageRating = await Model.GetAverageRating(item.Id);
+                                        }
+                                        @for (var i = 1f; i <= 5; i++)
+                                        {
+                                            @if (averageRating >= i)
+                                            {
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                            }
+                                            else if (averageRating + 0.5 == i)
+                                            {
+                                                <small class="fas fa-star-half-alt text-primary mr-1"></small>
+                                            }
+                                            else
+                                            {
+                                                <small class="far fa-star text-primary mr-1"></small>
+                                            }
+                                        }
+                                        <small>(@await Model.GetNumberOfRating(item.Id))</small>
                                     </div>
                                 </div>
                             </div>

@@ -42,11 +42,11 @@ namespace BirdTradingApp.Pages.Orders
                 else
                 {
                     currentTotal -= (details.Quantity * details.Product.OriginalPrice);
-                    CurrentTotal = currentTotal;
+                    CurrentTotal = currentTotal <= 0 ? 0 : currentTotal;
                 }
             }
 
-            return Partial("OrdersAjax/_CheckoutPartial", this);
+            return Partial("OrdersPartials/_CheckoutPartial", this);
         }
 
         public async Task<IActionResult> OnGetPaymentAsync(string cartDetailsId)

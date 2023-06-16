@@ -95,11 +95,11 @@
             <div class="row pb-3">
                 <div class="col-12 pb-1">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <div>
+                        @*<div>
                             <button class="btn btn-sm btn-light"><i class="fa fa-th-large"></i></button>
                             <button class="btn btn-sm btn-light ml-2"><i class="fa fa-bars"></i></button>
-                        </div>
-                        <div class="ml-2">
+                        </div>*@
+                        @*<div class="ml-2">
                             <div class="btn-group">
                                 <button type="button" id="sortingBtn" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">@(Model.CurrentFilter is null ? "Sorting" : Model.CurrentFilter)</button>
                                 <div class="dropdown-menu dropdown-menu-right">
@@ -116,7 +116,7 @@
                                     <a class="dropdown-item" asp-page-handler="Filter" asp-route-filterType="@Model.CurrentFilter" asp-route-pageSize="30">30</a>
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                     </div>
                 </div>
 
@@ -149,44 +149,61 @@
 
                 <hr class="col-12" />
 
-                @foreach (var item in Model.ProductPaging.Items)
-                {
-                    <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
-                        <div class="product-item bg-light mb-4">
-                            <div class="product-img position-relative overflow-hidden">
-                                @if (item.ImageUrl.StartsWith("img"))
-                                {
-                                    <img class="img-fluid w-100" src="~/@item.ImageUrl" alt="">
-                                }
-                                else
-                                {
-                                    <img class="img-fluid w-100" src="@item.ImageUrl" alt="" style="width: 200px; height: 200px;">
-                                }
-                                <div class="product-action">
-                                    <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id"
-                                   asp-page="Index" asp-page-handler="AddToCart"><i class="fa fa-shopping-cart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                                    <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id" asp-page="Details"><i class="fa fa-search"></i></a>
+                <div class="row col-12" id="product-container">
+                    @foreach (var item in Model.ProductPaging.Items)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-6 pb-1">
+                            <div class="product-item bg-light mb-4">
+                                <div class="product-img position-relative overflow-hidden">
+                                    @if (item.ImageUrl.StartsWith("img"))
+                                    {
+                                        <img class="img-fluid w-100" src="~/@item.ImageUrl" alt="">
+                                    }
+                                    else
+                                    {
+                                        <img class="img-fluid w-100" src="@item.ImageUrl" alt="" style="width: 200px; height: 200px;">
+                                    }
+                                    <div class="product-action">
+                                        <a class="btn btn-outline-dark btn-square addToCart" data-id="@item.Id"><i class="fa fa-shopping-cart"></i></a>
+                                        @*<a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                        <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>*@
+                                        <a class="btn btn-outline-dark btn-square" asp-route-id="@item.Id" asp-page="Details"><i class="fa fa-search"></i></a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="text-center py-4">
-                                <a class="h6 text-decoration-none text-truncate text-wrap" asp-route-id="@item.Id" asp-page="Details">@item.Name</a>
-                                <div class="d-flex align-items-center justify-content-center mt-2">
-                                    <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
-                                </div>
-                                <div class="d-flex align-items-center justify-content-center mb-1">
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small class="fa fa-star text-primary mr-1"></small>
-                                    <small>(@item.Quantity)</small>
+                                <div class="text-center py-4">
+                                    <a class="h6 text-decoration-none text-truncate text-wrap" asp-route-id="@item.Id" asp-page="Details">@item.Name</a>
+                                    <div class="d-flex align-items-center justify-content-center mt-2">
+                                        <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
+                                        <h6 class="text-muted ml-2">
+                                            Qty: @item.Quantity
+                                        </h6>
+                                    </div>
+                                    <div class="d-flex align-items-center justify-content-center mb-1">
+                                        @{
+                                            var averageRating = await Model.GetAverageRating(item.Id);
+                                        }
+                                        @for (var i = 1f; i <= 5; i++)
+                                        {
+                                            @if (averageRating >= i)
+                                            {
+                                                <small class="fa fa-star text-primary mr-1"></small>
+                                            }
+                                            else if (averageRating + 0.5 == i)
+                                            {
+                                                <small class="fas fa-star-half-alt text-primary mr-1"></small>
+                                            }
+                                            else
+                                            {
+                                                <small class="far fa-star text-primary mr-1"></small>
+                                            }
+                                        }
+                                        <small>(@await Model.GetNumberOfRating(item.Id))</small>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                }
+                    }
+                </div>
 
                 @{
                     var previousDisabled = Model.ProductPaging.HasPreviousPage ? "" : "disabled";
@@ -260,4 +277,5 @@
 <!-- Shop End -->
 @section Scripts {
     <partial name="ProductAjax/_FilterByCategory" />
+    <partial name="ProductAjax/_AddToCart" />
 }

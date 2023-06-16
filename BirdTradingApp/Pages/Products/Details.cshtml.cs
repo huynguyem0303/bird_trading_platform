@@ -13,13 +13,26 @@ namespace BirdTradingApp.Pages.Products
             _unitOfWork = unitOfWork;
         }
 
-        public Product? Product { get; set; }
+        public Product Product { get; set; }
         public IEnumerable<Product> OtherProducts { get; set; }
+        public float AverageRating { get; set; }
+        public int NumOfRating { get; set; }
 
         public async Task OnGet(int id)
         {
-            Product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
-            OtherProducts = await _unitOfWork.ProductRepository.GetTop4RelateProductAsync(Product.Category.TypeId, Product.Id);
+            var product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
+            if (product is not null)
+            {
+                Product = product;
+                OtherProducts = await _unitOfWork.ProductRepository.GetTop8RelateProductAsync(Product.Category.TypeId, Product.Id);
+                foreach (var item in product.OrderDetails)
+                {
+                    AverageRating += item.Rating ?? 0;
+                }
+                NumOfRating = product.OrderDetails.Where(x => x.Rating != null).Count();
+                AverageRating /= NumOfRating;
+                AverageRating = (float) Math.Floor(AverageRating) + 0.5f;
+            }
         }
     }
 }

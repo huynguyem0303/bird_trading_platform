@@ -73,14 +73,18 @@ namespace BirdTradingApp.Pages.Products
             if (userId is not null)
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
-                if (product is not null && product.Quantity >= quantity)
+                if (product is not null && await IsValidQuantity((int) userId, product,  quantity))
                 {
                     var cart = await _unitOfWork.CartRepository.GetCartByUserIdAndShopIdAsync((int)userId, product.Shop.Id);
                     if (cart is null)
                     {
                         if (await CreateNewCartAsync((int)userId, product, quantity))
                         {
-                            return new JsonResult("Add to cart");
+                            return new JsonResult(new
+                            {
+                                Status = StatusCodes.Status200OK,
+                                Message = "Add Succeed"
+                            });
                         }
                     }
                     else
@@ -90,19 +94,34 @@ namespace BirdTradingApp.Pages.Products
                         {
                             if (await UpdateCartDetailAsync(details, quantity))
                             {
-                                return new JsonResult("Add to cart");
+                                return new JsonResult(new
+                                {
+                                    Status = StatusCodes.Status200OK,
+                                    Message = "Add Succeed"
+                                });
                             }
                         }
                         //
                         if (await CreateNewCartDetailAsync((int)userId, product, quantity, cart.Id))
                         {
-                            return new JsonResult("Add to cart");
+                            return new JsonResult(new
+                            {
+                                Status = StatusCodes.Status200OK,
+                                Message = "Add Succeed"
+                            });
                         }
                     }
                 }
+
+                //
+                return new JsonResult(new
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Message = "Quantity in store is not enough"
+                });
             }
-            //
-            return RedirectToPage("/Products/Index");
+
+            return RedirectToPage("/Login");
         }
 
         /// <summary>
@@ -160,7 +179,7 @@ namespace BirdTradingApp.Pages.Products
         }
 
         /// <summary>
-        /// Update cart quantity exists product in cart.
+        /// Update cart quantity if exists product in cart.
         /// </summary>
         /// <param name="detail"></param>
         /// <param name="quantity"></param>
@@ -170,6 +189,48 @@ namespace BirdTradingApp.Pages.Products
             detail.Quantity += quantity;
             _unitOfWork.CartDetailRepository.Update(detail);
             return await _unitOfWork.SaveChangeAsync();
+        }
+        #endregion
+
+        //
+        #region Extend Function
+        public async Task<bool> IsValidQuantity(int userId, Product product, int quantity)
+        {
+            var result = false;
+            if (quantity <= product.Quantity) result = true;
+            var cart = await _unitOfWork.CartDetailRepository.GetDetailByUserIdAndProductIdAsync(userId, product.Id);
+            if (cart is null) return result;
+            if (quantity + cart.Quantity <= product.Quantity) return true;
+            return false;
+        }
+
+        public async Task<float> GetAverageRating(int productId)
+        {
+            var product = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
+            var result = 0f;
+            if (product is not null)
+            {
+                foreach (var item in product.OrderDetails)
+                {
+                    result += item.Rating ?? 0;
+                }
+                var numOfRating = product.OrderDetails.Where(x => x.Rating != null).Count();
+                result /= numOfRating;
+                result = (float)Math.Floor(result) + 0.5f;
+            }
+            return result;
+        }
+
+        public async Task<int> GetNumberOfRating(int productId)
+        {
+            var result = 0;
+
+            var product = await _unitOfWork.ProductRepository.GetByIdAsync(productId);
+            if (product is not null)
+            {
+                result = product.OrderDetails.Where(x => x.Rating != null).Count();
+            }
+            return result;
         }
         #endregion
     }

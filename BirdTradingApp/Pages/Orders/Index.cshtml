@@ -12,6 +12,7 @@
     }
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <!-- Cart Start -->
 <div class="container-fluid">
     <div class="row px-xl-5">
@@ -33,7 +34,7 @@
                     {
                         <tr>
                             <td colspan="7">
-                                <partial name="OrdersAjax/_EmptyCartPartial" />
+                                <partial name="OrdersPartials/_EmptyCartPartial" />
                             </td>
                         </tr>
                     }
@@ -41,49 +42,49 @@
                     {
                         foreach (var item in Model.Carts)
                         {
-                            <tr class="align-middle" style="border-bottom: 5px solid #f5f5f5">
+                            <tr class="align-middle border-bottom" style="border-bottom: 5px solid #f5f5f5">
                                 <td></td>
-                                <td colspan="5" class="text-left text-danger">
-                                    <span class="material-symbols-outlined">
-                                        storefront &nbsp;
-                                    </span>
+                                <td colspan="6" class="text-left text-danger lead">
+                                    <i class="fa-solid fa-store"></i> &nbsp;
                                     <span class="font-weight-bold">@item.Shop.Name</span>
                                 </td>
                             </tr>
                             @foreach (var details in item.CartDetails)
                             {
-                                <tr class="detail-container">
+                                <tr class="detail-container border-bottom">
                                     <td class="align-middle align-content-center">
                                         <input type="checkbox" name="checkoutCheckbox" value="@details.Id" onclick="checkedButton()" />
                                         </td>
                                     <td class="align-middle text-left" colspan="2">
-                                        @if (details.Product.ImageUrl.StartsWith("img"))
-                                        {
-                                            <img src="~/@details.Product.ImageUrl" alt="" style="width: 75px;">
-                                        }
-                                        else
-                                        {
-                                            <img src="@details.Product.ImageUrl" alt="" style="width: 75px;">
-                                        }
-                                        @details.Product.Name
+                                        <a class="text-decoration-none text-dark" asp-page="/Products/Details" asp-route-id="@details.ProductId">
+                                            @if (details.Product.ImageUrl.StartsWith("img"))
+                                            {
+                                                <img src="~/@details.Product.ImageUrl" alt="" style="width: 75px;">
+                                            }
+                                            else
+                                            {
+                                                <img src="@details.Product.ImageUrl" alt="" style="width: 75px;">
+                                            }
+                                            @details.Product.Name
+                                        </a>
                                     </td>
                                     <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice)</td>
                                     <td class="align-middle">
                                         <div class="input-group quantity mx-auto" style="width: 100px;">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-primary btn-minus">
+                                                <button class="btn btn-sm btn-primary btn-minus" onclick="updateQuantity('@details.Id', 'input-quantity-@details.Id', 'minus')">
                                                     <i class="fa fa-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" value="@details.Quantity">
+                                            <input type="text" class="form-control form-control-sm bg-secondary border-0 text-center" id="input-quantity-@details.Id" value="@details.Quantity">
                                             <div class="input-group-btn">
-                                                <button class="btn btn-sm btn-primary btn-plus">
+                                                <button class="btn btn-sm btn-primary btn-plus" onclick="updateQuantity('@details.Id', 'input-quantity-@details.Id', 'plus')">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="align-middle">@StringUtils.FormatCurrency(details.Product.OriginalPrice * details.Quantity)</td>
+                                    <td class="align-middle" id="cart-total-@details.Id">@StringUtils.FormatCurrency(details.Product.OriginalPrice * details.Quantity)</td>
                                     <td class="align-middle"><a class="btn btn-sm btn-danger" data-id="@details.Id" onclick="removeFromCart('@details.Id')"><i class="fa fa-times"></i></a></td>
                                 </tr>
                             }
@@ -138,4 +139,5 @@
 @section Scripts {
     <partial name="OrdersAjax/_CheckoutSelectedProduct" />
     <partial name="OrdersAjax/_RemoveFromCart" />
+    <partial name="OrdersAjax/_UpdateQuantity" />
 }

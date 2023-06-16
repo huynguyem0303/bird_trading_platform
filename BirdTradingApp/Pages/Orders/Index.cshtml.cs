@@ -1,7 +1,9 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using NuGet.Protocol;
 
 namespace BirdTradingApp.Pages.Orders
 {
@@ -41,9 +43,36 @@ namespace BirdTradingApp.Pages.Orders
                 TempData["success"] = $"Product {details.Product.Name} removed from cart";
                 var userId = GetCurrentUserId();
                 if (userId > 0) Carts = await _unitOfWork.CartRepository.GetUserCartAsync(userId);
-                return Partial("OrdersAjax/_CartListPartial", Carts);
+                return Partial("OrdersPartials/_CartListPartial", Carts);
             }
             return BadRequest("Product not found");
+        }
+        #endregion
+
+        #region UpdateQuantity
+        public async Task<IActionResult> OnGetUpdateQuantityAsync(int detailId, int quantity)
+        {
+            var details = await _unitOfWork.CartDetailRepository.GetByIdAsync(detailId);
+            if (details is null) return BadRequest("Product not found in cart.");
+            //
+            if (quantity > 0 && details.Product.Quantity >= quantity)
+            {
+                details.Quantity = quantity;
+                _unitOfWork.CartDetailRepository.Update(details);
+                if (await _unitOfWork.SaveChangeAsync()) return new JsonResult( new
+                {
+                    Status = StatusCodes.Status200OK,
+                    Message = "Update succeed",
+                    ProductPrice = details.Product.OriginalPrice,
+                    Quantity = quantity
+                });
+            }
+
+            return new JsonResult(new
+            {
+                Status = StatusCodes.Status400BadRequest,
+                Message = "Product quantity is not enough or invalid.",
+            });
         }
         #endregion
         //

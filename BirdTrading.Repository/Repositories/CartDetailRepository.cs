@@ -32,5 +32,13 @@ namespace BirdTrading.Repository.Repositories
         {
             return await _context.Set<CartDetail>().FirstOrDefaultAsync(x => x.CartId == cartId && x.ProductId == productId);
         }
+
+        public async Task<CartDetail?> GetDetailByUserIdAndProductIdAsync(int userId, int productId)
+        {
+            return await _context.Set<CartDetail>()
+                .Include(x => x.Cart)
+                .Include(x => x.Product)
+                .FirstOrDefaultAsync(x => x.ProductId == productId && x.Cart.UserId == userId);
+        }
     }
 }

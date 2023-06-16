@@ -1,18 +1,24 @@
 ﻿<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        $(".addToCart").on('click', function() {
+        $(".addToCart").on('click', function () {
+            var quantity = $("#add-to-cart-quantity").val();
+            if (quantity === 'undefined') quantity = 1;
             $.ajax({
                 type: "GET",
                 url: "/Products/AddToCart",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: {
-                    id: $(this).data("id")
+                    id: $(this).data("id"),
+                    quantity: quantity
                 },
                 success: function (e) {
-                    console.log("succeed");
-                    toastr.success(e);
+                    if (e.status == 200) {
+                        toastr.success(e.message);
+                    } else if (e.status == 400) {
+                        toastr.warning(e.message);
+                    }
                 },
                 failure: function (e) {
                     console.log(e);

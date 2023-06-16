@@ -17,7 +17,29 @@ namespace BirdTrading.Repository.Repositories
             return await _context.Set<Product>()
                 .Include(x => x.Shop)
                 .Include(x => x.Category)
+                .Include(x => x.OrderDetails)
+                .ThenInclude(x => x.Order)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public override async Task<Pagination<Product>> GetPaginationsAsync(int pageIndex, int pageSize)
+        {
+            var totalCount = await _context.Set<Product>().CountAsync();
+            var items = await _context.Set<Product>()
+                .Include(x => x.OrderDetails)
+                .AsNoTracking()
+                .Skip(pageIndex * pageSize)
+                .Take(pageSize).ToListAsync();
+
+            var result = new Pagination<Product>()
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount
+            };
+            return result;
         }
 
         public async Task<Pagination<Product>> GetProductPagingByCategoryAsync(int category, int pageIndex, int pageSize)
@@ -64,13 +86,16 @@ namespace BirdTrading.Repository.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<Product>> GetTop4RelateProductAsync(int categoryType, int productId)
+        public async Task<IEnumerable<Product>> GetTop8RelateProductAsync(int categoryType, int productId)
         {
-            return await _context.Set<Product>()
+            var relateProducts = await _context.Set<Product>()
                 .Include(x => x.Shop)
                 .Include(x => x.Category)
                 .Where(x => x.Category.TypeId == categoryType && x.Id != productId)
-                .Take(4).ToListAsync();
+                .ToListAsync();
+            var random = new Random();
+            relateProducts = relateProducts.OrderBy(x => random.NextInt64()).ToList();
+            return relateProducts.Take(8);
         }
 
         public async Task<Pagination<Product>> SearchProductPagingAsync(string search, int pageIndex, int pageSize)

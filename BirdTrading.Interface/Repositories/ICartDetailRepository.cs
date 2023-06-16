@@ -6,5 +6,6 @@ namespace BirdTrading.Interface.Repositories
     {
         Task<IEnumerable<CartDetail>> GetUserCartsAsync(int id);
         Task<CartDetail?> GetDetailByCartIdAndProductIdAsync(int cartId, int productId);
+        Task<CartDetail?> GetDetailByUserIdAndProductIdAsync(int userId, int productId);
     }
 }
