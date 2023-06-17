@@ -57,20 +57,20 @@
             <h5>Shipping Information</h5>
         </div>
         <div class="address-content row col-12">
-            <div class="col-6 border-right border-5 border-dark">
+            <div class="col-7 border-right border-5 border-dark">
                 <span class="font-weight-bold">@Model.Details.ShippingInformation.Name</span> <br />
                 <small>@Model.Details.ShippingInformation.Phone.FormatPhoneNumber()</small> <br />
                 <small>@Model.Details.ShippingInformation.Address</small>
             </div>
             <div class="vr"></div>
-            <div class="col-6">
+            <div class="col-5">
                 @foreach (var item in Model.Details.ShippingSessions)
                 {
                     <div class="status-details row">
-                        <div class="status-datetime col-4">
+                        <div class="status-datetime col-5">
                             @item.SessionDate.ToString("HH:mm dd-MM-yyyy")
                         </div>
-                        <div class="col-8" style="color: #03c04a">
+                        <div class="col-7" style="color: #03c04a">
                             <b>@item.Status.ToString().FormatEnumString()</b> <br />
                             @(item.Description ?? "No Description")
                         </div>
@@ -117,7 +117,129 @@
     </div>
     <!-- Total End -->
     <div class="pt-3 pr-4 pb-3" style="text-align: right;">
-        <button class="btn btn-primary pl-5 pr-5 m-3">Rating</button>
-        <button class="btn btn-dark pl-5 pr-5 m-3">Buy again</button>
+        @if (Model.Details.ShippingSessions.Last().Status == BirdTrading.Domain.Enums.OrderStatus.Delivered)
+        {
+            @if (Model.Details.OrderDetails.Any(x => x.Rating == null))
+            {
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary pl-5 pr-5 m-3" data-toggle="modal" data-target="#rating-item-@Model.Details.Id">
+                    Rating
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="rating-item-@Model.Details.Id" tabindex="-1" role="dialog" aria-labelledby="rating-item-@Model.Details.Id-label" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="rating-model-@Model.Details.Id-longTitle">Leave a comment</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <form method="post" asp-page="/Orders/Purchase" asp-page-handler="Rating" onsubmit="return SubmitComment()">
+                                <div class="modal-body text-left">
+                                    <dl class="dl-horizontal">
+                                        <dd>
+                                            <div class="commentBox bg-light">
+                                                <div class="form-horizontal">
+                                                    <div class="form-group">
+                                                        <label class="col-12 control-label">
+                                                            Your rating <span style="font-weight:normal;">(1 start is bad, 5 star is good)</span>
+                                                        </label>
+                                                        <div class="col-md-7">
+                                                            <div onmouseout="CRateSelected()">
+                                                                <span class="starFade" id="Rate1" onclick="CRate(1)" onmouseover="CRateOver(1)" onmouseout="CRateOut(1)"></span>
+                                                                <span class="starFade" id="Rate2" onclick="CRate(2)" onmouseover="CRateOver(2)" onmouseout="CRateOut(2)"></span>
+                                                                <span class="starFade" id="Rate3" onclick="CRate(3)" onmouseover="CRateOver(3)" onmouseout="CRateOut(3)"></span>
+                                                                <span class="starFade" id="Rate4" onclick="CRate(4)" onmouseover="CRateOver(4)" onmouseout="CRateOut(4)"></span>
+                                                                <span class="starFade" id="Rate5" onclick="CRate(5)" onmouseover="CRateOver(5)" onmouseout="CRateOut(5)"></span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="col-md-12">
+                                                            <textarea name="comment" id="Comment" required rows="5" style="width:100%;" class="form-control"></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <input type="hidden" name="rating" id="Rating" value="0" />
+                                                    <input type="hidden" name="orderId" value="@Model.Details.Id" />
+                                                    <input type="hidden" name="type" value="@Request.Query["type"]" />
+                                                </div>
+                                            </div>
+                                        </dd>
+                                    </dl>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary" name="btnRegister">Save</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <button type="button" class="btn btn-primary pl-5 pr-5 m-3 disabled">Rated</button>
+            }
+        }
     </div>
 </div>
+@section Scripts {
+    <script type="text/javascript">
+        function SubmitComment() {
+            if ($("#Rating").val() == "0") {
+                alert("Please rate this service provider.");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        function CRate(r) {
+            $("#Rating").val(r);
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+            // unselect remaining
+            for (var i = r + 1; i <= 5; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+
+        function CRateOver(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
+
+        function CRateOut(r) {
+            for (var i = 1; i <= r; i++) {
+                $("#Rate" + i).attr('class', 'starFade');
+            }
+        }
+
+        function CRateSelected() {
+            var setRating = $("#Rating").val();
+            for (var i = 1; i <= setRating; i++) {
+                $("#Rate" + i).attr('class', 'starGlow');
+            }
+        }
+    </script>
+
+    <script type="text/javascript">
+        function SCRate() {
+            for (var i = 1; i <= 5; i++) {
+                $("#sRate" + i).attr('class', 'starGlowN');
+            }
+        }
+        $(function () {
+            SCRate();
+        });
+
+        function submitTest() {
+            alert($("#Rating").val() + ", " + $("#Comment").val());
+        }
+    </script>
+}

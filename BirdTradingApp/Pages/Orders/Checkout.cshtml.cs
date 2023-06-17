@@ -120,7 +120,8 @@ namespace BirdTradingApp.Pages.Orders
                 //
                 var shippingInfor = await GetShippingInformationAsync();
                 var shippingStatus = new List<ShippingSession> { CreateShippingStatus() };
-                if (shippingInfor is not null) {
+                if (shippingInfor is not null)
+                {
 
                     var order = new Order
                     {
@@ -149,6 +150,8 @@ namespace BirdTradingApp.Pages.Orders
         public async Task<bool> RemoveCartAsync(IEnumerable<CartDetail> cartDetails)
         {
             var cartIds = cartDetails.Select(x => x.CartId).Distinct();
+            var cartCount = HttpContext.Session.GetInt32("CartCount") ?? 0;
+            if (cartCount != 0) HttpContext.Session.SetInt32("CartCount", cartCount - cartIds.Count());
             _unitOfWork.CartDetailRepository.DeleteRange(cartDetails.ToList());
             //
             if (await _unitOfWork.SaveChangeAsync())

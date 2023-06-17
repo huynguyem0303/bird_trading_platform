@@ -1,9 +1,7 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using NuGet.Protocol;
 
 namespace BirdTradingApp.Pages.Orders
 {
@@ -59,7 +57,7 @@ namespace BirdTradingApp.Pages.Orders
             {
                 details.Quantity = quantity;
                 _unitOfWork.CartDetailRepository.Update(details);
-                if (await _unitOfWork.SaveChangeAsync()) return new JsonResult( new
+                if (await _unitOfWork.SaveChangeAsync()) return new JsonResult(new
                 {
                     Status = StatusCodes.Status200OK,
                     Message = "Update succeed",

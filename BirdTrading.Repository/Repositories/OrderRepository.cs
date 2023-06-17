@@ -19,7 +19,7 @@ namespace BirdTrading.Repository.Repositories
                 .ThenInclude(x => x.Product)
                 .ThenInclude(x => x.Shop)
                 .Include(x => x.ShippingSessions)
-                .Where(x => x.UserId == userId && x.ShippingSessions.Any(s => (int) s.Status == status))
+                .Where(x => x.UserId == userId && x.ShippingSessions.Any(s => (int)s.Status == status))
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }

@@ -31,7 +31,7 @@ namespace BirdTradingApp.Pages.Products
                 }
                 NumOfRating = product.OrderDetails.Where(x => x.Rating != null).Count();
                 AverageRating /= NumOfRating;
-                AverageRating = (float) Math.Floor(AverageRating) + 0.5f;
+                AverageRating = (float)Math.Floor(AverageRating) + 0.5f;
             }
         }
     }

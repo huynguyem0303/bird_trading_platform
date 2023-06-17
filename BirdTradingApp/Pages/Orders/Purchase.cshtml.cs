@@ -1,5 +1,6 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BirdTradingApp.Pages.Orders
@@ -45,6 +46,24 @@ namespace BirdTradingApp.Pages.Orders
             {
                 Orders = await _unitOfWork.OrderRepository.GetListSearchAsync(userId, search);
             }
+        }
+
+        public async Task<IActionResult> OnPostRatingAsync(string comment, float rating, int orderId, string type)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+            if (order is not null)
+            {
+                foreach (var item in order.OrderDetails)
+                {
+                    item.Comment = comment;
+                    item.Rating = rating;
+                }
+                _unitOfWork.OrderRepository.Update(order);
+                await _unitOfWork.SaveChangeAsync();
+                TempData["success"] = "Add comment succeed. Thanks for your rating.";
+                return RedirectToPage("/Orders/Purchase", type);
+            }
+            return Page();
         }
         //
         public int GetCurrentUserId()

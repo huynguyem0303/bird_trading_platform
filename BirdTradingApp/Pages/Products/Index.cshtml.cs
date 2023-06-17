@@ -1,7 +1,6 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
 using BirdTrading.Utils.Pagination;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -55,7 +54,7 @@ namespace BirdTradingApp.Pages.Products
             }
             else
             {
-                CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();;
+                CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync(); ;
                 if (filterType.Equals("Latest"))
                 {
                     ProductPaging = await _unitOfWork.ProductRepository.GetDescendingPaginationAsync(x => x.Id, pageIndex, pageSize);
@@ -74,7 +73,7 @@ namespace BirdTradingApp.Pages.Products
             if (userId is not null)
             {
                 var product = await _unitOfWork.ProductRepository.GetByIdAsync(id);
-                if (product is not null && await IsValidQuantity((int) userId, product,  quantity))
+                if (product is not null && await IsValidQuantity((int)userId, product, quantity))
                 {
                     var cart = await _unitOfWork.CartRepository.GetCartByUserIdAndShopIdAsync((int)userId, product.Shop.Id);
                     if (cart is null)
@@ -82,7 +81,7 @@ namespace BirdTradingApp.Pages.Products
                         if (await CreateNewCartAsync((int)userId, product, quantity))
                         {
                             var cartCount = HttpContext.Session.GetInt32("CartCount");
-                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int) cartCount + 1);
+                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int)cartCount + 1);
                             return new JsonResult(new
                             {
                                 Status = StatusCodes.Status200OK,
@@ -108,7 +107,7 @@ namespace BirdTradingApp.Pages.Products
                         if (await CreateNewCartDetailAsync((int)userId, product, quantity, cart.Id))
                         {
                             var cartCount = HttpContext.Session.GetInt32("CartCount");
-                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int) cartCount + 1);
+                            if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int)cartCount + 1);
                             return new JsonResult(new
                             {
                                 Status = StatusCodes.Status200OK,
