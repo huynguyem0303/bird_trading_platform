@@ -13,7 +13,7 @@
         }
         public int PageIndex { get; set; }
 
-        public bool HasNextPage { get { return PageIndex + 1 < TotalPagesCount; } }
+        public bool HasNextPage { get { return PageIndex + 1 <= TotalPagesCount; } }
         public bool HasPreviousPage { get { return PageIndex > 0; } }
 
         public ICollection<T> Items { get; set; }

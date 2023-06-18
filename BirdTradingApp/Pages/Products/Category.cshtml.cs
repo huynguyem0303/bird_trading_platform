@@ -20,7 +20,6 @@ namespace BirdTradingApp.Pages.Products
         public Category RecentCategory { get; set; }
         public string RecentType { get; set; }
         public int CurrentPageIndex { get; set; }
-        public string CurrentFilter { get; set; }
         public int CurrentPageSize { get; set; }
 
         public async Task OnGetAsync(int categoryType, int pageIndex = 0, int pageSize = 9)
@@ -30,7 +29,7 @@ namespace BirdTradingApp.Pages.Products
             ProductPaging = await _unitOfWork.ProductRepository.GetProductPagingByCategoryTypeAsync(categoryType, pageIndex, pageSize);
             var type = await _unitOfWork.CategoryTypeRepository.GetByIdAsync(categoryType);
             if (type is not null) RecentType = type.Type;
-            CurrentPageIndex = ProductPaging.TotalPagesCount;
+            CurrentPageIndex = pageIndex;
             CurrentPageSize = pageSize;
         }
 
@@ -41,7 +40,7 @@ namespace BirdTradingApp.Pages.Products
             if (categoryObj is not null) RecentCategory = categoryObj;
             CategoryTypes = await _unitOfWork.CategoryTypeRepository.GetListAsync();
             RecentType = RecentCategory.Type.Type;
-            CurrentPageIndex = ProductPaging.TotalPagesCount;
+            CurrentPageIndex = pageIndex;
             CurrentPageSize = pageSize;
         }
         //
