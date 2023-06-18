@@ -56,6 +56,7 @@ namespace BirdTradingApp.Pages.Orders
             var orderList = await GenerateListOrderAsync(cartDetails);
             await UpdateOrderAsync(orderList);
             await RemoveCartAsync(cartDetails);
+            await UpdateProductQuantity(cartDetails);
             TempData["success"] = "Succeed";
             return RedirectToPage("Index");
         }
@@ -67,6 +68,7 @@ namespace BirdTradingApp.Pages.Orders
             return id;
         }
 
+        #region Checkout Func
         public async Task<ShippingInformation?> GetShippingInformationAsync()
         {
             var id = GetCurrentUserId();
@@ -168,6 +170,22 @@ namespace BirdTradingApp.Pages.Orders
             return false;
         }
 
+        public async Task UpdateProductQuantity(IEnumerable<CartDetail> cartDetails)
+        {
+            var listProducts = new List<Product>();
+            foreach (var item in cartDetails)
+            {
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(item.ProductId);
+                if (product is not null)
+                {
+                    product.Quantity -= item.Quantity;
+                    listProducts.Add(product);
+                }
+            }
+            _unitOfWork.ProductRepository.UpdateRange(listProducts);
+            await _unitOfWork.SaveChangeAsync();
+        }
+
         public ShippingSession CreateShippingStatus()
         {
             return new ShippingSession
@@ -176,5 +194,6 @@ namespace BirdTradingApp.Pages.Orders
                 SessionDate = DateTime.Now,
             };
         }
+        #endregion
     }
 }

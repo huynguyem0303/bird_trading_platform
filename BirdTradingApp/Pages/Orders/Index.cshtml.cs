@@ -41,6 +41,8 @@ namespace BirdTradingApp.Pages.Orders
                 TempData["success"] = $"Product {details.Product.Name} removed from cart";
                 var userId = GetCurrentUserId();
                 if (userId > 0) Carts = await _unitOfWork.CartRepository.GetUserCartAsync(userId);
+                var cartCount = HttpContext.Session.GetInt32("CartCount");
+                if (cartCount is not null) HttpContext.Session.SetInt32("CartCount", (int)cartCount - 1);
                 return Partial("OrdersPartials/_CartListPartial", Carts);
             }
             return BadRequest("Product not found");

@@ -14,6 +14,7 @@ namespace BirdTrading.Repository.Repositories
         {
             return await _context.Set<CategoryType>()
                 .Include(x => x.Categories)
+                .ThenInclude(x => x.Products)
                 .ToListAsync();
         }
     }

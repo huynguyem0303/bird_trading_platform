@@ -91,6 +91,7 @@ namespace BirdTrading.Repository.Repositories
             var relateProducts = await _context.Set<Product>()
                 .Include(x => x.Shop)
                 .Include(x => x.Category)
+                .Include(x => x.OrderDetails)
                 .Where(x => x.Category.TypeId == categoryType && x.Id != productId)
                 .ToListAsync();
             var random = new Random();

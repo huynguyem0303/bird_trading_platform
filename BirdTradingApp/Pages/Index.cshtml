@@ -22,8 +22,8 @@
                             <div class="p-3" style="max-width: 700px;">
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Pet Birds</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
-                                    ... provide you with a variety of ornamental birds.
-                                    </p>
+                                    Birt Shop provide you with a variety of ornamental birds.
+                                </p>
                                 <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" asp-page="/Products/Index">Shop Now</a>
                             </div>
                         </div>
@@ -35,7 +35,7 @@
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Foods</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                                     @*Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam*@
-                                    </p>
+                                </p>
                                 <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" asp-page="/Products/Index">Shop Now</a>
                             </div>
                         </div>
@@ -47,7 +47,7 @@
                                 <h1 class="display-4 text-white mb-3 animate__animated animate__fadeInDown">Cages and Others</h1>
                                 <p class="mx-md-5 px-5 animate__animated animate__bounceIn">
                                     @*Lorem rebum magna amet lorem magna erat diam stet. Sadips duo stet amet amet ndiam elitr ipsum diam*@
-                                    </p>
+                                </p>
                                 <a class="btn btn-outline-light py-2 px-4 mt-3 animate__animated animate__fadeInUp" asp-page="/Products/Index">Shop Now</a>
                             </div>
                         </div>
@@ -56,22 +56,22 @@
             </div>
         </div>
         @*<div class="col-lg-4">
-            <div class="product-offer mb-30" style="height: 200px;">
-                <img class="img-fluid" src="img/offer-1.jpg" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
-            <div class="product-offer mb-30" style="height: 200px;">
-                <img class="img-fluid" src="img/offer-2.jpg" alt="">
-                <div class="offer-text">
-                    <h6 class="text-white text-uppercase">Save 20%</h6>
-                    <h3 class="text-white mb-3">Special Offer</h3>
-                    <a href="" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
+        <div class="product-offer mb-30" style="height: 200px;">
+        <img class="img-fluid" src="img/offer-1.jpg" alt="">
+        <div class="offer-text">
+        <h6 class="text-white text-uppercase">Save 20%</h6>
+        <h3 class="text-white mb-3">Special Offer</h3>
+        <a href="" class="btn btn-primary">Shop Now</a>
+        </div>
+        </div>
+        <div class="product-offer mb-30" style="height: 200px;">
+        <img class="img-fluid" src="img/offer-2.jpg" alt="">
+        <div class="offer-text">
+        <h6 class="text-white text-uppercase">Save 20%</h6>
+        <h3 class="text-white mb-3">Special Offer</h3>
+        <a href="" class="btn btn-primary">Shop Now</a>
+        </div>
+        </div>
         </div>*@
     </div>
 </div>
@@ -90,7 +90,14 @@
                         </div>
                         <div class="flex-fill pl-3">
                             <h6>@item.Type</h6>
-                            <small class="text-body">100 Products</small>
+                            @{
+                                var count = 0;
+                                item.Categories.ToList().ForEach(x =>
+                                {
+                                    count += x.Products.Count();
+                                });
+                            }
+                            <small class="text-body">@count Products</small>
                         </div>
                     </div>
                 </a>
@@ -118,25 +125,39 @@
                         }
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
-                            <a class="btn btn-outline-dark btn-square" asp-page="/Products/Details" 
-                            asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
+                            @*<a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>*@
+                            <a class="btn btn-outline-dark btn-square" asp-page="/Products/Details"
+                           asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
                     <div class="text-center py-4">
                         <a class="h6 text-decoration-none text-truncate" asp-page="/Products/Details"
                        asp-route-id="@item.Id">@item.Name</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                            <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
+                            <h6 class="text-muted ml-2">Qty: @item.Quantity</h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small>(99)</small>
+                            @{
+                                var averageRating = await Model.GetAverageRating(item.Id);
+                            }
+                            @for (var i = 1f; i <= 5; i++)
+                            {
+                                @if (averageRating >= i)
+                                {
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                }
+                                else if (averageRating + 0.5 == i)
+                                {
+                                    <small class="fas fa-star-half-alt text-primary mr-1"></small>
+                                }
+                                else
+                                {
+                                    <small class="far fa-star text-primary mr-1"></small>
+                                }
+                            }
+                            <small>(@await Model.GetNumberOfRating(item.Id))</small>
                         </div>
                     </div>
                 </div>
@@ -190,8 +211,8 @@
                         }
                         <div class="product-action">
                             <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
-                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                            @*<a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                            <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>*@
                             <a class="btn btn-outline-dark btn-square" asp-page="/Products/Details"
                            asp-route-id="@item.Id"><i class="fa fa-search"></i></a>
                         </div>
@@ -200,15 +221,29 @@
                         <a class="h6 text-decoration-none text-truncate" asp-page="/Products/Details"
                        asp-route-id="@item.Id">@item.Name</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                            <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
+                            <h6 class="text-muted ml-2">Qty: @item.Quantity</h6>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small class="fa fa-star text-primary mr-1"></small>
-                            <small>(99)</small>
+                            @{
+                                var averageRating = await Model.GetAverageRating(item.Id);
+                            }
+                            @for (var i = 1f; i <= 5; i++)
+                            {
+                                @if (averageRating >= i)
+                                {
+                                    <small class="fa fa-star text-primary mr-1"></small>
+                                }
+                                else if (averageRating + 0.5 == i)
+                                {
+                                    <small class="fas fa-star-half-alt text-primary mr-1"></small>
+                                }
+                                else
+                                {
+                                    <small class="far fa-star text-primary mr-1"></small>
+                                }
+                            }
+                            <small>(@await Model.GetNumberOfRating(item.Id))</small>
                         </div>
                     </div>
                 </div>

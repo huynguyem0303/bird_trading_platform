@@ -82,13 +82,15 @@
                 </div>
                 <h3 class="font-weight-semi-bold mb-4">@StringUtils.FormatCurrency((decimal) Model.Product.OriginalPrice)</h3>
                 <p class="mb-4">@Model.Product?.Description</p>
-                <div class="d-flex mb-3">
-                    <strong class="text-dark mr-3">Quantity:</strong>
-                    <div class="custom-control custom-radio custom-control-inline">
-                        @Model.Product?.Quantity
+                @if (Model.Product?.Quantity > 0)
+                {
+                    <div class="d-flex mb-3">
+                        <strong class="text-dark mr-3">Quantity:</strong>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            @Model.Product?.Quantity
+                        </div>
                     </div>
-                </div>
-                @*<div class="d-flex mb-4">
+                    @*<div class="d-flex mb-4">
                 <strong class="text-dark mr-3">Colors:</strong>
                 <form>
                 <div class="custom-control custom-radio custom-control-inline">
@@ -113,24 +115,31 @@
                 </div>
                 </form>
                 </div>*@
-                <div class="d-flex align-items-center mb-4 pt-2">
-                    <div class="input-group quantity mr-3" style="width: 130px;">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-minus">
-                                <i class="fa fa-minus"></i>
-                            </button>
+                    <div class="d-flex align-items-center mb-4 pt-2">
+                        <div class="input-group quantity mr-3" style="width: 130px;">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-minus">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="form-control bg-secondary border-0 text-center" id="add-to-cart-quantity" value="1">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary btn-plus">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
                         </div>
-                        <input type="text" class="form-control bg-secondary border-0 text-center" id="add-to-cart-quantity" value="1">
-                        <div class="input-group-btn">
-                            <button class="btn btn-primary btn-plus">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
+                        <button class="btn btn-primary px-3 addToCart" data-id="@Model.Product.Id">
+                            <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
+                        </button>
                     </div>
-                    <button class="btn btn-primary px-3 addToCart" data-id="@Model.Product.Id">
-                        <i class="fa fa-shopping-cart mr-1"></i> Add To Cart
-                    </button>
-                </div>
+                }
+                else
+                {
+                    <div class="d-flex mb-4">
+                        <h4 class="text-danger">Out of stock</h4>
+                    </div>
+                }
                 <div class="d-flex pt-2">
                     <strong class="text-dark mr-2">Share on:</strong>
                     <div class="d-inline-flex">
@@ -336,15 +345,29 @@
                         <div class="text-center py-4">
                             <a class="h6 text-decoration-none text-truncate text-wrap" asp-page="Details" asp-route-id="@item.Id">@item.Name</a>
                             <div class="d-flex align-items-center justify-content-center mt-2">
-                                <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5><h6 class="text-muted ml-2"><del>$123.00</del></h6>
+                                <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
+                                <h6 class="text-muted ml-2">Qty: @item.Quantity</h6>
                             </div>
                             <div class="d-flex align-items-center justify-content-center mb-1">
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small class="fa fa-star text-primary mr-1"></small>
-                                <small>(99)</small>
+                                @{
+                                    var averageRating = await Model.GetAverageRating(item.Id);
+                                }
+                                @for (var i = 1f; i <= 5; i++)
+                                {
+                                    @if (averageRating >= i)
+                                    {
+                                        <small class="fa fa-star text-primary mr-1"></small>
+                                    }
+                                    else if (averageRating + 0.5 == i)
+                                    {
+                                        <small class="fas fa-star-half-alt text-primary mr-1"></small>
+                                    }
+                                    else
+                                    {
+                                        <small class="far fa-star text-primary mr-1"></small>
+                                    }
+                                }
+                                <small>(@await Model.GetNumberOfRating(item.Id))</small>
                             </div>
                         </div>
                     </div>

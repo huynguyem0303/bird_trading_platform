@@ -30,32 +30,32 @@
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" checked id="price-all">
                         <label class="custom-control-label" for="price-all">All Price</label>
-                        <span class="badge border font-weight-normal">1000</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" id="price-1">
                         <label class="custom-control-label" for="price-1">$0 - $100</label>
-                        <span class="badge border font-weight-normal">150</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" id="price-2">
                         <label class="custom-control-label" for="price-2">$100 - $200</label>
-                        <span class="badge border font-weight-normal">295</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" id="price-3">
                         <label class="custom-control-label" for="price-3">$200 - $300</label>
-                        <span class="badge border font-weight-normal">246</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" id="price-4">
                         <label class="custom-control-label" for="price-4">$300 - $400</label>
-                        <span class="badge border font-weight-normal">145</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between">
                         <input type="checkbox" class="custom-control-input" id="price-5">
                         <label class="custom-control-label" for="price-5">$400 - $500</label>
-                        <span class="badge border font-weight-normal">168</span>
+                        <span class="badge border font-weight-normal"></span>
                     </div>
                 </form>
             </div>
@@ -67,7 +67,7 @@
                     <div class="custom-control custom-checkbox d-flex align-items-center justify-content-between mb-3">
                         <input type="checkbox" class="custom-control-input" checked id="category-all">
                         <label class="custom-control-label" for="category-all">All</label>
-                        <span class="badge border font-weight-normal">1000</span>
+                        <span class="badge border font-weight-normal">@Model.ProductPaging.TotalItemsCount</span>
                     </div>
                     @foreach (var item in Model.CategoryTypes)
                     {
@@ -76,7 +76,14 @@
                             <label class="custom-control-label" for="categoryType-@item.Id">
                                 @item.Type
                             </label>
-                            <span class="badge border font-weight-normal"></span>
+                            @{
+                                var count = 0;
+                                item.Categories.ToList().ForEach(x =>
+                                {
+                                    count += x.Products.Count();
+                                });
+                            }
+                            <span class="badge border font-weight-normal">@count</span>
                         </div>
                     }
                 </form>
@@ -135,8 +142,8 @@
                                 <button type="button" id="sortingBtn" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">@(Model.CurrentFilter is null ? "Sorting" : Model.CurrentFilter)</button>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <a class="dropdown-item" asp-page-handler="Filter" asp-route-filterType="Latest" asp-route-pageSize="@Model.CurrentPageSize">Latest</a>
-                                    <a class="dropdown-item" href="#">Popularity</a>
-                                    <a class="dropdown-item" href="#">Best Rating</a>
+                                    @*<a class="dropdown-item" href="#">Popularity</a>
+                                    <a class="dropdown-item" href="#">Best Rating</a>*@
                                 </div>
                             </div>
                             <div class="btn-group ml-2">

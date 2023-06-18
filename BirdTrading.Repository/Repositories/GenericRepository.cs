@@ -78,6 +78,11 @@ namespace BirdTrading.Repository.Repositories
             _context.Set<TModel>().Update(model);
         }
 
+        public virtual void UpdateRange(IEnumerable<TModel> models)
+        {
+            _context.Set<TModel>().UpdateRange(models);
+        }
+
         public virtual void DeleteRange(List<TModel> model)
         {
             _context.Set<TModel>().RemoveRange(model);
