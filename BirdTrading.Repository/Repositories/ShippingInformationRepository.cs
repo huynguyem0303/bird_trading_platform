@@ -17,5 +17,13 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.IsDefaultAddress && x.Users.Any(u => u.Id == userId));
         }
+
+        public async Task<IEnumerable<ShippingInformation>> GetUserShippingInformationAsync(int userId)
+        {
+            return await _context.Set<ShippingInformation>()
+                .Include(x => x.Users)
+                .Where(x => x.Users.Any(u => u.Id == userId))
+                .ToListAsync();
+        }
     }
 }

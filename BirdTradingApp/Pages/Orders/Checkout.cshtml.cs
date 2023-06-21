@@ -17,14 +17,15 @@ namespace BirdTradingApp.Pages.Orders
         public decimal CurrentTotal { get; set; }
         public IEnumerable<CartDetail> CartDetails { get; set; }
         public ShippingInformation ShippingInformation { get; set; }
+        public IEnumerable<ShippingInformation> AddressList { get; set; }
 
         public async Task OnGet(string cartDetailsId)
         {
             if (cartDetailsId is null) return;
             //
             CartDetails = await GenerateDetailListAsync(cartDetailsId);
-            var shippingInformation = await GetShippingInformationAsync();
-            if (shippingInformation is not null) ShippingInformation = shippingInformation;
+            AddressList = await GetUserShippingInformationAsync();
+            if (AddressList.Count() > 0) ShippingInformation = AddressList.First(x => x.IsDefaultAddress)!;
         }
 
         //
@@ -49,17 +50,40 @@ namespace BirdTradingApp.Pages.Orders
             return Partial("OrdersPartials/_CheckoutPartial", this);
         }
 
-        public async Task<IActionResult> OnGetPaymentAsync(string cartDetailsId)
+        public async Task<IActionResult> OnGetPaymentAsync(string cartDetailsId, int addressId)
         {
-            if (string.IsNullOrEmpty(cartDetailsId)) return RedirectToPage("Index");
+            if (string.IsNullOrEmpty(cartDetailsId) || !await IsExistAddressAsync(addressId)) return RedirectToPage("Index");
             var cartDetails = await GenerateDetailListAsync(cartDetailsId);
-            var orderList = await GenerateListOrderAsync(cartDetails);
+            var orderList = GenerateListOrder(cartDetails, addressId);
             await UpdateOrderAsync(orderList);
             await RemoveCartAsync(cartDetails);
             await UpdateProductQuantity(cartDetails);
             TempData["success"] = "Succeed";
             return RedirectToPage("Index");
         }
+
+        #region ChangeAddress
+        public async Task OnGetChangeAddressAsync(int addressId, string cartDetailsId)
+        {
+            if (!await IsExistAddressAsync(addressId))
+            {
+                TempData["error"] = "Address is invalid";
+                await OnGet(cartDetailsId);
+                return;
+            }
+            //
+            var address = await _unitOfWork.ShippingInformationRepository.GetByIdAsync(addressId);
+            if (address is null)
+            {
+                TempData["error"] = "Address doesn't exists";
+                await OnGet(cartDetailsId);
+                return;
+            }
+            //
+            await OnGet(cartDetailsId);
+            ShippingInformation = address;
+        }
+        #endregion
 
         //
         public int GetCurrentUserId()
@@ -68,12 +92,17 @@ namespace BirdTradingApp.Pages.Orders
             return id;
         }
 
+        public async Task<bool> IsExistAddressAsync(int addressId)
+        {
+            var address = await _unitOfWork.ShippingInformationRepository.GetByIdAsync(addressId);
+            return address is not null;
+        }
+
         #region Checkout Func
-        public async Task<ShippingInformation?> GetShippingInformationAsync()
+        public async Task<IEnumerable<ShippingInformation>> GetUserShippingInformationAsync()
         {
             var id = GetCurrentUserId();
-            var shippingInformation = await _unitOfWork.ShippingInformationRepository.GetDefaultShippingInformationAsync(id);
-            return shippingInformation;
+            return await _unitOfWork.ShippingInformationRepository.GetUserShippingInformationAsync(id);
         }
 
         public async Task<IEnumerable<CartDetail>> GenerateDetailListAsync(string cartDetailsId)
@@ -97,7 +126,7 @@ namespace BirdTradingApp.Pages.Orders
             return detailList;
         }
 
-        public async Task<IEnumerable<Order>> GenerateListOrderAsync(IEnumerable<CartDetail> detailCheckout)
+        public IEnumerable<Order> GenerateListOrder(IEnumerable<CartDetail> detailCheckout, int addressId)
         {
             var numOfOrder = detailCheckout.Select(x => x.Product.ShopId).Distinct();
             var listOrder = new List<Order>();
@@ -120,24 +149,19 @@ namespace BirdTradingApp.Pages.Orders
                     total += cartDetail.Product.OriginalPrice * cartDetail.Quantity;
                 }
                 //
-                var shippingInfor = await GetShippingInformationAsync();
                 var shippingStatus = new List<ShippingSession> { CreateShippingStatus() };
-                if (shippingInfor is not null)
+                var order = new Order
                 {
-
-                    var order = new Order
-                    {
-                        OrderDate = DateTime.Now,
-                        CompanyName = "GHN",
-                        UserId = GetCurrentUserId(),
-                        ShippingInformationId = shippingInfor.Id,
-                        OrderDetails = orderDetails,
-                        ShippingSessions = shippingStatus,
-                        Total = total
-                    };
-                    //1
-                    listOrder.Add(order);
-                }
+                    OrderDate = DateTime.Now,
+                    CompanyName = "GHN",
+                    UserId = GetCurrentUserId(),
+                    ShippingInformationId = addressId,
+                    OrderDetails = orderDetails,
+                    ShippingSessions = shippingStatus,
+                    Total = total
+                };
+                //
+                listOrder.Add(order);
             }
 
             return listOrder;
