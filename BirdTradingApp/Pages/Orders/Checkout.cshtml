@@ -146,7 +146,7 @@
                 <h5>Payment</h5>
             </div>
             <div class="col-3 pr-4" style="text-align: right;">
-                Momo
+                Paypal
             </div>
         </div>
         <hr />
@@ -171,7 +171,7 @@
         <hr />
         <div class="border-1 row p-4">
             <div class="col-11 pr-4" style="text-align: right;">
-                <a class="btn btn-danger border-1" asp-page-handler="Payment"
+                <a class="btn btn-danger border-1" asp-page-handler="PaymentWithPaypal"
                    asp-route-cartDetailsId="@Request.Query["cartDetailsId"]"
                    asp-route-addressId="@Model.ShippingInformation.Id">Checkout</a>
             </div>

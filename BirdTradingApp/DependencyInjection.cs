@@ -1,8 +1,10 @@
 ﻿using BirdTrading.DataAccess;
 using BirdTrading.Interface;
 using BirdTrading.Interface.Repositories;
+using BirdTrading.Interface.Services;
 using BirdTrading.Repository;
 using BirdTrading.Repository.Repositories;
+using BirdTrading.Services.Paypal;
 using Microsoft.EntityFrameworkCore;
 
 namespace BirdTradingApp
@@ -27,6 +29,8 @@ namespace BirdTradingApp
             services.AddTransient<IShippingSessionRepository, ShippingSessionRepository>();
             services.AddTransient<IShopRepository, ShopRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            //
+            services.AddTransient<IPaypalServices, PaypalServices>();
         }
 
         public static void InjectService(this IServiceCollection services)
