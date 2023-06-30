@@ -35,9 +35,6 @@
     <!-- Toastr -->
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
-    <!-- Start rating css -->
-    <link href="~/css/start-rating.css" rel="stylesheet" />
-
 </head>
 <body>
     <header>
@@ -54,18 +51,7 @@
                 </div>
                 <div class="col-lg-6 text-center text-lg-right">
                     <div class="d-inline-flex align-items-center">
-                        @if (role is null)
-                        {
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
-                                <div class="dropdown-menu dropdown-menu-right">
-                                    <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
-                                    <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
+
                             <div class="nav-item dropdown">
                                 <a href="#" class="nav-link dropdown-toggle text-decoration-none text-dark" data-toggle="dropdown">
                                     Welcome, @name </a>
@@ -74,23 +60,7 @@
                                     <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
                                 </div>
                             </div>
-                        }
-                        @*<div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">EUR</button>
-                        <button class="dropdown-item" type="button">GBP</button>
-                        <button class="dropdown-item" type="button">CAD</button>
-                        </div>
-                        </div>
-                        <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                        <button class="dropdown-item" type="button">FR</button>
-                        <button class="dropdown-item" type="button">AR</button>
-                        <button class="dropdown-item" type="button">RU</button>
-                        </div>
-                        </div>*@
+                      
                     </div>
                     <div class="d-inline-flex align-items-center d-block d-lg-none">
                         <a href="" class="btn px-0 ml-2">
@@ -105,30 +75,18 @@
                 </div>
             </div>
             <div class="row align-items-center bg-light py-3 px-xl-5 d-none d-lg-flex">
-                <div class="col-lg-4">
+                <div class="col-lg-3">
                     <a asp-page="/Index" class="text-decoration-none">
                         <span class="h1 text-uppercase text-primary bg-dark px-2">Bird</span>
                         <span class="h1 text-uppercase text-dark bg-primary px-2 ml-n1">Shop</span>
                     </a>
                 </div>
-                <div class="col-lg-4 col-6 text-left">
-                    <form method="get" asp-page="/Products/Index" asp-page-handler="Search">
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="search" placeholder="Search for products">
-                            <div class="input-group-append">
-                                <span class="input-group-text bg-transparent text-primary">
-                                    <i class="fa fa-search"></i>
-                                </span>
-                            </div>
-                        </div>
-                    </form>
                 </div>
-                <div class="col-lg-4 col-6 text-right">
+                <div class="col-lg-12 col-6 text-right">
                     <p class="m-0">Customer Service</p>
                     <h5 class="m-0">+84 988 123 123</h5>
                 </div>
             </div>
-        </div>
         <!-- Topbar End -->
         <!-- Navbar Start -->
         <div class="container-fluid bg-dark mb-30">
@@ -266,14 +224,14 @@
         <div class="row border-top mx-xl-5 py-4" style="border-color: rgba(256, 256, 256, .1) !important;">
             <div class="col-md-6 px-xl-0">
                 <p class="mb-md-0 text-center text-md-left text-secondary">
-                    &copy; 2023 - Bird Shop. All Rights Reserved. @*Designed
+                    &copy; 2023 - BirdTradingApp. All Rights Reserved. Designed
                     by
-                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>*@
+                    <a class="text-primary" href="https://htmlcodex.com">HTML Codex</a>
                 </p>
             </div>
-            @*<div class="col-md-6 px-xl-0 text-center text-md-right">
+            <div class="col-md-6 px-xl-0 text-center text-md-right">
                 <img class="img-fluid" src="img/payments.png" alt="">
-            </div>*@
+            </div>
         </div>
     </div>
     <!-- Footer End -->

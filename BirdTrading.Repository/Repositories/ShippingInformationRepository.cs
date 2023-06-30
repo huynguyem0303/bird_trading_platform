@@ -11,6 +11,31 @@ namespace BirdTrading.Repository.Repositories
         {
         }
 
+        public async Task<bool> DeleteShippingInformationAsync(int userId, int shippingInformationId)
+        {
+            var shippingInformations =  GetAllShippingInformation(userId);
+            if(shippingInformations != null)
+            {
+                foreach (var address in shippingInformations)
+                {
+                    if (address.Id == shippingInformationId)
+                    {
+                        _context.Set<ShippingInformation>().Remove(address);
+                        await _context.SaveChangesAsync();
+                        return true;
+                    }
+                }
+            }                    
+            return false;
+        }
+
+        public  IList<ShippingInformation> GetAllShippingInformation(int userId)
+        {
+            return  _context.ShippingInformation
+                .Include(x => x.Users)
+                .Where(x => x.Users.Any(u => u.Id == userId)).ToList();
+        }
+
         public async Task<ShippingInformation?> GetDefaultShippingInformationAsync(int userId)
         {
             return await _context.Set<ShippingInformation>()
@@ -18,6 +43,7 @@ namespace BirdTrading.Repository.Repositories
                 .FirstOrDefaultAsync(x => x.IsDefaultAddress && x.Users.Any(u => u.Id == userId));
         }
 
+<<<<<<< Updated upstream
         public async Task<IEnumerable<ShippingInformation>> GetUserShippingInformationAsync(int userId)
         {
             return await _context.Set<ShippingInformation>()
@@ -25,5 +51,7 @@ namespace BirdTrading.Repository.Repositories
                 .Where(x => x.Users.Any(u => u.Id == userId))
                 .ToListAsync();
         }
+=======
+>>>>>>> Stashed changes
     }
 }

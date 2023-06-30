@@ -1,4 +1,5 @@
 using BirdTrading.Interface;
+using BirdTrading.Utils.Others;
 using BirdTrading.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,7 +14,7 @@ namespace BirdTradingApp.Pages.Login
         {
             _unitOfWork = unitOfWork;
         }
-
+        
         [BindProperty]
         public LoginViewModel LoginModel { get; set; }
 
@@ -30,6 +31,7 @@ namespace BirdTradingApp.Pages.Login
                     HttpContext.Session.SetInt32("Id", login.Id);
                     HttpContext.Session.SetString("Name", login.Name);
                     HttpContext.Session.SetInt32("CartCount", cart.Count());
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", login);
                     TempData["success"] = "Login Succeed";
                     return RedirectToPage("/Index");
                 }
@@ -37,6 +39,11 @@ namespace BirdTradingApp.Pages.Login
             }
 
             return Page();
+        }
+
+        public async Task<IActionResult> OnPostCreateNew()
+        {
+            return RedirectToPage("../Users/Register");
         }
     }
 }

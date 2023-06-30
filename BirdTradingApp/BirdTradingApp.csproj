@@ -29,4 +29,16 @@
     <Folder Include="wwwroot\scss\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\img\users\3c4a2efc-eaa4-44e2-8509-ff2f7c89fcd6.png" />
+    <None Include="wwwroot\img\person-2.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Pages\Shared\_LayoutProfile.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

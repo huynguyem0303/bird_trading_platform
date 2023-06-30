@@ -1,0 +1,59 @@
+﻿@page
+@model BirdTradingApp.Pages.Users.RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+    <div class="container py-5 h-100 d-flex justify-content-center align-items-center">
+        <div class="col-xl-10">
+            <div class="card rounded-3 text-black">
+                <div class="row g-0">
+                    <div class="col-lg-12">
+                        <div class="card-body p-md-5 mx-md-4">
+                            <div class="text-center">
+                                <img src="~/img/logo/logo.png" style="width: 185px;" alt="logo">
+                                <h4 class="mt-1 mb-5 pb-1">Bird Shop</h4>
+                            </div>
+                            <form method="post">
+                                <h5 class="mb-4">Please input your account</h5>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" asp-for="ResModel.UserName">Email or phone number</label>
+                                    <input type="email" asp-for="ResModel.UserName" class="form-control"
+                                           placeholder="Phone number or email address" />
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" asp-for="ResModel.UserFullName">Full Name</label>
+                                    <input type="text" asp-for="ResModel.UserFullName" class="form-control"
+                                           placeholder="Phone number or email address" />
+                                </div>
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" asp-for="ResModel.Password">Password</label>
+                                    <input type="password" asp-for="ResModel.Password" class="form-control" />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <label class="form-label" asp-for="ResModel.ConfirmPassword">Confirm Password</label>
+                                    <input type="password" asp-for="ResModel.ConfirmPassword" class="form-control" />
+                                </div>
+
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                                <div class="text-center pt-1 mb-5 pb-1">
+                                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit" asp-page-handler="Create">
+                                        Create Now
+                                    </button>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center pb-4">
+                                    <p class="mb-0 me-2 mr-3">Already have an account?</p>
+                                    <button type="submit" class="btn btn-outline-danger" asp-page-handler="SignIn">Sign In</button>
+                                </div>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,4 +1,1209 @@
 ﻿@page
 @model BirdTradingApp.Pages.Users.IndexModel
 @{
+    ViewData["Title"] = "User Profile";
+    Layout = "~/Pages/Shared/_LayoutProfile.cshtml";
+    var DefaultContainer = ViewData["DefaultContainer"]?.ToString();
+    var ErrorCurrentPass = ViewData["ErrorCurrentPass"]?.ToString();
+    var ErrorNewPassword = ViewData["ErrorNewPassword"]?.ToString();
+    var ErrorConfirm = ViewData["ErrorConfirm"]?.ToString();
 }
+<style>
+    .row {
+        display: flex;
+        border: none; /* Remove border from the row */
+        flex: 1; /* Take up all available space */
+    }
+
+    .col {
+        padding: 20px;
+        border: none; /* Remove border from the column */
+        flex: 1; /* Take up all available space */
+    }
+
+    .col-25 {
+        flex-basis: 25%; /* Set the initial size of the column */
+    }
+
+    .col-75 {
+        flex-basis: 75%; /* Set the initial size of the column */
+    }
+
+    .row-50 {
+        margin-top: 15px;
+        flex-basis: 50%;
+    }
+
+    .col-50 {
+        flex-basis: 50%;
+    }
+
+    .item-container {
+        height: 200px;
+        background-color: red;
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-image-chilren {
+        width: 250px;
+        height: 120px;
+    }
+
+    .img-user {
+        width: 250px;
+        height: 120px;
+        border: 1px solid black;
+        margin-top: 15px;
+        margin-left: 270px;
+    }
+
+    .profile-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+
+    .profile-name {
+        margin-left: 15px;
+        font-weight: bold;
+    }
+
+    .parent-text {
+        margin-left: 15px;
+    }
+
+    .children-text {
+        margin-top: 3px;
+    }
+
+    .edit-icon {
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+
+    .children-text.active {
+        color: red;
+    }
+
+    .user-children {
+        margin-left: 32px;
+        margin-top: 5px;
+    }
+
+    .address.active .parent-text {
+        color: red;
+    }
+
+    .notification.active .parent-text {
+        color: red;
+    }
+
+    .infor-header {
+        border-bottom: 1px solid black;
+        padding-bottom: 30px;
+        margin-top: 15px;
+        margin-left: 10px;
+    }
+
+    .infor-body {
+        margin-top: 15px;
+        margin-left: 50px;
+        margin-bottom: 10px;
+    }
+
+    .row-infor {
+        width: 500px;
+        height: 50px;
+        text-align: left;
+        margin-left: 70px;
+    }
+
+        .row-infor a {
+            color: blue;
+            margin-left: 10px;
+        }
+
+    .input-name {
+        width: 300px;
+        height: 35px;
+    }
+
+    .row-lable {
+        width: 100px;
+        height: 50px;
+        text-align: right;
+        margin-right: 15px;
+    }
+
+    .gender-select {
+        padding: 10px;
+    }
+
+    #specifyColor {
+        accent-color: red;
+    }
+
+    .select-form select {
+        width: 100px;
+        height: 30px;
+    }
+
+    .btn-save button {
+        height: 40px;
+        width: 52px;
+        color: white;
+        background-color: red;
+        border: 1px;
+        border-radius: 3px;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-save-infor button {
+        height: 40px;
+        width: 150px;
+        color: white;
+        background-color: red;
+        border: 1px;
+        border-radius: 3px;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 15px;
+        margin-left: 170px;
+    }
+
+    .btn-img {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+        .btn-img label {
+            height: 25px;
+            width: 150px;
+            border: 2px solid black;
+            border-radius: 3px;
+            text-align: center;
+            color: black;
+        }
+
+    .head-container {
+        background-color: white;
+        border: 1px solid #eee;
+        border-radius: 3px;
+    }
+
+    .lable-head {
+        margin-top: 25px;
+    }
+
+    .default-address:checked {
+        color: red;
+    }
+
+    .default-address {
+        width: 15px;
+        height: 15px;
+    }
+
+        .default-address checked {
+            color: red;
+        }
+
+    .lable-body input {
+        height: 37px;
+        width: 200px;
+        text-align: center;
+    }
+
+    .begin {
+        margin-left: 10px;
+    }
+
+    .row-lable-address {
+        width: 500px;
+        text-align: left;
+    }
+
+    .row-infor-address {
+        width: 230px;
+        text-align: right;
+    }
+
+        .row-infor-address a {
+            margin-bottom: 10px;
+            color: blue;
+        }
+
+        .row-infor-address button {
+            height: 35px;
+            border: 1px solid black;
+            border-radius: 3px;
+            background-color: white;
+        }
+
+
+    .txt-adr {
+        margin-right: 465px;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .btn-add-new button {
+        height: 35px;
+        background-color: red;
+        color: white;
+        border: 1px solid white;
+        border-radius: 3px;
+    }
+
+    .defaut-div {
+        height: 25px;
+        width: 70px;
+        background-color: white;
+        color: red;
+        border: 1px solid red;
+        border-radius: 3px;
+    }
+
+    .voucher-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .voucher {
+        margin-bottom: 50px;
+    }
+
+    .notification-popup {
+        width: 270px;
+        height: 110px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: none;
+        z-index: 9999;
+    }
+
+    .notification-icon {
+        color: green;
+        margin-right: 5px;
+        height: 90px;
+        width: 90px;
+        border-radius: 100%;
+        background: white;
+        text-align: center;
+        font-size: 40px;
+        
+    }
+
+    .notification-icon i{
+       margin-top: 25px;
+    }
+
+    .notification-popup.show {
+        display: flex;
+    }
+
+   .notification-popup.show.clicked {
+            display: none;
+    }
+
+    .notification-message{
+        margin-left: 7px;
+        margin-top: 35px;
+    }
+    body.locked {
+        overflow: hidden;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        height: 400px;
+        width: 700px;
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .close {
+        height: 40px;
+        width: 90px;
+        cursor: pointer;
+        color: black;
+        font-size: 20px;
+        background-color: red;
+    }
+
+    .save{
+        height: 40px;
+        width: 90px;
+        font-size: 20px;
+        background-color: red;
+        color: white;
+        border: 1px solid white;
+    }
+    .popup-text{
+        margin-bottom: 20px;
+        font-size: 30px;
+        color: black;
+    }
+
+    .popup-input-name{
+        width: 300px;
+        height: 35px;
+        margin-right: 30px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .popup-input-phone{
+        width: 300px;
+        height: 35px;
+        margin-bottom: 10px;
+    }
+    .country-selected{
+        width: 300px;
+        height: 30px;
+        margin-bottom: 15px;
+    }
+
+    .city-selected{
+        width: 300px;
+        height: 30px;
+        margin-right: 30px;
+        margin-bottom: 15px;
+        margin-left: 10px
+    }
+
+    .address-detail{
+        width: 640px;
+        height: 100px;
+        margin-bottom: 15px;
+        margin-left: 10px
+    }
+
+    .popup-btn{
+        float: right;
+    }
+    .default-div{
+        margin-left: 10px;
+    }
+
+    .address-form-div{
+        height: 130px;
+        width: 700px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+    .btn-update-address{
+        border: 1px solid white;
+        color: blue;
+        background-color: white;
+    }
+</style>
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+    <input type="hidden" id="defaultContainer" value="@DefaultContainer"/>
+    <div class="container py-5 h-100 begin">
+        <div class="row">
+            <div id="notification-popup" class="text-center notification-popup">
+                <div id="notification-icon" class="notification-icon">
+                    <i class="fa fa-check"></i>
+                    </div>
+                <div id="notification-message" class="notification-message"></div>
+            </div>
+            <div class="col col-25">
+                <div class="row row-50">
+                    <div class="profile-container">
+                        @if(Model.UserLogin.AvatarURL != null && Model.UserLogin.AvatarURL != "")
+                        {
+                            <img src="@Model.UserLogin.AvatarURL"
+                            alt="Profile Image" class="profile-image">
+                        }
+                        else
+                        {
+                            <img src="https://htmlcolorcodes.com/assets/images/colors/white-color-solid-background-1920x1080.png"
+                                 alt="Profile Image" class="profile-image">
+                        }
+                        <div class="profile-info">
+                            <div class="profile-name">@Model.UserLogin.Name</div>
+                            <span class="edit-icon">Edit Your Profile</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-50">
+                    <div class="user">
+                        <span>
+                            <i class="fa fa-user"></i>
+                        </span>
+                        <span class="parent-text">
+                            My account
+                        </span>
+                        <div class="user-children">
+                            <!-- Children elements -->
+                            <div class="children-text" data-container="personal-info-container">Personal Information</div>
+                            <div class="children-text" data-container="avatar-container">Avatar</div>
+                            <div class="children-text" data-container="change-password-container">Change Password</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row row-50">
+                    <div class="address">
+                        <span>
+                            <i class="fa fa-map-marker"></i>
+                        </span>
+                        <span class="parent-text">
+                            Address
+                        </span>
+                    </div>
+                </div>
+                <div class="row row-50">
+                    <div class="notification">
+                        <span>
+                            <i class="fa fa-bell"></i>
+                        </span>
+                        <span class="parent-text">
+                            Notification
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-75">
+                <container class="personal-info-container">
+                    <div class="h-100 gradient-form head-container">
+                        <div class="infor-header">
+                            <h5>My Personal Information</h5>
+                            <div>Manage profile information for account security</div>
+                        </div>
+                        <div class="infor-body">
+                            <form method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="row-section">
+                                    <div class="row">
+                                        <div class="row-lable">
+                                            <p>ID</p>
+                                        </div>
+                                        <div class="row-infor">
+                                            <p>230405ANW8QNRMUSCTV1.0.@Model.UserLogin.Id </p>
+                                            <input type="hidden" asp-for="UserLogin.Id" value="@Model.UserLogin.Id"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="row-lable">
+                                            <div>User Name</div>
+                                        </div>
+                                        <div class="row-infor">
+                                            <input asp-for="UserLogin.Name"  type="text" value="@Model.UserLogin.Name" />
+                                            <span asp-validation-for="UserLogin.Name" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="row-lable">
+                                            <div>Email</div>
+                                        </div>
+                                        <div class="row-infor">
+                                            <input asp-for="UserLogin.Email"  type="text" value="@Model.UserLogin.Email" />
+                                            <span asp-validation-for="UserLogin.Email" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="row-lable">
+                                            <div>Phone</div>
+                                        </div>
+                                        <div class="row-infor">
+                                            @if(Model.UserLogin.Phone != null)
+                                            {
+                                                <input asp-for="UserLogin.Phone" type="text" value="@Model.UserLogin.Phone" required />
+                                                <span asp-validation-for="UserLogin.Phone" class="text-danger"></span>
+                                            }else{
+                                                <input asp-for="UserLogin.Phone" type="text" value="" required/>
+                                                <span asp-validation-for="UserLogin.Phone" class="text-danger"></span>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="btn-save-infor">
+                                        <button type="submit" asp-page-handler="SaveInfor">Save</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>      
+                </container>
+                <container class="avatar-container">
+                    <div class="h-100 gradient-form head-container">
+                        <form method="post" enctype="multipart/form-data">
+                            <div class="text-center">
+                                @if (Model.UserLogin.AvatarURL != null && Model.UserLogin.AvatarURL != "")
+                                {
+                                    <div class="img-user">
+                                         <img src="@Model.UserLogin.AvatarURL"
+                                             alt="Profile Image" class="profile-image-chilren">
+                                    </div>
+                                   
+                                }
+                                else
+                                {
+                                    <div class="img-user">
+                                        <img src="https://htmlcolorcodes.com/assets/images/colors/white-color-solid-background-1920x1080.png"
+                                             alt="Profile Image" class="profile-image-chilren">
+                                    </div>
+                                }
+                            <div class="btn-img">
+                                    <label for="image-upload" class="image-upload-label">
+                                        Choose Image
+                                        <input type="file" name="image" id="image-upload" accept=".jpeg, .png" style="display: none;">
+                                    </label>
+                                <div>
+                                    Maximum file size 1 MB
+                                </div>
+                                <div>
+                                    Format: .JPEG, .PNG
+                                </div>
+                            </div>
+                                <div class="btn-save">
+                                    <button type="submit" asp-page-handler="SaveImg">Save</button>
+                                </div>
+                        </div>
+                        </form>
+                    </div>
+                </container>
+                <container class="change-password-container">
+                    <div class="text-center h-100 gradient-form head-container">
+                        <form method="post">
+                            <div class="lable-head">
+                                <label>Current Password</label>
+                            </div>
+                            <div class="lable-body">
+                                <input name="currentPassword" type="text" value="" />
+                                @if (!string.IsNullOrWhiteSpace(ErrorCurrentPass))
+                                {
+                                    <div class="text-danger">
+                                        @ErrorCurrentPass
+                                    </div>
+                                }
+                            </div>
+                            <div class="lable-head">
+                                <label>New Pasword</label>
+                            </div>
+                            <div class="lable-body">
+                                <input name="newPassword" type="text" value="" />
+                                @if (!string.IsNullOrWhiteSpace(ErrorNewPassword))
+                                {
+                                    <div class="text-danger">
+                                        @ErrorNewPassword
+                                    </div>
+                                }
+                            </div>
+                            <div class="lable-head">
+                                <label>Confirm Password</label>
+                            </div>
+                            <div class="lable-body">
+                                <input name="confirmPassword" type="text" value="" />
+                                @if (!string.IsNullOrWhiteSpace(ErrorConfirm))
+                                {
+                                    <div class="text-danger">
+                                        @ErrorConfirm
+                                    </div>
+                                }
+                            </div>
+                            <div class="btn-save">
+                                <button type="submit" asp-page-handler="SavePassword">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </container>
+                <container class="address-container">                 
+                    <div class="text-center h-100 gradient-form head-container">             
+                        <form method="post">
+                            <div class="infor-header row-section">
+                                <div class="infor-head">
+                                    <span class="txt-adr">
+                                        My Address
+                                    </span>
+                                    <span class="btn-add-new">
+                                        <button class="btn-add-new-address" type="button">
+                                            <i class="fas fa-plus"></i>
+                                            Add new address
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="infor-body">
+                                <div class="row-section">
+                                    <div class="row">
+                                        <div class="row-lable-address">
+                                            <h5>Address</h5>
+                                        </div>
+                                    </div>
+                                    @if(Model.ShippingInformations != null)
+                                    {
+                                        int count = 0;
+                                        @foreach (var address in @Model.ShippingInformations)
+                                        {
+                                            count++;
+                                            <div class="address-form-div">
+                                                <div class="row">
+                                                    <div class="row-lable-address">
+                                                        <span id="address-name" value="@address.Name">@address.Name </span> |
+                                                        <span id="address-phone" value="@address.Phone">@address.Phone</span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="row-lable-address" id="row-lable-detail" value=" @address.Address">
+                                                        @address.Address
+                                                    </div>
+                                                    <div class="row-infor-address">
+                                                        <button type="button" class="btn-update-address" onclick="openUpdateAddressModal('@address.Name', '@address.Phone', '@address.Address', '@address.IsDefaultAddress', '@address.City', '@address.Country', '@address.Id')">
+                                                            Update
+                                                        </button>
+                                                        @if(count >= 2)
+                                                        {
+                                                            <input type="hidden" name="addressId" value="@address.Id" />
+                                                            <button type="submit" class="btn-delete-address" asp-page-handler="DeleteAddress">
+                                                                Delete
+                                                            </button>
+                                                        }
+                                                        <div>
+                                                          
+                                                            @if (!address.IsDefaultAddress)
+                                                            {
+                                                                <input type="hidden" name="addressId" value="@address.Id" />
+                                                                <button type="submit" asp-page-handler="SetAddressDefault">Set as default</button>
+                                                            }else{
+                                                                <button type="submit" disabled>Set as default</button>
+                                                            } 
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @if (address.IsDefaultAddress)
+                                                {
+                                                    <div class="row">
+                                                        <div class="defaut-div" id="defaut-div" value="yes">Default</div>
+                                                    </div>
+                                                }
+                                            </div>  
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </container>
+                <div id="addAddressModal" class="modal">
+                    <div class="modal-content">
+                        <form method="post" asp-page-handler="ModifyAddress" onsubmit="return validateForm(event)">
+                            <div class="popup-text">
+                                New Address
+                            </div>
+                           
+                            <span>
+                                <input class="popup-input-name" type="text" name="name" placeholder="Name" value=""/>
+                            </span>
+                            <span>
+                                <input class="popup-input-phone"  type="text" name="phone" placeholder="Phone"/>
+                            </span>
+                            <div>
+                                <span>
+                                    <select class="city-selected" name="citySelected" onchange="updateDistricts()">
+                                        <option value="DEFAULT" selected">Select a city</option>
+                                        <option value="Ho Chi Minh">
+                                            Ho Chi Minh
+                                        </option>
+                                        <option value="Ha Noi">
+                                            Ha Noi
+                                        </option>
+                                        <option value="Can Tho">
+                                            Can Tho
+                                        </option>
+                                        <option value="Binh Phuoc">
+                                            Binh Phuoc
+                                        </option>
+                                    </select>
+                                </span>
+                                <span>
+                                    <select class="country-selected" name="countrySelected" disabled>
+                                        <option value="">Select a district</option>
+                                    </select>
+                                </span>
+                            </div>
+                            <div>
+                                <input class="address-detail" name="addressDetail" type="text" placeholder="Address detail"/>
+                            </div>
+                            <div class="default-div">
+                                <input type="checkbox"  class="default-address" name="default">
+                                <label> Set At Default </label>
+                            </div>
+                            <div class="text-center text-danger">
+
+                            </div>
+                            <div class="popup-btn">
+                                <span>
+                                    <button type="button" class="close">Close</button>
+                                </span>
+                                <span>
+                                    <input type="hidden" class="popup-input-id" name="shippingId" value="" />
+                                    <button type="submit" class="save">Save</button>
+                                </span>
+                            </div>                         
+                        </form>
+                    </div>
+                </div>
+                <container class="notification-container">
+                    <div class="text-center h-100 gradient-form head-container">
+                        <div class="infor-body">
+                            <div class="row-section">
+                                <div class="row voucher">
+                                    <div class="row-lable">
+                                        <img src="https://innhanhthanhdanh.com/wp-content/uploads/2013/08/orange-and-blue-marketing-gift-voucher-free-vector.jpg"
+                                             alt="Profile Image" class="voucher-image">
+                                    </div>
+                                    <div class="row-infor">
+                                        <h6>
+                                            Voucher sales 50%
+                                        </h6>
+                                        <p>
+                                            Voucher give you extra free discount up to 50% affect on product with to tal over 500k
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row voucher">
+                                    <div class="row-lable">
+                                        <img src="https://innhanhthanhdanh.com/wp-content/uploads/2013/08/orange-and-blue-marketing-gift-voucher-free-vector.jpg"
+                                             alt="Profile Image" class="voucher-image">
+                                    </div>
+                                    <div class="row-infor">
+                                        <h6>
+                                            Voucher sales 50%
+                                        </h6>
+                                        <p>
+                                            Voucher give you extra free discount up to 50% affect on product with to tal over 500k
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="row voucher">
+                                    <div class="row-lable">
+                                        <img src="https://effectiveinboundmarketing.com/wp-content/uploads/2019/10/Steps-To-Make-Last-Mile-Delivery-A-Success-In-E-Commerce-Space.jpg"
+                                             alt="Profile Image" class="voucher-image">
+                                    </div>
+                                    <div class="row-infor">
+                                        <h6>
+                                            Your Delevery success
+                                        </h6>
+                                        <p>
+                                            2 sets of badminton rackets have been delivered to your address
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </container>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var $containers = $('.col-75 > container');
+        $containers.hide();
+
+        var defaultContainerClass = document.getElementById("defaultContainer").value;
+    
+        $('.' + defaultContainerClass).show();
+
+        $('.user').click(function () {
+            handleUserClick($(this));
+        });
+
+        $('.address').click(function () {
+            handleAddressClick($(this));
+        });
+
+        $('.notification').click(function () {
+            handleNotificationClick($(this));
+        });
+
+        $('.children-text').click(function () {
+            var containerClass = $(this).data('container');
+            $containers.hide();
+            $('.' + containerClass).show();
+            $('.user.active').find('.user-children').show();
+
+            $('.children-text').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $('.user-children').click(function (e) {
+            e.stopPropagation();
+            $('.user-children .child-element').removeClass('active');
+            $(this).addClass('active');
+        });
+
+        $('.user').mouseenter(function () {
+            $(this).find('.parent-text').css("color", "red");
+        });
+
+        $('.user').mouseleave(function () {
+            $(this).find('.parent-text').css("color", "black");
+        });
+
+
+        function handleUserClick($element) {
+            $containers.hide();
+            $('.' + defaultContainerClass).show();
+            var $children = $element.find('.user-children');
+            var $user = $('.user, .address, .notification');
+            if (!$element.hasClass('active')) {
+                $user.removeClass('active');
+                $('.user-children').hide();
+                $children.show();
+            }
+        }
+
+        function handleAddressClick($element) {
+            var $children = $element.find('.user-children');
+            var $user = $('.user, .address, .notification');
+            var addressContainerClass = 'address-container';
+            $containers.hide();
+            $('.' + addressContainerClass).show();
+
+            if ($element.hasClass('active')) {
+                $element.removeClass('active');
+                $children.hide();
+            } else {
+                $user.removeClass('active');
+                $user.find('.children-text').removeClass('active');
+                $('.user-children').hide();
+                $element.addClass('active');
+                $children.show();
+            }
+        }
+
+        function handleNotificationClick($element) {
+            var $children = $element.find('.user-children');
+            var $user = $('.user, .address, .notification');
+            var notificationContainerClass = 'notification-container';
+            $containers.hide();
+            $('.' + notificationContainerClass).show();
+
+            if ($element.hasClass('active')) {
+                $element.removeClass('active');
+                $children.find('.children-text').removeClass('active');
+                $children.hide();
+            } else {
+                $user.removeClass('active');
+                $('.user-children').hide();
+                $element.addClass('active');
+                $children.show();
+            }
+        }
+    });
+</script>
+<script>
+    var notificationMessage = '@ViewData["NotificationMessage"]';
+
+    if (notificationMessage !== '') {
+        $('#notification-message').text(notificationMessage);
+        $('#notification-popup').addClass('show');
+        $('body').addClass('locked');
+
+        setTimeout(function () {
+            $('#notification-popup').removeClass('show');
+            $('body').removeClass('locked'); 
+        }, 3000);
+
+        $('#notification-popup').click(function () {
+            $(this).removeClass('show');
+            $(this).addClass('clicked');
+            $('body').removeClass('locked');
+        });
+    }
+
+    document.getElementById('image-upload').addEventListener('change', function (event) {
+        var selectedFile = event.target.files[0];
+        if (selectedFile) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.querySelector('.profile-image-chilren').src = e.target.result;
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    });
+
+    $(document).ready(function () {
+        var citySelect = document.getElementById("citySelect");
+        $('.btn-add-new-address').click(function () {
+            openAddAddressModal();
+        });
+
+        // Function to open the add address modal
+        function openAddAddressModal() {
+            $('#addAddressModal').show();
+        }
+
+        function closeAddAddressModal() {
+            var citySelect = document.querySelector(".city-selected");
+            var cityOptions = citySelect.options;
+            for (var i = 0; i < cityOptions.length; i++) {
+                var option = cityOptions[i];
+                if (option.value === "DEFAULT") {
+                    citySelect.removeChild(option);
+                }
+            }
+            var option = document.createElement("option");
+            option.text = "Select a city";
+            option.value = "DEFAULT";
+            option.selected = true;
+            citySelect.insertBefore(option, citySelect.firstChild);
+            $('#addAddressModal').hide();
+        }
+
+        $('.modal .close').click(function () {
+            closeAddAddressModal();
+        });
+    });
+
+    function validateForm(event) {
+        event.preventDefault(); // Prevents the form from submitting automatically
+
+        var nameInput = document.querySelector(".popup-input-name");
+        var phoneInput = document.querySelector(".popup-input-phone");
+        var addressInput = document.querySelector(".address-detail");
+        var citySelect = document.querySelector(".city-selected");
+        var districtSelect = document.querySelector(".country-selected");
+
+        var errorContainer = document.querySelector(".text-center.text-danger");
+        errorContainer.innerHTML = ""; // Clear any previous error messages
+
+        if (nameInput.value.length < 12 || nameInput.value.length > 30) {
+            displayError("Full name must be between 12-30 characters");
+            return false;
+        }
+
+        if (addressInput.value.length > 300) {
+            displayError("Address must be less than 300 characters");
+            return false;
+        }
+
+        var forbiddenString = "  ";
+        if (nameInput.value.indexOf(forbiddenString) !== -1) {
+            displayError("Please input a valid name");
+            return false;
+        }
+
+        if (!/^[0-9]+$/.test(phoneInput.value)) {
+            displayError("Phone must contain only numbers");
+            return false;
+        }
+
+        if (phoneInput.value.length > 10) {
+            displayError("Please input a valid phone number");
+            return false;
+        }
+
+        if (citySelect.value === "") {
+            displayError("Please select a city");
+            return false;
+        }
+
+        if (districtSelect.value === "") {
+            displayError("Please select a district");
+            return false;
+        }
+
+        return true;
+    }
+
+    function displayError(message) {
+        var errorContainer = document.querySelector(".text-center.text-danger");
+        var errorElement = document.createElement("div");
+        errorElement.classList.add("error-message");
+        errorElement.textContent = message;
+        errorContainer.appendChild(errorElement);
+    }
+      
+    function openUpdateAddressModal(name, phone, address, isDefault, city, country, id) {
+        // Get the pop-up form elements
+        var nameInput = document.querySelector(".popup-input-name");
+        var phoneInput = document.querySelector(".popup-input-phone");
+        var addressId = document.querySelector(".popup-input-id");
+        var addressInput = document.querySelector(".address-detail");
+        var defaultAddress = document.querySelector(".default-address");
+
+        var citySelect = document.querySelector(".city-selected");
+        citySelect.remove(0);
+        var cityOptions = citySelect.options;
+
+        for (var i = 0; i < cityOptions.length; i++) {
+            var option = cityOptions[i];
+            if(option.value === "DEFAULT"){
+                citySelect.removeChild(option);
+            }
+            if (option.value === city) {
+                cityOptions[i].selected = true;
+                getDistricts(option.value, country);
+            }
+        }
+
+        if(isDefault === "True"){
+            defaultAddress.checked = true;
+        }else{
+            defaultAddress.checked = false;
+        }
+
+        nameInput.value = name;
+        phoneInput.value = phone;
+        addressInput.value = address;
+        addressId.value = id;
+     
+
+        $('#addAddressModal').show();
+        function closeAddAddressModal() {
+            var citySelect = document.querySelector(".city-selected");
+            var cityOptions = citySelect.options;
+            for (var i = 0; i < cityOptions.length; i++) {
+                var option = cityOptions[i];
+                if (option.value === "DEFAULT") {
+                    citySelect.removeChild(option);
+                }
+            }
+            var option = document.createElement("option");
+            option.text = "Select a city";
+            option.value = "DEFAULT";
+            option.selected = true;
+            citySelect.insertBefore(option, citySelect.firstChild);
+            $('#addAddressModal').hide();
+        }
+
+        $('.modal .close').click(function () {
+            closeAddAddressModal();
+        });
+    }
+
+    function getDistricts(citySelect, country) {  
+        var districtSelect = document.querySelector(".country-selected");
+        districtSelect.innerHTML = "";
+        districtSelect.disabled = false;
+
+        if (citySelect === "Ho Chi Minh") {
+            addSelectedDistrictOption("Go Vap", country);
+            addSelectedDistrictOption("Binh Chanh", country);
+            addSelectedDistrictOption("Quan 9", country);
+            addSelectedDistrictOption("Quan 1", country);
+            addSelectedDistrictOption("Quan 2", country);
+            addSelectedDistrictOption("Thu Duc", country);
+            addSelectedDistrictOption("Tan Binh", country);
+        } else if (citySelect === "Ha Noi") {
+            addSelectedDistrictOption("Chuong My", country);
+            addSelectedDistrictOption("Gia Lam", country);
+            addSelectedDistrictOption("Hoai Duc", country);
+            addSelectedDistrictOption("Phuc Tho", country);
+            addSelectedDistrictOption("Phu Xuyen", country);
+            addSelectedDistrictOption("Thanh Tri", country);
+        } else if (citySelect === "Can Tho") {
+            addSelectedDistrictOption("Co Do", country);
+            addSelectedDistrictOption("Thoi Lai", country);
+            addSelectedDistrictOption("Vinh Thanh", country);
+            addSelectedDistrictOption("Cai Rang", country);
+            addSelectedDistrictOption("Thot Not", country);
+        } else if (citySelect === "Binh Phuoc") {
+            addSelectedDistrictOption("Bu Gia Map", country);
+            addSelectedDistrictOption("Bu Dang", country);
+            addSelectedDistrictOption("Bu Dop", country);
+            addSelectedDistrictOption("Chon Thanh", country);
+            addSelectedDistrictOption("Dong Phu", country);
+            addSelectedDistrictOption("Dong Xoai", country);
+        }
+    }
+
+    function updateDistricts() {
+        var citySelect = document.querySelector(".city-selected"); 
+        var districtSelect = document.querySelector(".country-selected");
+        districtSelect.innerHTML = "";
+        districtSelect.disabled = false;
+        var cityOptions = citySelect.options;
+
+        for (var i = 0; i < cityOptions.length; i++) {
+            var option = cityOptions[i];
+            if (option.value === "DEFAULT") {
+                citySelect.remove(0);
+                break;
+            }
+        }
+
+        if (citySelect.value === "Ho Chi Minh") {
+            addDistrictOption("Go Vap");
+            addDistrictOption("Binh Chanh");
+            addDistrictOption("Quan 9");
+            addDistrictOption("Quan 1");
+            addDistrictOption("Quan 2");
+            addDistrictOption("Thu Duc");
+            addDistrictOption("Tan Binh");
+        } else if (citySelect.value === "Ha Noi") {
+            addDistrictOption("Chuong My");
+            addDistrictOption("Gia Lam");
+            addDistrictOption("Hoai Duc");
+            addDistrictOption("Phuc Tho");
+            addDistrictOption("Phu Xuyen");
+            addDistrictOption("Thanh Tri");
+        } else if (citySelect.value === "Can Tho"){
+            addDistrictOption("Co Do");
+            addDistrictOption("Thoi Lai");
+            addDistrictOption("Vinh Thanh");
+            addDistrictOption("Cai Rang");
+            addDistrictOption("Thot Not");
+        } else if (citySelect.value === "Binh Phuoc"){
+            addDistrictOption("Bu Gia Map");
+            addDistrictOption("Bu Dang");
+            addDistrictOption("Bu Dop");
+            addDistrictOption("Chon Thanh");
+            addDistrictOption("Dong Phu");
+            addDistrictOption("Dong Xoai");
+        }
+    }
+
+    function addDistrictOption(district) {
+        var districtSelect = document.querySelector(".country-selected");
+        var option = document.createElement("option");
+        option.text = district;
+        option.value = district
+        districtSelect.add(option);
+    }
+    function addSelectedDistrictOption(district, country) {
+        var districtSelect = document.querySelector(".country-selected");
+        var option = document.createElement("option");
+        option.text = district;
+        option.value = district
+        if (district === country) {
+            option.selected = true;
+        }
+        districtSelect.add(option);
+    }
+   
+</script>
