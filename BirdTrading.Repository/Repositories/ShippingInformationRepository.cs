@@ -43,7 +43,6 @@ namespace BirdTrading.Repository.Repositories
                 .FirstOrDefaultAsync(x => x.IsDefaultAddress && x.Users.Any(u => u.Id == userId));
         }
 
-<<<<<<< Updated upstream
         public async Task<IEnumerable<ShippingInformation>> GetUserShippingInformationAsync(int userId)
         {
             return await _context.Set<ShippingInformation>()
@@ -51,7 +50,5 @@ namespace BirdTrading.Repository.Repositories
                 .Where(x => x.Users.Any(u => u.Id == userId))
                 .ToListAsync();
         }
-=======
->>>>>>> Stashed changes
     }
 }

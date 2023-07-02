@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -20,8 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BirdTrading.DataAccess\BirdTrading.DataAccess.csproj" />
+    <ProjectReference Include="..\BirdTrading.Domain\BirdTrading.Domain.csproj" />
+    <ProjectReference Include="..\BirdTrading.Interface\BirdTrading.Interface.csproj" />
     <ProjectReference Include="..\BirdTrading.Repository\BirdTrading.Repository.csproj" />
     <ProjectReference Include="..\BirdTrading.Services\BirdTrading.Services.csproj" />
+    <ProjectReference Include="..\BirdTrading.Utils\BirdTrading.Utils.csproj" />
     <ProjectReference Include="..\BirdTrading.ViewModel\BirdTrading.ViewModel.csproj" />
   </ItemGroup>
 
