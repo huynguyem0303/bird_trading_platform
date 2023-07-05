@@ -30,9 +30,8 @@ namespace BirdTradingApp.Pages.Login
                     HttpContext.Session.SetString("Role", login.Role.ToString());
                     HttpContext.Session.SetInt32("Id", login.Id);
                     HttpContext.Session.SetString("Name", login.Name);
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", login);
                     TempData["success"] = "Login Succeed";
-                    return RedirectToPage("/Admin/Index");
+                    return RedirectToPage("/Admin/DashBoard");
                 }
                 if (login is not null)
                 {

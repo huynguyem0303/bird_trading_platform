@@ -7,6 +7,7 @@ namespace BirdTradingApp.Pages.Admin
     public class DashBoardModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _contextAccessor;
         public int TotalUser {get; set;}
         public int TotalShop { get; set;}
         public int TotalOrder { get; set;}
@@ -14,12 +15,18 @@ namespace BirdTradingApp.Pages.Admin
         public int[] UserStatic {  get; set;}
         public int[] ShopStatic { get; set;}
         public decimal[] OrderStatic { get; set;}   
-        public DashBoardModel(IUnitOfWork unitOfWork)
+        public DashBoardModel(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            string role = _contextAccessor.HttpContext.Session.GetString("Role");
+            if (role is null || !role.Equals("Admin"))
+            {
+                return RedirectToPage("/Login/Index");
+            }
             TotalUser = _unitOfWork.UserRepository.GetAllUsersExceptAdmin().Count();
             TotalShop = _unitOfWork.ShopRepository.GetAll().Count();
             TotalOrder = _unitOfWork.OrderRepository.GetAll().Count();
@@ -35,6 +42,7 @@ namespace BirdTradingApp.Pages.Admin
             {
                 OrderStatic[i] = _unitOfWork.OrderRepository.DoStatics()[i];
             }
+            return Page();
         }
     }
 }

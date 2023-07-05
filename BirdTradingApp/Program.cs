@@ -4,7 +4,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.InjectService();
 builder.Services.InjectInfracstucture(builder.Configuration);
-
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddDistributedMemoryCache();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -10,17 +10,19 @@ namespace BirdTradingApp.Pages.Admin
     public class AddShopModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHttpContextAccessor _contextAccessor;
         [BindProperty]
         public Shop AddShopDTO { get; set;} 
         public List<User> Users { get; set; }
-        public AddShopModel(IUnitOfWork unitOfWork)
+        public AddShopModel(IUnitOfWork unitOfWork, IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
         public IActionResult OnGet()
         {
-            User userLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            if (userLogin == null)
+            string role = _contextAccessor.HttpContext.Session.GetString("Role");
+            if (role is null || !role.Equals("Admin"))
             {
                 return RedirectToPage("/Login/Index");
             }

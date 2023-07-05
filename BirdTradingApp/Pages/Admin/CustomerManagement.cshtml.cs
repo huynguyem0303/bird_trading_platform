@@ -11,15 +11,16 @@ namespace BirdTradingApp.Pages.Admin
         private readonly IUnitOfWork _unitOfWork;
         private readonly IHttpContextAccessor _contextAccessor;
         public List<User> Users { get; set; }
-        public CustomerManagementModel(IUnitOfWork unitOfWork)
+        public CustomerManagementModel(IUnitOfWork unitOfWork,IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
 
         public IActionResult OnGet()
         {
-            User userLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            if (userLogin == null)
+            string role = _contextAccessor.HttpContext.Session.GetString("Role");
+            if (role is null || !role.Equals("Admin"))
             {
                 return RedirectToPage("/Login/Index");
             }

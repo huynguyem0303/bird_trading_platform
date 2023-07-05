@@ -18,13 +18,14 @@ namespace BirdTradingApp.Pages.Admin
         public List<ShippingInformation> ShippingInfors { get; set; }
         public List<bool> AccountStatus { get; set; } = new List<bool>();
         public List<bool> AccountTemp { get; set; } = new List<bool>();
-        public EditCustomerModel(IUnitOfWork unitOfWork)
+        public EditCustomerModel(IUnitOfWork unitOfWork,IHttpContextAccessor contextAccessor)
         {
             _unitOfWork = unitOfWork;
+            _contextAccessor = contextAccessor;
         }
         public IActionResult OnGet(int id){
-            User userLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            if (userLogin == null)
+            string role = _contextAccessor.HttpContext.Session.GetString("Role");
+            if (role is null || !role.Equals("Admin"))
             {
                 return RedirectToPage("/Login/Index");
             }
