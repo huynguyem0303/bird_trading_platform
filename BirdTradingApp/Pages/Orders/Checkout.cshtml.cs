@@ -2,12 +2,14 @@ using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
 using BirdTrading.Interface.Services;
 using BirdTrading.Utils.PaypalConfiguration;
+using BirdTradingApp.CustomAuthorize;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using PayPal.Api;
 
 namespace BirdTradingApp.Pages.Orders
 {
+    [UserAuthorize]
     public class CheckoutModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
