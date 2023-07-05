@@ -15,8 +15,24 @@
                 },
                 success: function (e) {
                     if (e.status == 200) {
+                        toastr.options = {
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "750",
+                            "extendedTimeOut": "1000",
+                        }
                         toastr.success(e.message);
                     } else if (e.status == 400) {
+                        toastr.options = {
+                            "preventDuplicates": true,
+                            "onclick": null,
+                            "showDuration": "300",
+                            "hideDuration": "1000",
+                            "timeOut": "1500",
+                            "extendedTimeOut": "1000",
+                        }
                         toastr.warning(e.message);
                     } else {
                         window.location.href = e.url;

@@ -65,6 +65,30 @@ namespace BirdTradingApp.Pages.Orders
             }
             return Page();
         }
+
+        public async Task<IActionResult> OnPostCancelAsync(int orderId, string reason)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+            if (order is not null)
+            {
+                ShippingSession session = new ShippingSession
+                {
+                    OrderId = orderId,
+                    Description = "Buyer cancels order with reason: " + reason,
+                    SessionDate = DateTime.Now,
+                    Status = BirdTrading.Domain.Enums.OrderStatus.Cancel
+                };
+
+                await _unitOfWork.ShippingSessionRepository.AddAsync(session);
+                if (await _unitOfWork.SaveChangeAsync())
+                {
+                    TempData["success"] = "Cancel order succeed.";
+                    return RedirectToPage("/Orders/Purchase", new { type = 4 });
+                }
+            }
+
+            return Page();
+        }
         //
         public int GetCurrentUserId()
         {

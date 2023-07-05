@@ -1,6 +1,7 @@
 ﻿using BirdTrading.DataAccess;
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace BirdTrading.Repository.Repositories
 {
