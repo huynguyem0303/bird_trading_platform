@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.ViewModel", "Bi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.Utils", "BirdTrading.Utils\BirdTrading.Utils.csproj", "{8716A96A-DB0D-4C3C-AED2-76C24C3F584C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BirdTrading.Services", "BirdTrading.Services\BirdTrading.Services.csproj", "{82D3ED7D-B697-4567-81D8-F2D61A327586}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BirdTrading.Services", "BirdTrading.Services\BirdTrading.Services.csproj", "{82D3ED7D-B697-4567-81D8-F2D61A327586}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

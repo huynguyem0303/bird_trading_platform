@@ -2,6 +2,7 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -12,6 +13,33 @@ namespace BirdTrading.Repository.Repositories
     {
         public UserRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public string AddUser(User user)
+        {
+            if(user == null)
+            {
+                return "user is null";
+            }
+            bool check = _context.Users.ToList().Any(x => x.Email == user.Email);
+            if(check) {
+                return "Email is exist";
+            }
+            _context.Users.Add(user);
+            _context.SaveChanges();
+            return "Add successfully";
+        }
+
+        public void BlockUser(int id)
+        {
+            User user = _context.Users.FirstOrDefault(x => x.Id == id);
+            if(user == null)
+            {
+                return;
+            }
+            user.IsBlocked = true;
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
 
         public async Task<User> CreateUserAsync(string username, string password, String fullname)
@@ -38,11 +66,38 @@ namespace BirdTrading.Repository.Repositories
             return null;
         }
 
+        public int[] DoStatic()
+        {
+            int[] result = new int[2];
+            int active = _context.Users.ToList().FindAll(u => u.Role != BirdTrading.Domain.Enums.UserRole.Admin).FindAll(x=>x.IsBlocked == false).Count;
+            result[0] = active;
+            int blocked = _context.Users.ToList().FindAll(u => u.Role != BirdTrading.Domain.Enums.UserRole.Admin).FindAll(x => x.IsBlocked == true).Count;
+            result[1] = blocked;
+            return result;
+        }
+
+        public List<User> GetAllUsersExceptAdmin()
+        {
+            return _context.Users.ToList().FindAll(u => u.Role != BirdTrading.Domain.Enums.UserRole.Admin);
+        }
+        public List<User> GetAllUsersExceptAdminandNoShop() {
+            List<Shop> shops = _context.Shops.ToList();
+            List<int> userIds = (from s in shops
+                                select s.Id).ToList();
+            List<User> users = _context.Users.Include(x => x.Shop).ToList().FindAll(u => u.Role == BirdTrading.Domain.Enums.UserRole.ShopOwner && userIds.Contains(u.Id) == true);
+            return users;
+
+        }
         public async Task<User?> GetUserByEmailOrPhoneAndPasswordAsync(string username, string password)
         {
             return await _context.Set<User>().
                 FirstOrDefaultAsync(x => (x.Email == username || x.Phone == username)
                 && x.Password == password);
+        }
+
+        public User GetUserById(int id)
+        {
+            return _context.Users.ToList().SingleOrDefault(x=>x.Id == id);
         }
 
         public async Task<User> ModifyShippingInformationAsync(ShippingInformation shippingInformation, int userId, int shippingInformationId)
@@ -142,6 +197,17 @@ namespace BirdTrading.Repository.Repositories
             return currentUser;
         }
 
+        public string updateUser(User user)
+        {
+            if (user == null)
+            {
+                return "user is null";
+            }
+            _context.Users.Update(user);
+            _context.SaveChanges();
+            return "Update successfully";
+        }
+
         public async Task<User> UpdateUserAsync(User user)
         {
             var currentUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
@@ -156,4 +222,5 @@ namespace BirdTrading.Repository.Repositories
             return null;
         }
     }
+
 }

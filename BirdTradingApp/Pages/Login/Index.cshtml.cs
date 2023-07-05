@@ -25,6 +25,15 @@ namespace BirdTradingApp.Pages.Login
             {
                 var login = await _unitOfWork.UserRepository
                     .GetUserByEmailOrPhoneAndPasswordAsync(LoginModel.UserName, LoginModel.Password);
+                if (login is not null && login.Role == BirdTrading.Domain.Enums.UserRole.Admin)
+                {
+                    HttpContext.Session.SetString("Role", login.Role.ToString());
+                    HttpContext.Session.SetInt32("Id", login.Id);
+                    HttpContext.Session.SetString("Name", login.Name);
+                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", login);
+                    TempData["success"] = "Login Succeed";
+                    return RedirectToPage("/Admin/Index");
+                }
                 if (login is not null)
                 {
                     var cart = await _unitOfWork.CartDetailRepository.GetUserCartsAsync(login.Id);

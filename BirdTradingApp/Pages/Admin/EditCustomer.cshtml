@@ -1,0 +1,113 @@
+﻿@page "{id:int}"
+@model BirdTradingApp.Pages.Admin.EditCustomerModel
+@{
+    Layout = "/Pages/Shared/_AdminLayout.cshtml";
+    var ErrorEmail = ViewData["EmailError"]?.ToString();
+}
+<div class="bg-secondary bg-opacity-10 py-2 mb-5">
+    <div class="container">
+        <h1>Add User</h1>
+    </div>
+</div>
+<div class="container">
+    <form method="post">
+        <input type="text" id="idUser" hidden asp-for="User.Id" />
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" id="email" class="form-control" asp-for="User.Email" readonly required>
+            @if (!string.IsNullOrWhiteSpace(ErrorEmail))
+            {
+                <div class="alert alert-warning" role="alert">
+                    @ErrorEmail
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="form-label"> Name</label>
+            <input type="text" class="form-control" id="customerName" pattern=".*[^ ].*" asp-for="User.Name" required>
+        </div>
+        <div class="form-group">
+            <label for="city" class="form-label">Phone</label>
+            <input type="number" class="form-control" id="city" pattern=".*[^ ].*" asp-for="User.Phone" required>
+        </div>
+        <div class="form-group">
+            <label for="country" class="form-label">Password</label>
+            <input type="text" class="form-control" pattern=".*[^ ].*" id="country" asp-for="User.Password" required>
+        </div>
+        <div class="form-group">
+            <label for="avatar" class="form-label">AvatarUrl</label>
+            <input type="text" class="form-control" pattern=".*[^ ].*" id="password" asp-for="User.AvatarURL" required>
+        </div>
+        <div class="form-group">
+            <label for="Category" class="form-label">Shipping</label>
+            <select id="staffDropdown" class="form-control" asp-for="User.ShippingInforId">
+                <option value="">Select a ShippingInfor</option>
+                @foreach (var ship in Model.ShippingInfors)
+                {
+                    @if (ship.Id == Model.User.ShippingInforId)
+                    {
+                        <option value="@ship.Id" checked>@ship.Name</option>
+                    }
+                    @if (ship.Id != Model.User.ShippingInforId)
+                    {
+                        <option value="@ship.Id">@ship.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Role" class="form-label">Role</label>
+            <select id="staffDropdown2" class="form-control" asp-for="User.Role">
+                <option value="">Select a Role</option>
+                @foreach (var role in Model.UserRoles)
+                {
+                    @if (role == Model.User.Role)
+                    {
+                        <option value="@role" checked>@role.ToString()</option>
+                    }
+                    @if (role != Model.User.Role)
+                    {
+                        <option value="@role">@role.ToString()</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="IsBlocked" class="form-label">Account Status</label>
+            <select id="staffDropdown2" class="form-control" asp-for="User.IsBlocked">
+                <option value="">Select a status</option>
+                @foreach (var status in Model.AccountStatus)
+                {
+                    @if (status == Model.User.IsBlocked)
+                    {
+                        <option value="@status" checked>@(@status == true? "IsBlocked": "Active")</option>
+                    }
+                    @if (status != Model.User.IsBlocked)
+                    {
+                        <option value="@status">@(@status == true ? "IsBlocked" : "Active")</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="IsTempe" class="form-label">Temp User</label>
+            <select id="staffDropdown3" class="form-control" asp-for="User.IsTempUser">
+                <option value="">Select a status</option>
+                @foreach (var status in Model.AccountTemp)
+                {
+                    @if (status == Model.User.IsTempUser)
+                    {
+                        <option value="@status" checked>@(@status == true ? "Yes" : "No")</option>
+                    }
+                    @if (status != Model.User.IsTempUser)
+                    {
+                        <option value="@status">@(@status == true ? "Yes" : "No")</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group" style="margin-top : 20px">
+            <button class="btn btn-primary" type="submit" font-weight="bold">Update</button>
+        </div>
+    </form>
+</div>

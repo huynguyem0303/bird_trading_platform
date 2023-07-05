@@ -1,4 +1,5 @@
 ﻿using BirdTrading.Domain.Models;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,12 @@ namespace BirdTrading.Interface.Repositories
         Task<User> UpdateImageAsync(string url, int userId);
         Task<User> UpdatePasswordAsync(string password, int userId);
         Task<User> UpdateUserAsync(User user);
-
+        List<User> GetAllUsersExceptAdmin();
+        string AddUser(User user);
+        void BlockUser(int id);
+        User GetUserById(int id);
+        string updateUser(User user);
+        List<User> GetAllUsersExceptAdminandNoShop();
+        int[] DoStatic();
     }
 }
