@@ -3,7 +3,7 @@
 @using BirdTrading.Utils.Others
 @{
     ViewData["Title"] = "Details";
-    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role"))
+    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role")))
     {
         Response.Redirect("/Login");
         return;

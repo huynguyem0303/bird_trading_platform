@@ -64,5 +64,20 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.ShippingSessions)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public List<Order> GetAll()
+        {
+            return _context.Orders.ToList();
+        }
+
+        public decimal[] DoStatics()
+        {
+            decimal[] result = new decimal[7];
+            for(int i = 0; i < 7; i++)
+            {
+                result[i] = GetAll().FindAll(x => x.OrderDate.Month == (i + 1)).Sum(x => x.Total);
+            }
+            return result;
+        }
     }
 }

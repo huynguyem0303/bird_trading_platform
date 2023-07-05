@@ -1,0 +1,64 @@
+﻿@page
+@model BirdTradingApp.Pages.Admin.AddCustomerModel
+@{
+    Layout = "/Pages/Shared/_AdminLayout.cshtml";
+    var ErrorEmail = ViewData["EmailError"]?.ToString();
+}
+<div class="bg-secondary bg-opacity-10 py-2 mb-5">
+    <div class="container">
+        <h1>Add User</h1>
+    </div>
+</div>
+<div class="container">
+    <form method="post">
+        <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input type="text" id="email" class="form-control" asp-for="AddCustomerDTO.Email" required>
+            @if (!string.IsNullOrWhiteSpace(ErrorEmail))
+            {
+                <div class="alert alert-warning" role="alert">
+                    @ErrorEmail
+                </div>
+            }
+        </div>
+        <div class="form-group">
+            <label for="customerName" class="form-label"> Name</label>
+            <input type="text" class="form-control" id="customerName" pattern=".*[^ ].*" asp-for="AddCustomerDTO.Name" required>
+        </div>
+        <div class="form-group">
+            <label for="city" class="form-label">Phone</label>
+            <input type="number" class="form-control" id="city" pattern=".*[^ ].*" asp-for="AddCustomerDTO.Phone" required>
+        </div>
+        <div class="form-group">
+            <label for="country" class="form-label">Password</label>
+            <input type="password" class="form-control" pattern=".*[^ ].*" id="country" asp-for="AddCustomerDTO.Password" required>
+        </div>
+        <div class="form-group">
+            <label for="avatar" class="form-label">AvatarUrl</label>
+            <input type="text" class="form-control" pattern=".*[^ ].*" id="password" asp-for="AddCustomerDTO.AvatarURL" required>
+        </div>
+        <div class="form-group">
+            <label for="Category" class="form-label">Shipping</label>
+            <select id="staffDropdown" class="form-control" asp-for="AddCustomerDTO.ShippingInforId">
+                <option value="">Select a ShippingInfor</option>
+                @foreach (var ship in Model.ShippingInfors)
+                {
+                    <option value="@ship.Id">@ship.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="Role" class="form-label">Role</label>
+            <select id="staffDropdown2" class="form-control" asp-for="AddCustomerDTO.Role">
+                <option value="">Select a Role</option>
+                @foreach (var role in Model.UserRoles)
+                {
+                    <option value="@role">@role.ToString()</option>
+                }
+            </select>
+        </div>
+        <div class="form-group" style="margin-top : 20px">
+            <button class="btn btn-primary" type="submit" font-weight="bold">Add</button>
+        </div>
+    </form>
+</div>

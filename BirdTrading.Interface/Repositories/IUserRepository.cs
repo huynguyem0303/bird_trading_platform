@@ -16,7 +16,13 @@ namespace BirdTrading.Interface.Repositories
         Task<User> UpdateImageAsync(string url, int userId);
         Task<User> UpdatePasswordAsync(string password, int userId);
         Task<User> UpdateUserAsync(User user);
-        Task<User?> GetUserByIdAsync(int userId);   
-
+        Task<User?> GetUserByIdAsync(int userId);
+        List<User> GetAllUsersExceptAdmin();
+        string AddUser(User user);
+        void BlockUser(int id);
+        User GetUserById(int id);
+        string updateUser(User user);
+        List<User> GetAllUsersExceptAdminandNoShop();
+        int[] DoStatic();
     }
 }

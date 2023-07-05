@@ -1,0 +1,211 @@
+﻿@page
+@model BirdTradingApp.Pages.Admin.DashBoardModel
+@{
+    Layout = "/Pages/Shared/_AdminLayout.cshtml";
+}
+<div class="container-fluid ml-2">
+    <div class="title-wrapper pt-30 " style="margin-left:15px">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <div class="title mb-30">
+                    <h2>eCommerce Dashboard</h2>
+                </div>
+            </div>
+            <!-- end col -->
+            <div class="col-md-6">
+                <div class="breadcrumb-wrapper mb-30">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item">
+                                <a href="#0">Dashboard</a>
+                            </li>
+                            <li class="breadcrumb-item active" aria-current="page">
+                                eCommerce
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <div class="row" style="margin-left:50px">
+    <div class="col-xl-3 col-lg-4 col-sm-6">
+        <div class="icon-card mb-30">
+            <div class="icon purple">
+                <i class="lni lni-cart-full"></i>
+            </div>
+            <div class="content">
+                <h6 class="mb-10">Total Users</h6>
+                <h3 class="text-bold mb-10">@Model.TotalUser</h3>
+                <p class="text-sm text-success">
+                    <i class="lni lni-arrow-up"></i> +2.00%
+                    <span class="text-gray">(30 days)</span>
+                </p>
+            </div>
+        </div>
+    </div>
+        <!-- End Icon Cart -->
+    <div class="col-xl-3 col-lg-4 col-sm-6 p-2">
+            <div class="icon-card mb-30">
+                <div class="icon success">
+                    <i class="lni lni-dollar"></i>
+                </div>
+                <div class="content">
+                    <h6 class="mb-10">Total Shop</h6>
+                    <h3 class="text-bold mb-10">@Model.TotalShop</h3>
+                    <p class="text-sm text-success">
+                        <i class="lni lni-arrow-up"></i> +5.45%
+                        <span class="text-gray">Increased</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+            <!-- End Icon Cart -->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+                <div class="icon primary">
+                    <i class="lni lni-credit-cards"></i>
+                </div>
+                <div class="content">
+                    <h6 class="mb-10">Total Order</h6>
+                    <h3 class="text-bold mb-10">@Model.TotalOrder</h3>
+                    <p class="text-sm text-danger">
+                        <i class="lni lni-arrow-down"></i> -2.00%
+                        <span class="text-gray">Decresase</span>
+                    </p>
+                </div>
+            </div>
+            <!-- End Icon Cart -->
+        </div>
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+            <div class="icon-card mb-30">
+                <div class="icon primary">
+                    <i class="lni lni-credit-cards"></i>
+                </div>
+                <div class="content">
+                    <h6 class="mb-10">Total Income</h6>
+                    <h3 class="text-bold mb-10">@Model.TotalIncome</h3>
+                    <p class="text-sm text-danger">
+                        <i class="lni lni-arrow-down"></i> -1.00%
+                        <span class="text-gray">Decresase</span>
+                    </p>
+                </div>
+            </div>
+            <!-- End Icon Cart -->
+        </div>
+        <!-- End Col -->
+   </div>
+     <div class="row" style="margin-left:20px">
+         <div class ="col-sm-4">
+             <div class="card">
+                <div class="card-header fs-4 fw-bold" style="font-weight:bold">User Static</div>
+                 <div class="card-body">
+                    <canvas class="my-4 h-25" id="pie" style="width: 70%; height: 180px"></canvas>
+                 </div>
+             </div>
+         </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header text-medium" style="font-weight:bold">Shop Static</div>
+                <div class="card-body">
+                    <canvas class="my-4 h-25" id="pie2"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-header text-medium" style="font-weight:bold">Order Income Static</div>
+                <div class="card-body">
+                    <canvas class="my-4 h-25" id="myLine"></canvas>
+                </div>
+            </div>
+        </div>
+     </div>
+   </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script type="text/javascript">
+    var chart = document.getElementById('pie').getContext('2d');
+    var myChart = new Chart(chart,{
+        type : 'pie',
+        data:{
+            labels : ['Active','Blocked'],
+            datasets:[{
+                label:'Pie Chart',
+                data:[@Model.UserStatic[0],@Model.UserStatic[1]],
+                backgroundColor: ['#0000FF','#FF0000'],
+            }]
+        },
+        options:{
+            scales:{
+                yAxes:[{
+                    ticks:{
+                        beginAtZero:true
+                    }
+                }]
+            }
+        }
+    })
+    var chart = document.getElementById('pie2').getContext('2d');
+    var myChart = new Chart(chart, {
+        type: 'pie',
+        data: {
+            labels: ['Active', 'Blocked'],
+            datasets: [{
+                label: 'Pie Chart',
+                data: [@Model.ShopStatic[0], @Model.ShopStatic[1]],
+                backgroundColor: ['#0000FF', '#FF0000'],
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    })
+    var data = {
+        labels: ['January', 'February', 'March', 'April', 'May', 'June','July'],
+        datasets: [{
+            label: 'Sales',
+            data: [@Model.OrderStatic[0], @Model.OrderStatic[1], @Model.OrderStatic[2], @Model.OrderStatic[3], @Model.OrderStatic[4], @Model.OrderStatic[5],@Model.OrderStatic[6]],
+            borderColor: 'blue',
+            fill: false
+        }]
+    };
+    var options = {
+        responsive: true,
+        title: {
+            display: true,
+            text: 'Sales Chart'
+        },
+        scales: {
+            x: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'Month'
+                }
+            },
+            y: {
+                display: true,
+                title: {
+                    display: true,
+                    text: 'Incomes'
+                }
+            }
+        }
+    };
+
+    // Tạo biểu đồ đường
+    var ctx = document.getElementById('myLine').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: data,
+        options: options
+    });
+</script>
