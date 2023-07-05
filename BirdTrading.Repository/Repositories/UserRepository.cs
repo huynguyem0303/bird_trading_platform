@@ -94,12 +94,10 @@ namespace BirdTrading.Repository.Repositories
                 FirstOrDefaultAsync(x => (x.Email == username || x.Phone == username)
                 && x.Password == password);
         }
-
         public User GetUserById(int id)
         {
             return _context.Users.ToList().SingleOrDefault(x=>x.Id == id);
         }
-
         public async Task<User?> GetUserByIdAsync(int userId)
         {
             return await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == userId);

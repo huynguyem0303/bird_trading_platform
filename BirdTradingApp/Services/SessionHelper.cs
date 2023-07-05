@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace BirdTradingApp.Services
 {
@@ -12,7 +13,13 @@ namespace BirdTradingApp.Services
         public static T GetObjectFromJson<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
-            return value == null ? default : JsonSerializer.Deserialize<T>(value);
+
+            var options = new JsonSerializerOptions
+            {
+                ReferenceHandler = ReferenceHandler.Preserve
+            };
+
+            return value == null ? default : JsonSerializer.Deserialize<T>(value, options);
         }
     }
 }

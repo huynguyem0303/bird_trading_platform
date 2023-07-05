@@ -54,7 +54,6 @@ namespace BirdTradingApp.Pages.Users
                         HttpContext.Session.SetString("Role", user.Role.ToString());
                         HttpContext.Session.SetInt32("Id", user.Id);
                         HttpContext.Session.SetString("Name", user.Name);
-                        SessionHelper.SetObjectAsJson(HttpContext.Session, "user", user);
                         TempData["success"] = "Register Succeed";
                         return RedirectToPage("/Index");
                     }

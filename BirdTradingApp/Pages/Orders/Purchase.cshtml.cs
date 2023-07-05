@@ -1,10 +1,12 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
+using BirdTradingApp.CustomAuthorize;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BirdTradingApp.Pages.Orders
 {
+    [UserAuthorize]
     public class PurchaseModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -63,6 +65,30 @@ namespace BirdTradingApp.Pages.Orders
                 TempData["success"] = "Add comment succeed. Thanks for your rating.";
                 return RedirectToPage("/Orders/Purchase", type);
             }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostCancelAsync(int orderId, string reason)
+        {
+            var order = await _unitOfWork.OrderRepository.GetByIdAsync(orderId);
+            if (order is not null)
+            {
+                ShippingSession session = new ShippingSession
+                {
+                    OrderId = orderId,
+                    Description = "Buyer cancels order with reason: " + reason,
+                    SessionDate = DateTime.Now,
+                    Status = BirdTrading.Domain.Enums.OrderStatus.Cancel
+                };
+
+                await _unitOfWork.ShippingSessionRepository.AddAsync(session);
+                if (await _unitOfWork.SaveChangeAsync())
+                {
+                    TempData["success"] = "Cancel order succeed.";
+                    return RedirectToPage("/Orders/Purchase", new { type = 4 });
+                }
+            }
+
             return Page();
         }
         //

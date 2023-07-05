@@ -3,6 +3,11 @@
 @using BirdTrading.Utils.Others
 @{
     ViewData["Title"] = "Details";
+    if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role"))
+    {
+        Response.Redirect("/Login");
+        return;
+    }
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -111,7 +116,7 @@
                 <small>Payment type</small>
             </div>
             <div class="col-4 pt-2 pb-2" style="text-align: right">
-                <small>Momo</small>
+                <small>Paypal</small>
             </div>
         </div>
     </div>

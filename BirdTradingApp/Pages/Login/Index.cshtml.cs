@@ -41,7 +41,6 @@ namespace BirdTradingApp.Pages.Login
                     HttpContext.Session.SetInt32("Id", login.Id);
                     HttpContext.Session.SetString("Name", login.Name);
                     HttpContext.Session.SetInt32("CartCount", cart.Count());
-                    SessionHelper.SetObjectAsJson(HttpContext.Session, "user", login);
                     TempData["success"] = "Login Succeed";
                     return RedirectToPage("/Index");
                 }
