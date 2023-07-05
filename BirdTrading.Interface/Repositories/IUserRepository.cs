@@ -15,7 +15,7 @@ namespace BirdTrading.Interface.Repositories
         Task<IList<ShippingInformation>> SetDefaultShippingInformationUserAsync(int shippingInformationId, int userId);
         Task<User> UpdateImageAsync(string url, int userId);
         Task<User> UpdatePasswordAsync(string password, int userId);
-        Task<User> UpdateUserAsync(User user); Admin
+        Task<User> UpdateUserAsync(User user);
         Task<User?> GetUserByIdAsync(int userId);
         List<User> GetAllUsersExceptAdmin();
         string AddUser(User user);
