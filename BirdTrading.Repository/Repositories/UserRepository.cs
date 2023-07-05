@@ -45,6 +45,11 @@ namespace BirdTrading.Repository.Repositories
                 && x.Password == password);
         }
 
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            return await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == userId);
+        }
+
         public async Task<User> ModifyShippingInformationAsync(ShippingInformation shippingInformation, int userId, int shippingInformationId)
         {
             var currentUser = await _context.Users
