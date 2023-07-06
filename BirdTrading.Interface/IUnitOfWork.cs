@@ -1,4 +1,5 @@
-﻿using BirdTrading.Interface.Repositories;
+﻿using BirdTrading.Domain.Models;
+using BirdTrading.Interface.Repositories;
 
 namespace BirdTrading.Interface
 {

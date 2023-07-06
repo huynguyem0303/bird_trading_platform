@@ -1,9 +1,11 @@
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface;
+using BirdTradingApp.CustomAuthorize;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BirdTradingApp.Pages.Orders
 {
+    [UserAuthorize]
     public class DetailsModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

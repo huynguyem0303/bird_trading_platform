@@ -185,6 +185,40 @@
                         else
                         {
                             <a class="btn btn-primary pl-5 pr-5 m-3" asp-page="/Orders/Details" asp-route-detailId="@item.Id" asp-route-type="@Request.Query["type"]">Details</a>
+
+                            if (item.ShippingSessions.Last().Status == BirdTrading.Domain.Enums.OrderStatus.WaitingForConfirm ||
+                            item.ShippingSessions.Last().Status == BirdTrading.Domain.Enums.OrderStatus.WaitingForDelivery)
+                            {
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary pl-5 pr-5 m-3" data-toggle="modal" data-target="#cancalOrder-@item.Id">
+                                    Cancel
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="cancalOrder-@item.Id" tabindex="-1" role="dialog" aria-labelledby="cancalOrder-@item.Id-title" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Order cancel confirmation</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="post" asp-page="Purchase" asp-page-handler="Cancel">
+                                                <div class="modal-body" style="text-align: left;">
+                                                    Enter your cancel reason:
+                                                    <input name="reason" placeholder="Order cancel reason" type="text" class="form-control" />
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                    <input type="hidden" name="orderId" value="@item.Id" />
+                                                    <button type="submit" class="btn btn-primary">Confirm</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         }
                     </div>
                 </div>
