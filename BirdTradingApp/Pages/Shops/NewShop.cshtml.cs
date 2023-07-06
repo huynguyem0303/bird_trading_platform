@@ -110,7 +110,7 @@ namespace BirdTradingApp.Pages.Shops
                 Shop.UserId = (int)userId;
                 _unitOfWork.ShopRepository.UpdateUserRoleAysnc(currentUserLogin);
                 _unitOfWork.ShopRepository.CreateShopAysnc(Shop);
-                return RedirectToPage("/Products/AddProduct");
+                return RedirectToPage("/Shops/Index");
             }
 
             return Page();
