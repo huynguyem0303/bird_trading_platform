@@ -42,6 +42,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<ActionResult> OnPostAsync(IFormFile image)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             Boolean validate = true;
           
             if (Shop.Name.IsEmpty() || Shop.Name == null)
@@ -86,7 +87,6 @@ namespace BirdTradingApp.Pages.Shops
                 User User = new User();
                 var userId = HttpContext.Session.GetInt32("Id");
                 var shop = _unitOfWork.ShopRepository.GetByIdAsync((int)userId);
-                var currentUserLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
                 //if (!ModelState.IsValid)
                 //{
                 //    return Page();
@@ -108,7 +108,8 @@ namespace BirdTradingApp.Pages.Shops
                 Shop.AvatarUrl = imageUrl;
                 Shop.IsBlocked = false;
                 Shop.UserId = (int)userId;
-                _unitOfWork.ShopRepository.UpdateUserRoleAysnc(currentUserLogin);
+                var users = _unitOfWork.UserRepository.GetUserById((int)Session);
+                _unitOfWork.UserRepository.UpdateUserRole(users);
                 _unitOfWork.ShopRepository.CreateShopAysnc(Shop);
                 return RedirectToPage("/Shops/Index");
             }

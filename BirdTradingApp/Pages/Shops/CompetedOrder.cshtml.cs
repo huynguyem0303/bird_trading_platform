@@ -24,10 +24,9 @@ namespace BirdTradingApp.Pages.Shops
         public int? Session { get; set; }
         public async Task OnGetAsync(string searchString, string searchBy)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             bool validate = false;
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             var productlist = _unitOfWork.ProductRepository.GetByShopIdAsync((int)shopid);
             foreach (var item in productlist.Result)
             {

@@ -24,5 +24,6 @@ namespace BirdTrading.Interface.Repositories
         string updateUser(User user);
         List<User> GetAllUsersExceptAdminandNoShop();
         int[] DoStatic();
+        Task<User> UpdateUserRole(User user);
     }
 }

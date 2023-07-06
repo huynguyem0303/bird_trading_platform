@@ -8,7 +8,7 @@ namespace BirdTradingApp.Pages.Shops.Shared
         public int? Session { get; set; }
         public async Task<IActionResult> OnPostCreateNewShop()
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             return RedirectToPage("/Shops/NewShop");
         }
     }

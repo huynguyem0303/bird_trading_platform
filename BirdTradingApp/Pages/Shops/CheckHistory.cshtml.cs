@@ -25,7 +25,7 @@ namespace BirdTradingApp.Pages.Shops
         public int? Session { get; set; }
         public IActionResult OnGetAsync(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             ShippingSession =_unitOfWork.ShippingSessionRepository.CheckHistory(id).Result;
             orderid = id;
             return Page();

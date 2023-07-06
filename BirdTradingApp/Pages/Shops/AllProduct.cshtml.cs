@@ -23,9 +23,9 @@ namespace BirdTradingApp.Pages.Shops
         public int? Session { get; set; }
         public IActionResult OnGet(string searchString)
         {
-            Session = HttpContext.Session.GetInt32("id");
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+            Session = HttpContext.Session.GetInt32("Id");
+
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p=>p.ShopId == shopid && p.IsRemoved==false).ToList();
        
             CurrentFilter = searchString;
@@ -41,9 +41,9 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostDelete(int id)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             await _unitOfWork.ProductRepository.UpdateProductStatusAysnc(true,id);
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p => p.ShopId == shopid).ToList();
             return RedirectToPage("/Shops/AllProduct");
         }

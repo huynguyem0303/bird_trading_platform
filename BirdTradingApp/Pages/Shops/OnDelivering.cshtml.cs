@@ -27,8 +27,8 @@ namespace BirdTradingApp.Pages.Shops
             Session = HttpContext.Session.GetInt32("Id");
             bool checkcancel = false;
             bool validate = false;
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+        
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             var productlist = _unitOfWork.ProductRepository.GetByShopIdAsync((int)shopid);
             foreach (var item in productlist.Result)
             {

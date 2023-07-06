@@ -25,7 +25,7 @@ namespace BirdTradingApp.Pages.Shops
         public bool check4 { get; set; }
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             if (id == null)
             {
                 return NotFound();
@@ -47,7 +47,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostConfirm(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             var shippingsession = new ShippingSession();
             shippingsession.OrderId = id;
             shippingsession.SessionDate = DateTime.Now;
@@ -59,7 +59,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostOnDelivering(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             var shippingsession = new ShippingSession();
             shippingsession.OrderId = id;
             shippingsession.SessionDate = DateTime.Now;
@@ -71,7 +71,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostDelivered(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             var shippingsession = new ShippingSession();
             shippingsession.OrderId = id;
             shippingsession.SessionDate = DateTime.Now;
@@ -83,7 +83,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostCancel(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             var shippingsession = new ShippingSession();
             shippingsession.OrderId = id;
             shippingsession.SessionDate = DateTime.Now;
