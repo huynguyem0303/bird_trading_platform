@@ -7,6 +7,11 @@ namespace BirdTrading.Interface.Repositories
         Task<IEnumerable<Order>> GetListByUserIdAsync(int userId);
         Task<IEnumerable<Order>> GetListByUserIdAndStatusAsync(int userId, int status);
         Task<IEnumerable<Order>> GetListSearchAsync(int userId, string search);
+
         Task<List<Order?>> GetByOrderDetailIdAsync(int id);
+
+        List<Order> GetAll();
+        decimal[] DoStatics();
+
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
 using BirdTradingApp.Services;
+using NuGet.Protocol.Plugins;
 
 namespace BirdTradingApp.Pages.Users
 {
@@ -21,22 +22,25 @@ namespace BirdTradingApp.Pages.Users
         public User UserLogin { get; set; }
         [BindProperty]
         public IList<ShippingInformation> ShippingInformations { get; set; }
-        public  IActionResult OnGet()
+        public  async Task<IActionResult> OnGet()
         {
-            UserLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            if(UserLogin == null)
+            String role = HttpContext.Session.GetString("Role");
+            int id = (int)HttpContext.Session.GetInt32("Id");
+         
+            if(role == null)
             {
                  return RedirectToPage("/Login/Index");
             }
-            SetAll(UserLogin.Id, "personal-info-container", "");
+            UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
+            SetAll(id, "personal-info-container", "");
             return Page();
         }
 
         public async Task<IActionResult> OnPostSaveInfor()
         {
             Boolean validate = true;
-            if(UserLogin.Name.Length < 12 || UserLogin.Name.Length > 30) {
-                ModelState.AddModelError("UserLogin.Name", "Name must be between 12-30 character");
+            if(UserLogin.Name.Length < 6 || UserLogin.Name.Length > 30) {
+                ModelState.AddModelError("UserLogin.Name", "Name must be between 6-30 character");
                 validate = false;
             }
             if(UserLogin.Name.Contains("  "))
@@ -75,8 +79,9 @@ namespace BirdTradingApp.Pages.Users
         
         public async Task<IActionResult> OnPostSaveImg(IFormFile image)
         {
-            var imageUrl = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").AvatarURL;
-            var userId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
+            var userId = (int)HttpContext.Session.GetInt32("Id");
+            UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            var imageUrl = UserLogin.AvatarURL;
 
             if (image != null && image.Length > 0)
             {
@@ -101,7 +106,9 @@ namespace BirdTradingApp.Pages.Users
         {
             Boolean check = true;
             string message = "";
-            var currentUserLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
+
+            int id = (int)HttpContext.Session.GetInt32("Id");
+            var currentUserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
 
             if (!currentUserLogin.Password.Equals(currentPassword))
             {
@@ -132,13 +139,13 @@ namespace BirdTradingApp.Pages.Users
             {
                 UserLogin = currentUserLogin;
             }
-            SetAll(currentUserLogin.Id, "change-password-container", message);
+            SetAll( id, "change-password-container", message);
             return Page();
         }
 
         public async Task<IActionResult> OnPostModifyAddress(string name, string phone, string addressDetail, string shippingId)
         {
-            var userId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
+            var userId = (int)HttpContext.Session.GetInt32("Id");
             ShippingInformation shippingInformation = new ShippingInformation
             {
                 Name = name,
@@ -150,13 +157,14 @@ namespace BirdTradingApp.Pages.Users
             };
 
             UserLogin = await _unitOfWork.UserRepository.ModifyShippingInformationAsync(shippingInformation, userId, shippingId != null ? int.Parse(shippingId) : -1);
-            SetAll(UserLogin.Id, "address-container", "Update successful!");
+            SetAll(userId, "address-container", "Update successful!");
             return Page();
         }
          public  async Task<IActionResult> OnPostSetAddressDefault(string addressId)
-        {          
-            UserLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            ShippingInformations = await _unitOfWork.UserRepository.SetDefaultShippingInformationUserAsync(int.Parse(addressId), UserLogin.Id);
+        {
+            var userId = (int)HttpContext.Session.GetInt32("Id");
+            UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            ShippingInformations = await _unitOfWork.UserRepository.SetDefaultShippingInformationUserAsync(int.Parse(addressId), userId);
            
             ViewData["DefaultContainer"] = "address-container";
             return Page();
@@ -164,10 +172,11 @@ namespace BirdTradingApp.Pages.Users
 
         public async Task<IActionResult> OnPostDeleteAddress(string addressId)
         {
-            UserLogin = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user");
-            if(await _unitOfWork.ShippingInformationRepository.DeleteShippingInformationAsync(UserLogin.Id, int.Parse(addressId)))
+            var userId = (int)HttpContext.Session.GetInt32("Id");
+            UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
+            if (await _unitOfWork.ShippingInformationRepository.DeleteShippingInformationAsync(userId, int.Parse(addressId)))
             {
-                SetAll(UserLogin.Id, "address-container", "Address Deleted");
+                SetAll(userId, "address-container", "Address Deleted");
                 return Page();
             }
             ViewData["NotificationMessage"] = "Error Occurr";

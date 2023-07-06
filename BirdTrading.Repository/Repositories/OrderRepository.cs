@@ -19,7 +19,8 @@ namespace BirdTrading.Repository.Repositories
                 .ThenInclude(x => x.Product)
                 .ThenInclude(x => x.Shop)
                 .Include(x => x.ShippingSessions)
-                .Where(x => x.UserId == userId && x.ShippingSessions.Any(s => (int)s.Status == status))
+                .Where(x => x.UserId == userId && 
+                (int) x.ShippingSessions.OrderBy(ss => ss.Id).Last().Status == status)
                 .OrderByDescending(x => x.Id)
                 .ToListAsync();
         }
@@ -63,6 +64,7 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.ShippingSessions)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
         public  async Task<List<Order?>> GetByOrderDetailIdAsync(int id)
         {
             return await _context.Set<Order>()
@@ -73,6 +75,23 @@ namespace BirdTrading.Repository.Repositories
                 .ToListAsync();
         }
        
+
+
+
+        public List<Order> GetAll()
+        {
+            return _context.Orders.ToList();
+        }
+
+        public decimal[] DoStatics()
+        {
+            decimal[] result = new decimal[7];
+            for(int i = 0; i < 7; i++)
+            {
+                result[i] = GetAll().FindAll(x => x.OrderDate.Month == (i + 1)).Sum(x => x.Total);
+            }
+            return result;
+        }
 
     }
 }
