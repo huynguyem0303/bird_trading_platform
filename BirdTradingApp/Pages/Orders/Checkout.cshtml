@@ -70,7 +70,9 @@
                             </div>
                             <div class="modal-footer border-top-0">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" asp-page="Checkout" asp-page-handler="ChangeAddress">Add another address</a>
+                                <form method="get" asp-page="/Users/Index">
+                                    <button type="submit" class="btn btn-danger">Add another address</button>
+                                </form>
                             </div>
                         </div>
                     </div>

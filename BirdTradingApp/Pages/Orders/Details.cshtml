@@ -1,6 +1,7 @@
 ﻿@page "{detailId?}"
 @model BirdTradingApp.Pages.Orders.DetailsModel
 @using BirdTrading.Utils.Others
+@using Microsoft.AspNetCore.Http;
 @{
     ViewData["Title"] = "Details";
     if (string.IsNullOrEmpty(HttpContext.Session.GetString("Role")))
