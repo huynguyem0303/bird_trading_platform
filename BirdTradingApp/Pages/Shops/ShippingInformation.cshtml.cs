@@ -18,7 +18,7 @@ namespace BirdTradingApp.Pages.Shops
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             if (id == null)
             {
                 return NotFound();

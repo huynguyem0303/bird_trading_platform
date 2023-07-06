@@ -29,18 +29,7 @@ namespace BirdTrading.Repository.Repositories
             _context.Set<Shop>().Add(shop);
             _context.SaveChanges();
         }
-        public async Task<User> UpdateUserRoleAysnc(User user)
-        {
-            var currentUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
-            if (currentUser != null)
-            {
-                currentUser.Role = Domain.Enums.UserRole.ShopOwner;
-                _context.Entry(currentUser).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return currentUser;
-            }
-            return null;
-        }
+       
         public async Task<bool> UploadFile(IFormFile file)
         {
             string path = "";

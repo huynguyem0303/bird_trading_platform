@@ -32,13 +32,13 @@ namespace BirdTradingApp.Pages.Shops
         public int? Session { get; set; }
         public IActionResult OnGet(int id)
         {
-            Session = HttpContext.Session.GetInt32("id");
+            Session = HttpContext.Session.GetInt32("Id");
             Pid = id;
             if (id == null)
             {
                 return NotFound();
             }
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
+          
             Product =_unitOfWork.ProductRepository.GetByIdAsync(id).Result;
             cateid = Product.CategoryId;
             productid = Product.Id;
@@ -91,7 +91,7 @@ namespace BirdTradingApp.Pages.Shops
                 Product = await _unitOfWork.ProductRepository.UpdateProductgAsync(product);
                 return RedirectToPage("/Shops/AllProduct");
             }
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
+          
             Product = _unitOfWork.ProductRepository.GetByIdAsync(Pid).Result;
             cateid = Product.CategoryId;
             productid = Product.Id;
@@ -104,8 +104,9 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<ActionResult> OnPostSaveImg(IFormFile image)
         {
-            var userId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var imageUrl = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)userId).Result.AvatarUrl;
+            Session = HttpContext.Session.GetInt32("Id");
+            var users = _unitOfWork.UserRepository.GetUserById((int)Session);
+            var imageUrl = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.AvatarUrl;
             if (image != null)
             {
                 var imageName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);

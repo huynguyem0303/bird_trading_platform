@@ -10,7 +10,6 @@ namespace BirdTrading.Interface.Repositories
         Task<Shop?> GetShopsUserIdAysnc(int id);
         Task<Shop> UpdateImageAsync(string url, int userId);
         Task<Shop> UpdateShopAsync(Shop shop);
-        Task<User> UpdateUserRoleAysnc(User user);
         Task<bool> UploadFile(IFormFile file);
 
         List<Shop> GetAll();

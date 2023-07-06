@@ -22,8 +22,8 @@ namespace BirdTradingApp.Pages.Shops
         public async Task OnGetAsync(string searchString, string searchBy)
         {
             Session = HttpContext.Session.GetInt32("Id");
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+         
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p => p.ShopId == shopid && p.IsRemoved == true).ToList();
 
             CurrentFilter = searchString;
@@ -38,9 +38,9 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostDelete(int id)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             await _unitOfWork.ProductRepository.UpdateProductStatusAysnc(false, id);
-            var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
-            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
+            var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p => p.ShopId == shopid).ToList();
             return RedirectToPage("/Shops/RemovedProduct");
         }
