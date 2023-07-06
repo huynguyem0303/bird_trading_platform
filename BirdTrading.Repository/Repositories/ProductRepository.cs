@@ -42,6 +42,11 @@ namespace BirdTrading.Repository.Repositories
             return result;
         }
 
+        public List<Product> GetProductByShopId(int shopId)
+        {
+           return _context.Products.ToList().FindAll(x => x.ShopId == shopId);
+        }
+
         public async Task<Pagination<Product>> GetProductPagingByCategoryAsync(int category, int pageIndex, int pageSize)
         {
             var products = _context.Set<Product>()
