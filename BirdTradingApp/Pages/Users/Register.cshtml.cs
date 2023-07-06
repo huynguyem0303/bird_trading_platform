@@ -33,9 +33,9 @@ namespace BirdTradingApp.Pages.Users
             {
                 if (ResModel.Password.Equals(ResModel.ConfirmPassword))
                 {
-                    if (ResModel.UserFullName.Length > 30 || ResModel.UserFullName.Length < 12)
+                    if (ResModel.UserFullName.Length > 30 || ResModel.UserFullName.Length < 6)
                     {
-                        ModelState.AddModelError(string.Empty, "Full name must be between 12 and 30 characters.");
+                        ModelState.AddModelError(string.Empty, "Full name must be between 6 and 30 characters.");
                         return Page();
                     }
                     if(ResModel.UserFullName.Contains("  "))
@@ -45,7 +45,7 @@ namespace BirdTradingApp.Pages.Users
                     }
                     if (ResModel.Password.Length > 30 || ResModel.Password.Length < 6)
                     {
-                        ModelState.AddModelError(string.Empty, "Password mus be betwwen 12-30 characters");
+                        ModelState.AddModelError(string.Empty, "Password mus be betwwen 6-30 characters");
                         return Page();
                     }
                     var user = await _unitOfWork.UserRepository.CreateUserAsync(ResModel.UserName, ResModel.Password, ResModel.UserFullName);
