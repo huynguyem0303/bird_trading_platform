@@ -1,0 +1,108 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model BirdTradingApp.Pages.Shops.WaitingForDeleliveringModel
+@{
+    HttpContext context = ViewContext.HttpContext;
+    var role = context.Session.GetString("Role");
+    var name = context.Session.GetString("Name");
+}
+
+
+
+<div style="margin-left:10px;background-size: cover;width:1500px">
+    <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+        <!-- Sidebar Toggle (Topbar) -->
+        <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+        </button>
+
+        <!-- Topbar Title -->
+        <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <div class="input-group">
+                <p class="m-auto">Shop Channel</p>
+            </div>
+        </form>
+
+        <!-- Topbar Navbar -->
+        <div class="col-lg-6 text-center text-lg-right">
+            <div class="d-inline-flex align-items-center">
+                @if (role is null)
+                {
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
+                            <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle text-decoration-none text-dark" data-toggle="dropdown">
+                            Welcome, @name
+                        </a>
+                        <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                            <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                            <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
+                        </div>
+                    </div>
+                }
+
+    </nav>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order[0].OrderDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order[0].ShipperCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Order[0].CompanyName)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Order[0].ShipperPhone)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.checkNull)
+            {
+                @foreach (var item in Model.Order)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderDate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShipperCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CompanyName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ShipperPhone)
+                        </td>
+
+
+                        <td>
+                            <a class="btn btn-primary" asp-page="./OrderDetail" asp-route-id="@item.Id">Detail</a>
+                            @*<form method="post">
+                    <input type="hidden" name="id" value="@Html.DisplayFor(modelItem => item.Id)" />
+                    <button type="submit" class="btn btn-primary" asp-page-handler="Delete" onclick="return confirm('Do you want to delete this Product?')">Delete</button>
+                    </form>*@
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-primary" asp-page="./Index">Go Back</a>
+</div>

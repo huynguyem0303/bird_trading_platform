@@ -1,0 +1,210 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@using System.Web.Helpers;
+@model BirdTradingApp.Pages.Shops.NewShopModel
+@{
+    HttpContext context = ViewContext.HttpContext;
+    var role = context.Session.GetString("Role");
+    var name = context.Session.GetString("Name");
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="~/img/logo/logo.png" type="image/x-icon" />
+    <title>Bird Shop</title>
+
+    <!-- Custom fonts for this template-->
+    <link rel="stylesheet" type="text/css" href="~/css/style.css" />
+    <link href="~/shop-vendor/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="~/css/shop-css/sb-seller-2.min.css" rel="stylesheet">
+</head>
+<body id="page-top">
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <!-- Topbar Title -->
+                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <div class="input-group">
+                        <p class="m-auto">Shop Channel</p>
+                    </div>
+                </form>
+
+                <!-- Topbar Navbar -->
+                <div class="col-lg-6 text-center text-lg-right">
+                    <div class="d-inline-flex align-items-center">
+                        @if (role is null)
+                        {
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
+                                    <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle text-decoration-none text-dark" data-toggle="dropdown">
+                                    Welcome, @name
+                                </a>
+                                <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                                    <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                                    <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
+                                </div>
+                            </div>
+                        }
+
+
+            </nav>
+            <!-- End of Topbar -->
+        </div>
+        <div style="margin-left:200px" class="R-Gpdg">
+            <div class="volt8A ">
+                <form method="post" enctype="multipart/form-data">
+                    <table class="Zj7UK+">
+                        <div class="_66hYBa">
+                            <div class="zptdmA">Shop Infomation</div>
+                        </div>
+                        <tr>
+                            <td class="espR83 qQTY0O">Image</td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input name="image" class="bMWDYw" type="file" accept=".jpg,.jpeg,.png" value="@Model.Img"><br />
+                                    </div>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="espR83 qQTY0O">  Shop Name</td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input asp-for="Shop.Name" class="CMyrTJ" />
+                                     
+                                    </div>
+                                    <span asp-validation-for="Shop.Name" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="espR83 qQTY0O">Email </td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input asp-for="Shop.Email" value="@Model.Email" class="CMyrTJ" />
+                                       
+                                        
+                                    </div>
+                                    <span asp-validation-for="Shop.Email" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="espR83 qQTY0O">  Shop Address</td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input asp-for="Shop.Address" class="CMyrTJ" />
+                                       
+                                    </div>
+                                    <span asp-validation-for="Shop.Address" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="espR83 qQTY0O">Phone</td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input asp-for="Shop.Phone" class="CMyrTJ" />
+                                       
+                                    </div>
+                                    <span asp-validation-for="Shop.Phone" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="espR83 qQTY0O">Description</td>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <div class="W50dp5">
+                                        <input asp-for="Shop.Description" class="CMyrTJ" />
+                                      
+                                    </div>
+                                    <span asp-validation-for="Shop.Description" class="text-danger"></span>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        <br />
+                        <tr>
+                            <td class="Tmj5Z6">
+                                <div>
+                                    <input type="submit" class="btn btn-outline-danger" aria-disabled="false" value="Save" />
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+               
+            </div>
+            <div class="IQPHvE">
+                <div class ="scvgOW">
+                    <div class="XWsmVn">
+                        <div class="LoNm4g">
+                          
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End content wrapper -->
+    <!-- Bootstrap core JavaScript-->
+    <script src="~/shop-vendor/vendor/jquery/jquery.min.js"></script>
+    <script src="~/shop-vendor/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="~/shop-vendor/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="~/shop-vendor//js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="~/shop-vendor/vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="~/shop-vendor//js/demo/chart-area-demo.js"></script>
+    <script src="~/shop-vendor//js/demo/chart-pie-demo.js"></script>
+
+</body>
+</html>

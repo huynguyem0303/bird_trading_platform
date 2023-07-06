@@ -18,7 +18,11 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.Products)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
+        public async Task<Category?> GetCategoryNameAysnc(int id)
+        {
+            return await _context.Set<Category>()
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
         public async Task<IEnumerable<Category>> GetListByTypeIdAsync(int typeId)
         {
             return await _context.Set<Category>()

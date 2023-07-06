@@ -1,0 +1,608 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model BirdTradingApp.Pages.Shops.EditShopModel
+@{
+    HttpContext context = ViewContext.HttpContext;
+    var DefaultContainer = ViewData["DefaultContainer"]?.ToString();
+    var role = context.Session.GetString("Role");
+    var name = context.Session.GetString("Name");
+
+}
+<style>
+    .row {
+        display: flex;
+        border: none; /* Remove border from the row */
+        flex: 1; /* Take up all available space */
+    }
+
+    .col {
+        padding: 20px;
+        border: none; /* Remove border from the column */
+        flex: 1; /* Take up all available space */
+    }
+
+    .col-25 {
+        flex-basis: 25%; /* Set the initial size of the column */
+    }
+
+    .col-75 {
+        flex-basis: 75%; /* Set the initial size of the column */
+    }
+
+    .row-50 {
+        margin-top: 15px;
+        flex-basis: 50%;
+    }
+
+    .col-50 {
+        flex-basis: 50%;
+    }
+
+    .item-container {
+        height: 200px;
+        background-color: red;
+    }
+
+    .profile-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-image-chilren {
+        width: 250px;
+        height: 120px;
+    }
+
+    .img-user {
+        width: 250px;
+        height: 120px;
+        border: 1px solid black;
+        margin-top: 15px;
+        margin-left: 380px;
+    }
+
+    .profile-image {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+    }
+
+    .profile-name {
+        margin-left: 15px;
+        font-weight: bold;
+    }
+
+    .parent-text {
+        margin-left: 15px;
+    }
+
+    .children-text {
+        margin-top: 3px;
+    }
+
+    .edit-icon {
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+
+    .children-text.active {
+        color: red;
+    }
+
+    .user-children {
+        margin-left: 32px;
+        margin-top: 5px;
+    }
+
+    .address.active .parent-text {
+        color: red;
+    }
+
+    .notification.active .parent-text {
+        color: red;
+    }
+
+    .infor-header {
+        border-bottom: 1px solid black;
+        padding-bottom: 30px;
+        margin-top: 15px;
+        margin-left: 10px;
+    }
+
+    .infor-body {
+        margin-top: 15px;
+        margin-left: 50px;
+        margin-bottom: 10px;
+    }
+
+    .row-infor {
+        width: 500px;
+        height: 50px;
+        text-align: left;
+        margin-left: 70px;
+    }
+
+        .row-infor a {
+            color: blue;
+            margin-left: 10px;
+        }
+
+    .input-name {
+        width: 300px;
+        height: 35px;
+    }
+
+    .row-lable {
+        width: 100px;
+        height: 50px;
+        text-align: right;
+        margin-right: 15px;
+    }
+
+    .gender-select {
+        padding: 10px;
+    }
+
+    #specifyColor {
+        accent-color: red;
+    }
+
+    .select-form select {
+        width: 100px;
+        height: 30px;
+    }
+
+    .btn-save button {
+        height: 40px;
+        width: 52px;
+        color: white;
+        background-color: red;
+        border: 1px;
+        border-radius: 3px;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 15px;
+    }
+
+    .btn-save-infor button {
+        height: 40px;
+        width: 250px;
+        color: white;
+        background-color: red;
+        border: 1px;
+        border-radius: 3px;
+        text-align: center;
+        margin-bottom: 10px;
+        margin-top: 15px;
+        margin-left: 170px;
+    }
+
+    .btn-img {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+        .btn-img label {
+            height: 25px;
+            width: 150px;
+            border: 2px solid black;
+            border-radius: 3px;
+            text-align: center;
+            color: black;
+        }
+
+    .head-container {
+        background-color: white;
+        border: 1px solid #eee;
+        border-radius: 3px;
+    }
+
+    .lable-head {
+        margin-top: 25px;
+    }
+
+    .default-address:checked {
+        color: red;
+    }
+
+    .default-address {
+        width: 15px;
+        height: 15px;
+    }
+
+        .default-address checked {
+            color: red;
+        }
+
+    .lable-body input {
+        height: 37px;
+        width: 200px;
+        text-align: center;
+    }
+
+    .begin {
+        margin-left: 10px;
+    }
+
+    .row-lable-address {
+        width: 500px;
+        text-align: left;
+    }
+
+    .row-infor-address {
+        width: 230px;
+        text-align: right;
+    }
+
+        .row-infor-address a {
+            margin-bottom: 10px;
+            color: blue;
+        }
+
+        .row-infor-address button {
+            height: 35px;
+            border: 1px solid black;
+            border-radius: 3px;
+            background-color: white;
+        }
+
+
+    .txt-adr {
+        margin-right: 465px;
+        font-weight: bold;
+        font-size: 20px;
+    }
+
+    .btn-add-new button {
+        height: 35px;
+        background-color: red;
+        color: white;
+        border: 1px solid white;
+        border-radius: 3px;
+    }
+
+    .defaut-div {
+        height: 25px;
+        width: 70px;
+        background-color: white;
+        color: red;
+        border: 1px solid red;
+        border-radius: 3px;
+    }
+
+    .voucher-image {
+        width: 70px;
+        height: 70px;
+    }
+
+    .voucher {
+        margin-bottom: 50px;
+    }
+
+    .notification-popup {
+        width: 270px;
+        height: 110px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #eee;
+        border: 1px solid #ccc;
+        padding: 10px;
+        display: none;
+        z-index: 9999;
+    }
+
+    .notification-icon {
+        color: green;
+        margin-right: 5px;
+        height: 90px;
+        width: 90px;
+        border-radius: 100%;
+        background: white;
+        text-align: center;
+        font-size: 40px;
+    }
+
+        .notification-icon i {
+            margin-top: 25px;
+        }
+
+    .notification-popup.show {
+        display: flex;
+    }
+
+        .notification-popup.show.clicked {
+            display: none;
+        }
+
+    .notification-message {
+        margin-left: 7px;
+        margin-top: 35px;
+    }
+
+    body.locked {
+        overflow: hidden;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+        height: 400px;
+        width: 700px;
+        background-color: #fefefe;
+        margin: 10% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        max-width: 90%;
+        max-height: 90%;
+    }
+
+    .close {
+        height: 40px;
+        width: 90px;
+        cursor: pointer;
+        color: black;
+        font-size: 20px;
+        background-color: red;
+    }
+
+    .save {
+        height: 40px;
+        width: 90px;
+        font-size: 20px;
+        background-color: red;
+        color: white;
+        border: 1px solid white;
+    }
+
+    .popup-text {
+        margin-bottom: 20px;
+        font-size: 30px;
+        color: black;
+    }
+
+    .popup-input-name {
+        width: 300px;
+        height: 35px;
+        margin-right: 30px;
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    .popup-input-phone {
+        width: 300px;
+        height: 35px;
+        margin-bottom: 10px;
+    }
+
+    .country-selected {
+        width: 300px;
+        height: 30px;
+        margin-bottom: 15px;
+    }
+
+    .city-selected {
+        width: 300px;
+        height: 30px;
+        margin-right: 30px;
+        margin-bottom: 15px;
+        margin-left: 10px
+    }
+
+    .address-detail {
+        width: 640px;
+        height: 100px;
+        margin-bottom: 15px;
+        margin-left: 10px
+    }
+
+    .popup-btn {
+        float: right;
+    }
+
+    .default-div {
+        margin-left: 10px;
+    }
+
+    .address-form-div {
+        height: 130px;
+        width: 700px;
+        border-bottom: 1px solid black;
+        margin-bottom: 10px;
+    }
+
+    .btn-update-address {
+        border: 1px solid white;
+        color: blue;
+        background-color: white;
+    }
+</style>
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <!-- Main Content -->
+    <div id="content">
+
+        <!-- Topbar -->
+        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+            <!-- Sidebar Toggle (Topbar) -->
+            <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <!-- Topbar Title -->
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                <div class="input-group">
+                    <p class="m-auto">Shop Channel</p>
+                </div>
+            </form>
+
+            <!-- Topbar Navbar -->
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    @if (role is null)
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
+                                <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle text-decoration-none text-dark" data-toggle="dropdown">
+                                Welcome, @name
+                            </a>
+                            <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                                <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                                <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
+                            </div>
+                        </div>
+                    }
+
+        </nav>
+        <section class="h-100 gradient-form" style="background-color: #eee;">
+            <input type="hidden" id="defaultContainer" value="@DefaultContainer" />
+            <div class="container py-1 h-100 begin">
+                <div class="row">
+                    <div id="notification-popup" class="text-center notification-popup">
+                        <div id="notification-icon" class="notification-icon">
+                            <i class="fa fa-check"></i>
+                        </div>
+                        <div id="notification-message" class="notification-message"></div>
+                    </div>
+                    <div class="col col-25">
+                        <div class="row row-50">
+
+                            <div class="col col-75">
+                                <container class="personal-info-container">
+                                    <div class="h-100 gradient-form head-container">
+                                        <div class="infor-header">
+                                            <h5>My Shop Information</h5>
+                                            <div>Manage profile information for account security</div>
+                                        </div>
+                                        <div class="infor-body">
+                                            <div class="h-100 gradient-form head-container">
+                                                <form method="post" enctype="multipart/form-data">
+                                                    <div class="text-center">
+                                                        @if (Model.Shop.AvatarUrl != null && Model.Shop.AvatarUrl != "" && Model.Shop.AvatarUrl.StartsWith("img"))
+                                                        {
+                                                            <div class="img-user">
+                                                                <img src="~/@Model.Shop.AvatarUrl "
+                                                                     alt="Profile Image" class="profile-image-chilren">
+                                                            </div>
+
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="img-user">
+                                                                <img src="https://htmlcolorcodes.com/assets/images/colors/white-color-solid-background-1920x1080.png"
+                                                                     alt="Profile Image" class="profile-image-chilren">
+                                                            </div>
+                                                        }
+                                                        <div class="btn-img">
+                                                            <label for="image-upload" class="image-upload-label">
+                                                                Choose Image
+                                                                <input name="image" id="image-upload" type="file" accept=".jpg,.jpeg,.png" style="display: none;">
+                                                            </label>
+                                                            <div>
+                                                                Maximum file size 1 MB
+                                                            </div>
+                                                            <div>
+                                                                Format: .JPEG, .PNG
+                                                            </div>
+                                                        </div>
+                                                        <div class="btn-save">
+                                                            <button type="submit" asp-page-handler="SaveImg">Save</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <form method="post">
+                                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                                <div class="row-section">
+                                                    <div class="row">
+                                                        <div class="row-lable">
+                                                            <div>User Name</div>
+                                                        </div>
+                                                        <div class="row-infor">
+                                                            <input asp-for="Shop.Name" type="text" />
+                                                            <span asp-validation-for="Shop.Name" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="row-lable">
+                                                            <div>Email</div>
+                                                        </div>
+                                                        <div class="row-infor">
+                                                            <input asp-for="Shop.Email" type="text" />
+                                                            <span asp-validation-for="Shop.Email" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="row-lable">
+                                                            <div>Phone</div>
+                                                        </div>
+                                                        <div class="row-infor">
+                                                            <input asp-for="Shop.Phone" type="text" />
+                                                            <span asp-validation-for="Shop.Phone" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="row-lable">
+                                                            <div>Address</div>
+                                                        </div>
+                                                        <div class="row-infor">
+                                                            <input asp-for="Shop.Address" type="text" />
+                                                            <span asp-validation-for="Shop.Address" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="row-lable">
+                                                            <div>Description</div>
+                                                        </div>
+                                                        <div class="row-infor">
+                                                            <input asp-for="Shop.Description" type="text" />
+                                                            <span asp-validation-for="Shop.Description" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="btn-save-infor">
+                                                        <input asp-for="Shop.Id" type="hidden" />
+                                                        <button type="submit" asp-page-handler="SaveInfo">SaveInfo</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </container>
+
+                            </div>
+                        </div>
+                    </div>
+        </section>
+        <script>
+            document.getElementById('image-upload').addEventListener('change', function (event) {
+                var selectedFile = event.target.files[0];
+                if (selectedFile) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.querySelector('.profile-image-chilren').src = e.target.result;
+                    };
+                    reader.readAsDataURL(selectedFile);
+                }
+            });
+        </script>

@@ -12,6 +12,22 @@ namespace BirdTrading.Repository.Repositories
         {
         }
 
+        public async void CreateProductAysnc(Product product)
+        {
+            _context.Set<Product>().Add(product);
+            _context.SaveChanges();
+        }
+        public async Task<Product> UpdateProductStatusAysnc(bool status,int id)
+        {
+            var currentUser = await _context.Set<Product>().FirstOrDefaultAsync(u => u.Id == id);
+            if (currentUser != null)
+            {
+                currentUser.IsRemoved = status;
+                _context.Entry(currentUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            return currentUser;
+        }
         public override async Task<Product?> GetByIdAsync(int id)
         {
             return await _context.Set<Product>()
@@ -21,6 +37,13 @@ namespace BirdTrading.Repository.Repositories
                 .ThenInclude(x => x.Order)
                 .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(x => x.Id == id);
+        }
+        public async Task<List<Product?>> GetProductsListAsync()
+        {
+            var list= await _context.Set<Product>()
+                .Include(x => x.Shop)
+                .Include(x => x.Category).ToListAsync();
+            return list;
         }
 
         public override async Task<Pagination<Product>> GetPaginationsAsync(int pageIndex, int pageSize)
@@ -123,6 +146,39 @@ namespace BirdTrading.Repository.Repositories
                 TotalItemsCount = totalCount
             };
             return result;
+        }
+        public async Task<Product> UpdateImageAsync(string url, int userId)
+        {
+            var currentUser = await _context.Set<Product>().FirstOrDefaultAsync(u => u.Id == userId);
+            if (currentUser != null)
+            {
+                currentUser.ImageUrl = url;
+                _context.Entry(currentUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+            return currentUser;
+        }
+        public async Task<Product> UpdateProductgAsync(Product product)
+        {
+            var currentProduct = await _context.Set<Product>().FirstOrDefaultAsync(u => u.Id == product.Id);
+            if (currentProduct != null)
+            {
+                currentProduct.Name = product.Name;
+                currentProduct.OriginalPrice = product.OriginalPrice;
+                currentProduct.Quantity = product.Quantity;
+                currentProduct. CategoryId = product.CategoryId;
+                currentProduct.Description = product.Description;
+                _context.Entry(currentProduct).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return currentProduct;
+            }
+            return null;
+        }
+        public async Task<List<Product?>> GetByShopIdAsync(int id)
+        {
+            return await _context.Set<Product>()
+                .Where(x => x.ShopId == id)
+                .ToListAsync();
         }
     }
 }

@@ -1,8 +1,11 @@
 ﻿@page
+@using Microsoft.AspNetCore.Http
 @model BirdTradingApp.Pages.Shops.IndexModel
 @{
-}
-
+    HttpContext context = ViewContext.HttpContext;
+    var role = context.Session.GetString("Role");
+    var name = context.Session.GetString("Name");
+    }
 <!-- Content Wrapper -->
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -20,40 +23,37 @@
             <!-- Topbar Title -->
             <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
-                    <p class="m-auto">Kênh người bán</p>
+                    <p class="m-auto">Shop Channel</p>
                 </div>
             </form>
 
             <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto">
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="d-inline-flex align-items-center">
+                    @if (role is null)
+                    {
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
+                                <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle text-decoration-none text-dark" data-toggle="dropdown">
+                                Welcome, @name
+                            </a>
+                            <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
+                                <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                                <a asp-page="/Shops/EditShop" class="dropdown-item text-light">Shop Profile</a>
+                                <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
+                            </div>
+                        </div>
+                    }
 
-                <!-- Nav Item - User Information -->
-                <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">NAME</span>
-                        <img class="img-profile rounded-circle" src="~/img//birds/bird-blue-parakeet.png">
-                    </a>
-                    <!-- Dropdown - User Information -->
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                         aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="sellerProfile">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Hồ sơ
-                        </a>
-                        <a class="dropdown-item" href="profileSetting">
-                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Cài đặt
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="logOut">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Đăng xuất
-                        </a>
-                    </div>
-                </li>
-
-            </ul>
 
         </nav>
         <!-- End of Topbar -->
@@ -62,71 +62,44 @@
 
             <div class="things-need-to-do-wrapper col-lg-12">
                 <h4 class="things-title">
-                    Danh sách cần làm
+                    To Do List
                 </h4>
                 <h6 class="things-title">
-                    Những việc bạn sẽ phải làm
+                   Things you have to do
                 </h6>
                 <div class="things-to-do-content">
                     <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="allOrder?type=process">
-                            <span class="status-counter">1</span><br>Chờ xác
-                            nhận
+                        <a asp-page="/Shops/WaitingConfirm">
+                            <span class="status-counter"></span><br>Waiting Confirm
                         </a>
                     </div>
                     <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="allOrder?type=process2">
-                            <span class="status-counter">1</span><br>Chờ lấy
-                            hàng
+                        <a asp-page="/Shops/WaitingForDelelivering">
+                            <span class="status-counter"></span><br>Waiting For Delivery
                         </a>
                     </div>
                     <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="allOrder?type=status">
-                            <span class="status-counter">1</span><br>Đã xử
-                            lý
+                        <a asp-page="/Shops/OnDelivering">
+                            <span class="status-counter"></span><br>On Delivering
                         </a>
                     </div>
                     <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="allOrder?type=status2">
-                            <span class="status-counter">1</span><br>Đơn
-                            hủy
+                        <a asp-page="/Shops/CompetedOrder">
+                            <span class="status-counter"></span><br>Competed Order
                         </a>
                     </div>
                     <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="productSeller?type=outOfStock"><span class="status-counter">1</span><br>Sản phẩm hết hàng</a>
+                        <a asp-page="/Shops/CancelOrder">
+                            <span class="status-counter"></span><br>Cancel Order
+                        </a>
                     </div>
-                    <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                        <a href="selIncome">Tài chính/Doanh thu</a>
-                    </div>
+
+   
                 </div>
 
             </div>
 
-            <div class="bestsell-section-wrapper col-lg-12 p-2">
-                <h4 class="bestsell-title">
-                    Sản phẩm bán nhiều
-                </h4>
-
-                <div class="bestsell-section-content">
-                    <div class="bestsell-product-content position-relative">
-                        <a href="#">
-                            <img src="~/img/pet-birds.png" alt="Image for ..." width="200px" height="200px">
-                            <p class="product-title d-inline-block col-lg-8 position-absolute">
-                                Bird<br><br>
-
-                                <span class="product-discount-price">
-                                    <span class="old-price">$49.99</span><br>
-                                    <span class="new-price"><strong>$49.99</strong></span>
-                                </span>
-                            </p>
-
-                            <button class="btn btn-dark position-absolute position-relative">
-                                Chi tiết
-                            </button>
-                        </a>
-                    </div>
-                </div>
-            </div>
+         
 
         </div>
         <!-- End index content -->

@@ -40,7 +40,9 @@ namespace BirdTradingApp
             services.AddRazorPages()
                 .AddJsonOptions(options =>
                 {
+
                     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
                 })
                 .AddRazorRuntimeCompilation();
             //

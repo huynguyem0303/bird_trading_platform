@@ -1,4 +1,4 @@
-﻿using BirdTrading.DataAccess;
+﻿         using BirdTrading.DataAccess;
 using BirdTrading.Domain.Models;
 using BirdTrading.Interface.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -218,6 +218,18 @@ namespace BirdTrading.Repository.Repositories
             {
                 currentUser.Name = user.Name;
                 currentUser.Email = user.Email;
+                _context.Entry(currentUser).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+                return currentUser;
+            }
+            return null;
+        }
+        public async Task<User> UpdateUserRole(User user)
+        {
+            var currentUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
+            if (currentUser != null)
+            {
+                currentUser.Role = Domain.Enums.UserRole.ShopOwner;
                 _context.Entry(currentUser).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 return currentUser;

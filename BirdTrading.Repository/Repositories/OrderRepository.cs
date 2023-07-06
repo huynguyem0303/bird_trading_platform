@@ -65,6 +65,19 @@ namespace BirdTrading.Repository.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public  async Task<List<Order?>> GetByOrderDetailIdAsync(int id)
+        {
+            return await _context.Set<Order>()
+                .Include(x => x.OrderDetails)
+                .Include(x => x.User)
+                .Include(x => x.ShippingInformation)
+                .Where(x => x.Id == id)
+                .ToListAsync();
+        }
+       
+
+
+
         public List<Order> GetAll()
         {
             return _context.Orders.ToList();
@@ -79,5 +92,6 @@ namespace BirdTrading.Repository.Repositories
             }
             return result;
         }
+
     }
 }
