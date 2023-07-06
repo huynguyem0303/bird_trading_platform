@@ -6,6 +6,7 @@ using BirdTrading.Repository;
 using BirdTrading.Repository.Repositories;
 using BirdTrading.Services.Paypal;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 namespace BirdTradingApp
 {
@@ -39,7 +40,9 @@ namespace BirdTradingApp
             services.AddRazorPages()
                 .AddJsonOptions(options =>
                 {
-                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+
                 })
                 .AddRazorRuntimeCompilation();
             //

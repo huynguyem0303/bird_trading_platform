@@ -36,6 +36,11 @@ namespace BirdTrading.Repository.Repositories
                 .Where(x => x.Users.Any(u => u.Id == userId)).ToList();
         }
 
+        public List<ShippingInformation> GetAllShippingInformation()
+        {
+            return _context.ShippingInformation.ToList();
+        }
+
         public async Task<ShippingInformation?> GetDefaultShippingInformationAsync(int userId)
         {
             return await _context.Set<ShippingInformation>()

@@ -5,6 +5,8 @@ using BirdTrading.Interface.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
+
+
 namespace BirdTrading.Repository.Repositories
 {
     public class ShippingSessionRepository : GenericRepository<ShippingSession>, IShippingSessionRepository

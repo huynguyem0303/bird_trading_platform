@@ -1,0 +1,210 @@
+﻿@page "{id:int}"
+@model BirdTradingApp.Pages.Products.ProductShopModel
+@{
+    var count = 0;
+}
+<style>
+    .shop {
+        padding: 10px 11%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .shop-left {
+        padding: 10px;
+        background-color: rgb(25, 33, 49);
+        color: white;
+    }
+
+    .shop-left img {
+         width: 90%;
+         height: 90%;
+         border-radius: 50%;
+    }
+
+    .shop-left h5 {
+        font-size: 20px;
+     }
+
+    .shop-left-top {
+        margin-bottom: 10px;
+    }
+
+    .shop-left-bottom button {
+        width: 100%;
+        background-color: transparent;
+        border: 1px solid white;
+    }
+
+        .shop-left-bottom button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+    .shop-right div {
+        height: 160px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+    }
+
+    .shop-right p span {
+        color: #ffd43d;
+    }
+
+    .shop-right img {
+        height: 16px;
+        margin-right: 5px;
+    }
+
+    .shop-detail {
+        padding: 10px 10%;
+        width: 100%;
+        height: 100%;
+        background-color: #eeeeee;
+    }
+
+    .suggest {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+        .suggest .col-md-2 {
+            padding: 0 5px !important;
+        }
+
+    .item {
+        padding: 5px;
+        background-color: white;
+    }
+
+        .item img {
+            width: 100%;
+        }
+
+        .item .price {
+            color: red;
+        }
+
+            .item .price span {
+                text-decoration: line-through;
+                color: black;
+                font-size: 14px;
+            }
+
+        .item .rating {
+            font-size: 12px;
+        }
+
+    .shop-info {
+        margin-top: 20px;
+        background-color: white;
+        padding: 10px;
+    }
+
+    .shop-info-banner {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .shop-info-img {
+        width: 100%;
+    }
+
+    .shop-info .btn-img {
+        width: 30px;
+        height: 50px;
+        padding: 0;
+        border: 0;
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+
+        .shop-info .btn-img:hover {
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+
+        .shop-info .btn-img img {
+            width: 30px;
+            height: 30px;
+        }
+
+    .img-left {
+        position: absolute;
+        left: 15px;
+    }
+
+    .img-right {
+        position: absolute;
+        right: 15px;
+    }
+</style>
+<div>
+    <div class="shop row" style="padding:10px 11%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;">
+        <div class="shop-left col-md-4">
+            <div class="row shop-left-top">
+                <div class="col-xs-4">
+                    <img src="/@Model.Shop.AvatarUrl" style="margin-left:15px"/>
+                </div>
+                <div class="col-xs-8" style="margin-left:75px">
+                    <h5 style="color:white">@Model.Shop.Name</h5>
+                </div>
+            </div>
+        </div>
+        <div class="shop-right col-md-8 row">
+            <div class="col-md-6">
+                <p>Sản phẩm: <span>@Model.Products.Count</span></p>
+                <p>Đang theo: <span>122</span></p>
+                <p>Tỉ lệ phản hồi chat: <span>99% (Trong vài giờ)</span></p>
+            </div>
+            <div class="col-md-6">
+                <p>Người theo dõi: <span>200</span></p>
+                <p>Đánh giá: <span>4.8/5(180 Đánh giá)</span></p>
+                <p>Tham gia: <span>1 năm trước</span></p>
+            </div>
+        </div>
+    </div>
+    <div class="shop-detail">
+
+        <h4>GỢI Ý CHO BẠN</h4>
+        <div class="row">
+        @foreach (var productList in Model.ProductBatch)
+        {
+                <div class="row suggest">
+               
+                    @foreach (var product in productList)
+                    {
+                            <div class="col-md-4">
+                                <div class="item">
+                                    <!-- Hiển thị thông tin sản phẩm -->
+                                    <img src="/@product.ImageUrl" />
+                                    <h4>@product.Name</h4>
+                                    <p>$@product.OriginalPrice</p>
+                                 <button><a href="/Products/Details?id=@product.Id" role="button">Buy now</a></button>
+                                </div>
+                            </div>
+                    }
+           
+                </div>
+                <br/>
+        }
+        <div class="shop-info">
+            <h4>THÔNG TIN SHOP</h4>
+            <div class="row">
+                <div class="col-md-6 shop-info-banner">
+                    <img class="shop-info-img" src="/@Model.Shop.AvatarUrl" />
+                </div>
+                <div class="col-md-6">
+                    <p>
+                        <span style="font-weight:bold">@Model.Shop.Name</span> <br />
+                        @Model.Shop.Description<br />
+                   
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
