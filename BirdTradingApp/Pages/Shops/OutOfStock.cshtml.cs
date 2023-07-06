@@ -21,6 +21,7 @@ namespace BirdTradingApp.Pages.Shops
         public int? Session { get; set; }
         public async Task OnGetAsync(string searchString, string searchBy)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;
             var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)currentUserLoginId).Result.Id;
             Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p => p.ShopId == shopid && p.Quantity==0 && p.IsRemoved == false).ToList();
@@ -30,7 +31,7 @@ namespace BirdTradingApp.Pages.Shops
             if (!String.IsNullOrEmpty(searchString))
             {
 
-                Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())&& s.Quantity == 0 && s.IsRemoved == false).ToList();
+                Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower())&& s.Quantity == 0 && s.IsRemoved == false && s.ShopId == shopid).ToList();
 
             }
 

@@ -47,6 +47,12 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.Users)
                 .FirstOrDefaultAsync(x => x.IsDefaultAddress && x.Users.Any(u => u.Id == userId));
         }
+        public async Task<ShippingInformation?> GetShippingInformationAsync(int Id)
+        {
+            return await _context.Set<ShippingInformation>()
+                .Include(x => x.Users)
+                .FirstOrDefaultAsync(x => x.Id == Id );
+        }
 
         public async Task<IEnumerable<ShippingInformation>> GetUserShippingInformationAsync(int userId)
         {

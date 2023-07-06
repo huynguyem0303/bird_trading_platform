@@ -7,6 +7,11 @@
     var DefaultContainer = ViewData["DefaultContainer"]?.ToString();
     var role = context.Session.GetString("Role");
     var name = context.Session.GetString("Name");
+    if (Model.Session == null)
+    {
+        Response.Redirect("/Login");
+        return;
+    }
 }
 <style>
     .row {
@@ -457,6 +462,7 @@
                             <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <a asp-page="/Login/Index" class="dropdown-item btn btn-secondary">Sign in</a>
+                                <a asp-page="/Shops/EditShop" class="dropdown-item text-light">Shop Profile</a>
                                 <a asp-page="/Users/Register" class="dropdown-item btn btn-secondary">Sign up</a>
                             </div>
                         </div>

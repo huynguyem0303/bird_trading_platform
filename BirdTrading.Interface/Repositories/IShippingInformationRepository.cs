@@ -9,6 +9,10 @@ namespace BirdTrading.Interface.Repositories
 
         IList<ShippingInformation> GetAllShippingInformation(int userId);
         Task<bool> DeleteShippingInformationAsync(int userId, int shippingInformationId);
+
+        Task<ShippingInformation?> GetShippingInformationAsync(int Id);
+
         List<ShippingInformation> GetAllShippingInformation();
+
     }
 }

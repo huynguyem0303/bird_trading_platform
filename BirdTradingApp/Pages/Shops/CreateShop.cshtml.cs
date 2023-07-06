@@ -5,9 +5,10 @@ namespace BirdTradingApp.Pages.Shops.Shared
 {
     public class CreateShopModel : PageModel
     {
-       
+        public int? Session { get; set; }
         public async Task<IActionResult> OnPostCreateNewShop()
         {
+            Session = HttpContext.Session.GetInt32("id");
             return RedirectToPage("/Shops/NewShop");
         }
     }

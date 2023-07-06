@@ -20,6 +20,7 @@ namespace BirdTradingApp.Pages.Shops
             _unitOfWork = unitOfWork;
         }
         [BindProperty]
+
         public Product Product { get; set; }
         public string SelectedCategoryType { get; set; }
         public List<SelectListItem> CategoryType { get; set; }
@@ -28,8 +29,10 @@ namespace BirdTradingApp.Pages.Shops
         public static int cateid { get; set; }
         public static int productid { get; set; }
         public static int Pid { get; set; }
+        public int? Session { get; set; }
         public IActionResult OnGet(int id)
         {
+            Session = HttpContext.Session.GetInt32("id");
             Pid = id;
             if (id == null)
             {

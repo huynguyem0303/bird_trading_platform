@@ -21,10 +21,13 @@ namespace BirdTradingApp.Pages.Shops
         public List<OrderDetail> OrderDetail { get; set; }
         public string CurrentFilter { get; set; }
         public bool checkNull = false;
+        public int? orderid { get; set; }
         public int? Session { get; set; }
         public IActionResult OnGetAsync(int id)
         {
-            ShippingSession=_unitOfWork.ShippingSessionRepository.CheckHistory(id).Result;
+            Session = HttpContext.Session.GetInt32("id");
+            ShippingSession =_unitOfWork.ShippingSessionRepository.CheckHistory(id).Result;
+            orderid = id;
             return Page();
         }
     }

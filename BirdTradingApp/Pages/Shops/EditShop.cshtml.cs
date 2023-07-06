@@ -20,9 +20,11 @@ namespace BirdTradingApp.Pages.Shops
         }
         [BindProperty]
         public Shop Shop { get; set; }
+        public int? Session { get; set; }
 
         public IActionResult OnGet()
         {
+            Session = HttpContext.Session.GetInt32("id");
             var userId = HttpContext.Session.GetInt32("Id");
             Shop = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)userId).Result;
             var shop = Shop.AvatarUrl;
