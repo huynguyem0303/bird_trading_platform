@@ -7,7 +7,7 @@
     var DefaultContainer = ViewData["DefaultContainer"]?.ToString();
     var role = context.Session.GetString("Role");
     var name = context.Session.GetString("Name");
-     if (Model.Session == null)
+    if (Model.Session == null)
     {
         Response.Redirect("/Login");
         return;

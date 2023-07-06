@@ -6,6 +6,11 @@
     HttpContext context = ViewContext.HttpContext;
     var role = context.Session.GetString("Role");
     var name = context.Session.GetString("Name");
+    if (Model.Session == null)
+    {
+        Response.Redirect("/Login");
+        return;
+    }
 }
 
 
