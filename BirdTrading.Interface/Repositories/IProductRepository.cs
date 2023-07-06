@@ -9,5 +9,6 @@ namespace BirdTrading.Interface.Repositories
         Task<IEnumerable<Product>> GetTop8RelateProductAsync(int categoryType, int productId);
         Task<Pagination<Product>> GetProductPagingByCategoryTypeAsync(int categoryType, int pageIndex, int pageSize);
         Task<Pagination<Product>> GetProductPagingByCategoryAsync(int category, int pageIndex, int pageSize);
+        List<Product> GetProductByShopId(int shopId);
     }
 }
