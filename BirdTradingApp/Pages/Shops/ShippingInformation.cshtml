@@ -1,6 +1,8 @@
 ﻿@page
 @using Microsoft.AspNetCore.Http
-@model BirdTradingApp.Pages.Shops.WaitingConfirmModel
+@model BirdTradingApp.Pages.Shops.ShippingInformationModel
+@{
+}
 @{
     HttpContext context = ViewContext.HttpContext;
     var role = context.Session.GetString("Role");
@@ -57,63 +59,43 @@
                 }
 
     </nav>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Order[0].OrderDate)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Order[0].ShipperCode)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Order[0].CompanyName)
-                </th>
 
-                <th>
-                    @Html.DisplayNameFor(model => model.Order[0].ShipperPhone)
-                </th>
-                 <th>
-                    @Html.DisplayNameFor(model => model.Order[0].ShippingInformation)
-                </th>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingInformation.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingInformation.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingInformation.Address)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingInformation.Address)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingInformation.City)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingInformation.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingInformation.Country)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingInformation.Country)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ShippingInformation.Phone)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ShippingInformation.Phone)
+        </dd>
+    </dl>
+</div>
+<div>
 
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @if (!Model.checkNull)
-            {
-                @foreach (var item in Model.Order)
-                {
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.OrderDate)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ShipperCode)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.CompanyName)
-                        </td>
-
-                        <td>
-                            @Html.DisplayFor(modelItem => item.ShipperPhone)
-                        </td>
-                        <td>
-                            <a asp-page="./ShippingInformation" asp-route-id="@item.ShippingInformationId">Shipping Information</a>
-                        </td>
-
-                        <td>
-                            <a class="btn btn-primary" asp-page="./OrderDetail" asp-route-id="@item.Id">Detail</a>
-                            @*<form method="post">
-                    <input type="hidden" name="id" value="@Html.DisplayFor(modelItem => item.Id)" />
-                    <button type="submit" class="btn btn-primary" asp-page-handler="Delete" onclick="return confirm('Do you want to delete this Product?')">Delete</button>
-                    </form>*@
-                        </td>
-                    </tr>
-                }
-            }
-        </tbody>
-    </table>
-    <a class="btn btn-primary" asp-page="./Index">Go Back</a>
+        <a class="" btn btn-primary"" asp-page="./Index">Back to List</a>
 </div>

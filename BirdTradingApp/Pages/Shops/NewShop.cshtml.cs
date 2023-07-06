@@ -26,8 +26,10 @@ namespace BirdTradingApp.Pages.Shops
         public User User { get; set; }
         public string Email { get; set; }
         public string Img { get; set; }
+        public int? Session { get; set; }
         public IActionResult OnGet()
         {
+            Session = HttpContext.Session.GetInt32("Id");
             var userId = HttpContext.Session.GetInt32("Id");
             var user = _unitOfWork.UserRepository.GetByIdAsync((int)userId);
             Email = user.Result.Email;
@@ -108,7 +110,7 @@ namespace BirdTradingApp.Pages.Shops
                 Shop.UserId = (int)userId;
                 _unitOfWork.ShopRepository.UpdateUserRoleAysnc(currentUserLogin);
                 _unitOfWork.ShopRepository.CreateShopAysnc(Shop);
-                return RedirectToPage("Index");
+                return RedirectToPage("/Products/AddProduct");
             }
 
             return Page();

@@ -25,6 +25,7 @@ namespace BirdTradingApp.Pages.Shops
         public bool checkNull = false;
         public async Task OnGetAsync(string searchString, string searchBy)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             bool validate = false;
             bool checkcancel = false;
             var currentUserLoginId = SessionHelper.GetObjectFromJson<User>(HttpContext.Session, "user").Id;

@@ -47,6 +47,7 @@
                         </a>
                         <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                             <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                            <a asp-page="/Shops/EditShop" class="dropdown-item text-light">Shop Profile</a>
                             <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
                         </div>
                     </div>
@@ -69,7 +70,9 @@
                 <th>
                     @Html.DisplayNameFor(model => model.Order[0].ShipperPhone)
                 </th>
-
+                <th>
+                    @Html.DisplayNameFor(model => model.Order[0].ShippingInformation)
+                </th>
                 <th></th>
             </tr>
         </thead>
@@ -93,7 +96,9 @@
                             @Html.DisplayFor(modelItem => item.ShipperPhone)
                         </td>
 
-
+                        <td>
+                            <a asp-page="./ShippingInformation" asp-route-id="@item.ShippingInformationId">Shipping Information</a>
+                        </td>
                         <td>
                             <a class="btn btn-primary" asp-page="./OrderDetail" asp-route-id="@item.Id">Detail</a>
                             @*<form method="post">
