@@ -28,6 +28,7 @@ namespace BirdTrading.Repository.Repositories
         public virtual void Delete(TModel model)
         {
             _context.Remove(model);
+            
         }
 
         public virtual async Task<TModel?> GetByIdAsync(int id)

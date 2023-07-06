@@ -36,7 +36,12 @@ namespace BirdTradingApp
         public static void InjectService(this IServiceCollection services)
         {
             // Add services to the container.
-            services.AddRazorPages().AddRazorRuntimeCompilation();
+            services.AddRazorPages()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                })
+                .AddRazorRuntimeCompilation();
             //
             services.AddSession(opt =>
             {

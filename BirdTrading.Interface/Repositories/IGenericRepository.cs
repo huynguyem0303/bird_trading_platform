@@ -1,4 +1,5 @@
-﻿using BirdTrading.Utils.Pagination;
+﻿using BirdTrading.Domain.Models;
+using BirdTrading.Utils.Pagination;
 using System.Linq.Expressions;
 
 namespace BirdTrading.Interface.Repositories
@@ -15,5 +16,6 @@ namespace BirdTrading.Interface.Repositories
         void UpdateRange(IEnumerable<TModel> models);
         void Delete(TModel model);
         void DeleteRange(List<TModel> model);
+       
     }
 }
