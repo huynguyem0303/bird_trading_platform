@@ -1001,8 +1001,8 @@
         var errorContainer = document.querySelector(".text-center.text-danger");
         errorContainer.innerHTML = ""; // Clear any previous error messages
 
-        if (nameInput.value.length < 12 || nameInput.value.length > 30) {
-            displayError("Full name must be between 12-30 characters");
+        if (nameInput.value.length < 6 || nameInput.value.length > 30) {
+            displayError("Full name must be between 6-30 characters");
             return false;
         }
 
