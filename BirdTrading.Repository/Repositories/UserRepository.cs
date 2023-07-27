@@ -216,11 +216,16 @@ namespace BirdTrading.Repository.Repositories
             var currentUser = await _context.Set<User>().FirstOrDefaultAsync(u => u.Id == user.Id);
             if (currentUser != null)
             {
-                currentUser.Name = user.Name;
-                currentUser.Email = user.Email;
-                _context.Entry(currentUser).State = EntityState.Modified;
-                await _context.SaveChangesAsync();
-                return currentUser;
+                var checkValidEmail = await _context.Set<User>().FirstOrDefaultAsync(u => u.Email == user.Email);
+                if (checkValidEmail == null || checkValidEmail.Id == user.Id)
+                {
+                    currentUser.Name = user.Name;
+                    currentUser.Email = user.Email;
+                    currentUser.Phone = user.Phone;
+                    _context.Entry(currentUser).State = EntityState.Modified;
+                    await _context.SaveChangesAsync();
+                    return currentUser;
+                }           
             }
             return null;
         }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.RegularExpressions;
 using BirdTradingApp.Services;
 using NuGet.Protocol.Plugins;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace BirdTradingApp.Pages.Users
 {
@@ -39,6 +40,7 @@ namespace BirdTradingApp.Pages.Users
         public async Task<IActionResult> OnPostSaveInfor()
         {
             Boolean validate = true;
+            int userId = UserLogin.Id;
             if(UserLogin.Name.Length < 6 || UserLogin.Name.Length > 30) {
                 ModelState.AddModelError("UserLogin.Name", "Name must be between 6-30 character");
                 validate = false;
@@ -57,6 +59,12 @@ namespace BirdTradingApp.Pages.Users
                 ModelState.AddModelError("UserLogin.Phone", "Please input valid phone");
                 validate = false;
             }
+            if( !Regex.IsMatch(UserLogin.Email, @"@"))
+            {
+                ModelState.AddModelError("UserLogin.Email", "Please input valid email");
+                validate = false;
+            }
+
             if (validate)
             {
                 var newUser = new User
@@ -69,11 +77,16 @@ namespace BirdTradingApp.Pages.Users
                 UserLogin = await _unitOfWork.UserRepository.UpdateUserAsync(newUser);
                 if (UserLogin != null)
                 {
-                    SetAll(UserLogin.Id, "personal-info-container", "Update successful!");
+                    SetAll(userId, "personal-info-container", "Update successful");
                     return Page();
                 }
+                else
+                {
+                    ModelState.AddModelError("UserLogin.Email", "The new email is already in use");
+                }
             }
-            SetAll(UserLogin.Id, "personal-info-container", "");
+            UserLogin = _unitOfWork.UserRepository.GetUserById(userId);
+            SetAll(userId, "personal-info-container", "");
             return Page();
         }
         
@@ -98,7 +111,7 @@ namespace BirdTradingApp.Pages.Users
             }
 
             UserLogin = await _unitOfWork.UserRepository.UpdateImageAsync(imageUrl, userId);
-            SetAll(userId, "avatar-container", "Change Image successful!");      
+            SetAll(userId, "avatar-container", "Change Image successful");      
             return Page();
         }
 
@@ -120,9 +133,9 @@ namespace BirdTradingApp.Pages.Users
                 ViewData["ErrorNewPassword"] = "Passowrd cannot contain space";
                 check = false;
             }
-            if(newPassword.Length > 20 || newPassword.Length < 6)
+            if(newPassword.Length > 30 || newPassword.Length < 6)
             {
-                ViewData["ErrorNewPassword"] = "Passowrd must be between 6-20 characters";
+                ViewData["ErrorNewPassword"] = "Passowrd must be between 6-30 characters";
                 check = false;
             }
             if (!newPassword.Equals(confirmPassword))
@@ -157,7 +170,7 @@ namespace BirdTradingApp.Pages.Users
             };
 
             UserLogin = await _unitOfWork.UserRepository.ModifyShippingInformationAsync(shippingInformation, userId, shippingId != null ? int.Parse(shippingId) : -1);
-            SetAll(userId, "address-container", "Update successful!");
+            SetAll(userId, "address-container", shippingId == null ? "Add successful" : "Update successful!");
             return Page();
         }
          public  async Task<IActionResult> OnPostSetAddressDefault(string addressId)
@@ -176,7 +189,7 @@ namespace BirdTradingApp.Pages.Users
             UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
             if (await _unitOfWork.ShippingInformationRepository.DeleteShippingInformationAsync(userId, int.Parse(addressId)))
             {
-                SetAll(userId, "address-container", "Address Deleted");
+                SetAll(userId, "address-container", "Address delete successful");
                 return Page();
             }
             ViewData["NotificationMessage"] = "Error Occurr";

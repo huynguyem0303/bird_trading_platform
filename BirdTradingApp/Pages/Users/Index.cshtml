@@ -660,10 +660,9 @@
                                     </div>
                                     @if(Model.ShippingInformations != null)
                                     {
-                                        int count = 0;
+                                        int count = Model.ShippingInformations.Count;
                                         @foreach (var address in @Model.ShippingInformations)
                                         {
-                                            count++;
                                             <div class="address-form-div">
                                                 <div class="row">
                                                     <div class="row-lable-address">
@@ -681,10 +680,13 @@
                                                         </button>
                                                         @if(count >= 2)
                                                         {
-                                                            <input type="hidden" name="addressId" value="@address.Id" />
-                                                            <button type="submit" class="btn-delete-address" asp-page-handler="DeleteAddress">
-                                                                Delete
-                                                            </button>
+                                                            @if(address.IsDefaultAddress != true)
+                                                            {
+                                                                <input type="hidden" name="addressId" value="@address.Id" />
+                                                                <button type="submit" class="btn-delete-address" asp-page-handler="DeleteAddress">
+                                                                    Delete
+                                                                </button>
+                                                            }
                                                         }
                                                         <div>
                                                           
@@ -715,7 +717,7 @@
                 </container>
                 <div id="addAddressModal" class="modal">
                     <div class="modal-content">
-                        <form method="post" asp-page-handler="ModifyAddress" onsubmit="return validateForm(event)">
+                        <form method="post" asp-page="/Users/Index" asp-page-handler="ModifyAddress" onsubmit="return validateForm(event)">
                             <div class="popup-text">
                                 New Address
                             </div>
@@ -990,8 +992,7 @@
     });
 
     function validateForm(event) {
-        event.preventDefault(); // Prevents the form from submitting automatically
-
+        //event.preventDefault(); 
         var nameInput = document.querySelector(".popup-input-name");
         var phoneInput = document.querySelector(".popup-input-phone");
         var addressInput = document.querySelector(".address-detail");
@@ -1006,8 +1007,8 @@
             return false;
         }
 
-        if (addressInput.value.length > 300) {
-            displayError("Address must be less than 300 characters");
+        if (addressInput.value.length < 10 || addressInput.value.length > 300) {
+            displayError("Please input valid address");
             return false;
         }
 
@@ -1035,8 +1036,7 @@
         if (districtSelect.value === "") {
             displayError("Please select a district");
             return false;
-        }
-
+        } 
         return true;
     }
 
