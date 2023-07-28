@@ -44,34 +44,41 @@ namespace BirdTradingApp.Pages.Shops
         {
             Session = HttpContext.Session.GetInt32("Id");
             Boolean validate = true;
-          
-            if (Shop.Name.IsEmpty() || Shop.Name == null)
+            if (image == null)
             {
-                ModelState.AddModelError("Shop.Name", "Please input valid name");
+                ModelState.AddModelError("Product.ImageUrl", "img Url cannot be null or empty");
                 validate = false;
             }
-            if (Shop.Name.Length < 3 || Shop.Name.Length > 30)
+            if (Shop.Name.IsEmpty() || Shop.Name == null)
             {
-                ModelState.AddModelError("Shop.Name", "Name must be between 3-30 character");
+                ModelState.AddModelError("Shop.Name", "Name  cannot be null or empty");
                 validate = false;
+            }
+            if (Shop.Name != null)
+            {
+                if (Shop.Name.Length < 3 || Shop.Name.Length > 30)
+                {
+                    ModelState.AddModelError("Shop.Name", "Name must be between 3-30 character");
+                    validate = false;
+                }
             }
             if (Shop.Address.IsEmpty() || Shop.Address == null)
             {
-                ModelState.AddModelError("Shop.Address", "Please input valid Address");
+                ModelState.AddModelError("Shop.Address", "Address cannot be null or empty");
                 validate = false;
             }
             if (Shop.Description.IsEmpty() || Shop.Description == null)
             {
-                ModelState.AddModelError("Shop.Description", "Please input valid Description");
+                ModelState.AddModelError("Shop.Description", "Description cannot be null or empty");
                 validate = false;
             }
             if (!Regex.IsMatch(Shop.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$") || Shop.Email == null)
             {
-                ModelState.AddModelError("Shop.Email", "Please input valid Email.");
+                ModelState.AddModelError("Shop.Email", "Please input valid Email.(Email cannot be null or empty)");
                 validate = false;
             }
 
-            if (!Regex.IsMatch(Shop.Phone, @"^\d+$") )
+            if (!Regex.IsMatch(Shop.Phone, @"^\d+$"))
             {
                 ModelState.AddModelError("Shop.Phone", "Phone must only numbers.");
                 validate = false;

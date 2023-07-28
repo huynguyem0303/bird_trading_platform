@@ -522,7 +522,7 @@
                                                         <div class="btn-img">
                                                             <label for="image-upload" class="image-upload-label">
                                                                 Choose Image
-                                                                <input name="image" id="image-upload" type="file" accept=".jpg,.jpeg,.png" style="display: none;">
+                                                                <input value="@Model.Product.ImageUrl" name="imageproduct" id="image-upload" type="file" accept=".jpg,.jpeg,.png" style="display: none;">
                                                             </label>
                                                             <div>
                                                                 Maximum file size 1 MB
@@ -530,6 +530,7 @@
                                                             <div>
                                                                 Format: .JPEG, .PNG
                                                             </div>
+                                                            <span style="color:red">@Model.msg</span>
                                                         </div>
                                                         <div class="btn-save">
                                                             <button type="submit" asp-page-handler="SaveImg">Save</button>
@@ -593,9 +594,7 @@
                                             </form>
                                             <form method="post">
 
-                                                <button type="submit" class="btn btn-outline-danger" asp-page-handler="CreateNewShop">Go Back To List</button>
-
-
+                                                <button type="submit" class="btn btn-outline-danger" asp-page-handler="ProductList">Go Back To List</button>
                                             </form>
                                         </div>
                                     </div>

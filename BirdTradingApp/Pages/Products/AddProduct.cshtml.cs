@@ -28,7 +28,7 @@ namespace BirdTradingApp.Pages.Products
         public List<SelectListItem> Category { get; set; }
         public IActionResult OnGet(int id)
         {
-         
+
             ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             return Page();
         }
@@ -36,31 +36,45 @@ namespace BirdTradingApp.Pages.Products
 
         public async Task<ActionResult> OnPostAsync(IFormFile image)
         {
+            ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             Boolean validate = true;
             if (Product.Name.IsEmpty() || Product.Name == null)
             {
-                ModelState.AddModelError("Product.Name", "Please input valid Name");
+                ModelState.AddModelError("Product.Name", "Please Name cannot be null or empty");
                 validate = false;
             }
-            if (Product.Name.Length < 3 || Product.Name.Length > 30)
+            if (image == null)
             {
-                ModelState.AddModelError("Product.Name", "Name must be between 3-30 character");
+                ModelState.AddModelError("Product.ImageUrl", "img Url cannot be null or empty");
                 validate = false;
             }
-            if (Product.OriginalPrice <=0)
+            if (Product.Name != null)
             {
-                ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (Ex:1000,1000.0)");
-                validate = false;
-            }
-            if (Product.Quantity <= 0 || Product.Quantity > 1000000)
-            {
-                ModelState.AddModelError("Product.Quantity", "Please input valid Quantity (Quantity number is from 0-1000000)");
-                validate = false;
-            }
-            if (Product.Description.IsEmpty() || Product.Description == null)
-            {
-                ModelState.AddModelError("Product.Description", "Please input valid Description");
-                validate = false;
+                if (Product.Name.Length < 3 || Product.Name.Length > 30)
+                {
+                    ModelState.AddModelError("Product.Name", "Name must be between 3-30 character");
+                    validate = false;
+
+                }
+                if (Product.OriginalPrice <= 0 || Product.OriginalPrice==null)
+                {
+                    ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (Ex:1000,1000.0)");
+                    validate = false;
+
+                }
+                if (Product.Quantity <= 0 || Product.Quantity > 1000000)
+                {
+                    ModelState.AddModelError("Product.Quantity", "Please input valid Quantity (Quantity number is from 0-1000000)");
+                    validate = false;
+                    return Page();
+                }
+
+                if (Product.Description.IsEmpty() || Product.Description == null)
+                {
+                    ModelState.AddModelError("Product.Description", "Please input valid Description");
+                    validate = false;
+                    return Page();
+                }
             }
             if (validate)
             {
@@ -99,7 +113,7 @@ namespace BirdTradingApp.Pages.Products
             }
             ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             return Page();
-           
+
         }
         public async Task<IActionResult> OnPostProductList()
         {

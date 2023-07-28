@@ -30,6 +30,7 @@ namespace BirdTradingApp.Pages.Shops
         public static int productid { get; set; }
         public static int Pid { get; set; }
         public int? Session { get; set; }
+        public string msg { get; set; }
         public IActionResult OnGet(int id)
         {
             Session = HttpContext.Session.GetInt32("Id");
@@ -102,14 +103,23 @@ namespace BirdTradingApp.Pages.Shops
             ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             return Page();
         }
-        public async Task<ActionResult> OnPostSaveImg(IFormFile image)
+        public async Task<ActionResult> OnPostSaveImg(IFormFile imageproduct)
         {
+           
+             if (imageproduct == null)
+            {
+                Product = _unitOfWork.ProductRepository.GetByIdAsync(Pid).Result;
+                if (Product.ImageUrl == null)
+                {
+                    msg = "img Url cannot be null or empty";
+                }
+            }
             Session = HttpContext.Session.GetInt32("Id");
             var users = _unitOfWork.UserRepository.GetUserById((int)Session);
-            var imageUrl = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.AvatarUrl;
-            if (image != null)
+            var imageUrl = _unitOfWork.ProductRepository.GetByIdAsync((int)Pid).Result.ImageUrl;
+            if (imageproduct != null)
             {
-                var imageName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                var imageName = Guid.NewGuid().ToString() + Path.GetExtension(imageproduct.FileName);
                 var cate = _unitOfWork.CategoryRepository.GetCategoryNameAysnc(cateid).Result.Name.Trim().ToLower();
                 var folder = Path.Combine(UploadsFolderPath, cate);
                 var imagePath = Path.Combine(folder, imageName);
@@ -120,7 +130,7 @@ namespace BirdTradingApp.Pages.Shops
                 var imagePath1 = Path.Combine(folder, imageName);
                 using (var stream = System.IO.File.Create(imagePath))
                 {
-                    await image.CopyToAsync(stream);
+                    await imageproduct.CopyToAsync(stream);
                 }
                 imageUrl = "img/" + cate + "/" + imageName;
 

@@ -3,6 +3,8 @@ using BirdTrading.Interface;
 using BirdTradingApp.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web.Helpers;
 using System.Web.WebPages;
@@ -21,7 +23,7 @@ namespace BirdTradingApp.Pages.Shops
         [BindProperty]
         public Shop Shop { get; set; }
         public int? Session { get; set; }
-
+        public string msg { get; set; }
         public IActionResult OnGet()
         {
             Session = HttpContext.Session.GetInt32("Id");
@@ -34,29 +36,34 @@ namespace BirdTradingApp.Pages.Shops
         public async Task<IActionResult> OnPostSaveInfo()
         {
             Boolean validate = true;
+
+            Session = HttpContext.Session.GetInt32("Id");
             if (Shop.Name.IsEmpty() || Shop.Name == null)
             {
-                ModelState.AddModelError("Shop.Name", "Please input valid name");
+                ModelState.AddModelError("Shop.Name", "Name  cannot be null or empty");
                 validate = false;
             }
-            if (Shop.Name.Length < 3 || Shop.Name.Length > 30)
+            if (Shop.Name != null)
             {
-                ModelState.AddModelError("Shop.Name", "Name must be between 3-30 character");
-                validate = false;
+                if (Shop.Name.Length < 3 || Shop.Name.Length > 30)
+                {
+                    ModelState.AddModelError("Shop.Name", "Name must be between 3-30 character");
+                    validate = false;
+                }
             }
             if (Shop.Address.IsEmpty() || Shop.Address == null)
             {
-                ModelState.AddModelError("Shop.Address", "Please input valid Address");
+                ModelState.AddModelError("Shop.Address", "Address cannot be null or empty");
                 validate = false;
             }
             if (Shop.Description.IsEmpty() || Shop.Description == null)
             {
-                ModelState.AddModelError("Shop.Description", "Please input valid Description");
+                ModelState.AddModelError("Shop.Description", "Description cannot be null or empty");
                 validate = false;
             }
             if (!Regex.IsMatch(Shop.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$") || Shop.Email == null)
             {
-                ModelState.AddModelError("Shop.Email", "Please input valid Email.");
+                ModelState.AddModelError("Shop.Email", "Please input valid Email.(Email cannot be null or empty)");
                 validate = false;
             }
 
@@ -91,6 +98,16 @@ namespace BirdTradingApp.Pages.Shops
         public async Task<ActionResult> OnPostSaveImg(IFormFile image)
         {
             Session = HttpContext.Session.GetInt32("Id");
+            if (image == null)
+            {
+                var userId = HttpContext.Session.GetInt32("Id");
+                Shop = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)userId).Result;
+                if (Shop.AvatarUrl == null)
+                {
+                    msg = "img Url cannot be null or empty";
+                }
+                return Page();
+            }
             var users = _unitOfWork.UserRepository.GetUserById((int)Session);
        
             var imageUrl = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.AvatarUrl;
@@ -107,9 +124,8 @@ namespace BirdTradingApp.Pages.Shops
                 imageUrl = "img/shops" + "/" + imageName;
 
             }
-
             Shop = await _unitOfWork.ShopRepository.UpdateImageAsync(imageUrl, users.Id);
-            return Page();
+            return Page();  
         }
     }
 }

@@ -504,6 +504,7 @@
                                         <div class="infor-body">
                                             <div class="h-100 gradient-form head-container">
                                                 <form method="post" enctype="multipart/form-data">
+                                                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                                     <div class="text-center">
                                                         @if (Model.Shop.AvatarUrl != null && Model.Shop.AvatarUrl != "" && Model.Shop.AvatarUrl.StartsWith("img"))
                                                         {
@@ -523,7 +524,7 @@
                                                         <div class="btn-img">
                                                             <label for="image-upload" class="image-upload-label">
                                                                 Choose Image
-                                                                <input name="image" id="image-upload" type="file" accept=".jpg,.jpeg,.png" style="display: none;">
+                                                                <input asp-for="Shop.AvatarUrl" name="image" id="image-upload" type="file" accept=".jpg,.jpeg,.png" style="display: none;">
                                                             </label>
                                                             <div>
                                                                 Maximum file size 1 MB
@@ -531,6 +532,7 @@
                                                             <div>
                                                                 Format: .JPEG, .PNG
                                                             </div>
+                                                            <span style="color:red">@Model.msg</span>
                                                         </div>
                                                         <div class="btn-save">
                                                             <button type="submit" asp-page-handler="SaveImg">Save</button>
