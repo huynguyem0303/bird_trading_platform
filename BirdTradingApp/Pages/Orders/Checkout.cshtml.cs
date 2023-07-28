@@ -33,7 +33,7 @@ namespace BirdTradingApp.Pages.Orders
             CartDetails = await GenerateDetailListAsync(cartDetailsId);
             if (CartDetails.Count() == 0)
             {
-                TempData["msg"] = "The shop of this product is no longer exists";
+                TempData["msg"] = "The shop of this product is no longer exists or the quantity of product in shop is not enough";
             }
             AddressList = await GetUserShippingInformationAsync();
             if (AddressList.Count() > 0) ShippingInformation = AddressList.First(x => x.IsDefaultAddress)!;
@@ -197,6 +197,10 @@ namespace BirdTradingApp.Pages.Orders
                 var cartDetail = await _unitOfWork.CartDetailRepository.GetByIdAsync(id);
                 if (cartDetail is not null && !cartDetail.Product.IsRemoved && !cartDetail.Product.Shop.IsBlocked)
                 {
+                    if (cartDetail.Quantity > cartDetail.Product.Quantity)
+                    {
+                        return new List<CartDetail>();
+                    }
                     detailList.Add(cartDetail);
                     currentTotal += (cartDetail.Product.OriginalPrice * cartDetail.Quantity);
                 }
