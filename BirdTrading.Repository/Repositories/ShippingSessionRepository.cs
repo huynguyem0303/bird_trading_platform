@@ -19,7 +19,7 @@ namespace BirdTrading.Repository.Repositories
             _context.Set<ShippingSession>().Add(session);
             _context.SaveChanges();
         }
-        public async Task<List<ShippingSession?>> GetByOrderDetailIdAndStatusAsync(int id,OrderStatus status)
+        public async Task<List<ShippingSession?>> GetByOrderIdAndStatusAsync(int id,OrderStatus status)
         {
             return await _context.Set<ShippingSession>()
                 .Where(x => x.OrderId == id && x.Status==status)

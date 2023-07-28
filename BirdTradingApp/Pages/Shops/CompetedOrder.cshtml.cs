@@ -26,6 +26,7 @@ namespace BirdTradingApp.Pages.Shops
         {
             Session = HttpContext.Session.GetInt32("Id");
             bool validate = false;
+            bool checkcancel = false;
             var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
             var productlist = _unitOfWork.ProductRepository.GetByShopIdAsync((int)shopid);
             foreach (var item in productlist.Result)
@@ -41,38 +42,49 @@ namespace BirdTradingApp.Pages.Shops
                     continue;
                 }
             }
-            foreach (var item in OrderDetail)
-            {
-                if (ShippingSession == null)
-                {
-                    ShippingSession = _unitOfWork.ShippingSessionRepository.GetByOrderDetailIdAndStatusAsync(item.Id, OrderStatus.Delivered).Result;
-                    continue;
-                }
-                if (ShippingSession != null)
-                {
-                    ShippingSession.AddRange(_unitOfWork.ShippingSessionRepository.GetByOrderDetailIdAndStatusAsync(item.Id, OrderStatus.Delivered).Result);
-                    continue;
-                }
+            //foreach (var item in OrderDetail)
+            //{
+            //    if (ShippingSession == null)
+            //    {
+            //        ShippingSession = _unitOfWork.ShippingSessionRepository.GetByOrderIdAndStatusAsync(item.OrderId, OrderStatus.Delivered).Result;
+            //        continue;
+            //    }
+            //    if (ShippingSession != null)
+            //    {
+            //        ShippingSession.AddRange(_unitOfWork.ShippingSessionRepository.GetByOrderIdAndStatusAsync(item.OrderId, OrderStatus.Delivered).Result);
+            //        continue;
+            //    }
 
-            }
-            foreach (var item in ShippingSession)
-            {
-
-                if (Order == null)
-                {
-                    Order = _unitOfWork.OrderRepository.GetByOrderDetailIdAsync(item.OrderId).Result;
-                    continue;
-                }
-                if (Order != null)
-                {
-                    Order.AddRange(_unitOfWork.OrderRepository.GetByOrderDetailIdAsync(item.OrderId).Result);
-                    continue;
-
-                }
-            }
-            if (Order == null)
+            //}
+            if (OrderDetail == null)
             {
                 checkNull = true;
+
+            }
+            else
+            {
+                foreach (var item in OrderDetail)
+                {
+                    checkcancel = _unitOfWork.ShippingSessionRepository.CheckStatus(item.OrderId, OrderStatus.Cancel);
+                    if (!checkcancel)
+                    {
+                        if (Order == null)
+                        {
+                            Order = _unitOfWork.OrderRepository.GetByOrderDetailIdAsync(item.OrderId).Result;
+                            continue;
+                        }
+                        if (Order != null)
+                        {
+                            Order.AddRange(_unitOfWork.OrderRepository.GetByOrderDetailIdAsync(item.OrderId).Result);
+                            continue;
+
+                        }
+                    }
+                }
+                if (Order == null)
+                {
+                    checkNull = true;
+                }
             }
 
 
