@@ -57,7 +57,7 @@ namespace BirdTrading.Repository.Repositories
             return result;
         }
 
-        public async Task<Pagination<TModel>> GetDescendingPaginationAsync(Expression<Func<TModel, int>> keySelector, int pageIndex, int pageSize)
+        public virtual async Task<Pagination<TModel>> GetDescendingPaginationAsync(Expression<Func<TModel, int>> keySelector, int pageIndex, int pageSize)
         {
             var totalCount = await _context.Set<TModel>().CountAsync();
             var tempItems = _context.Set<TModel>().OrderByDescending(keySelector).AsQueryable();

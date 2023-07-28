@@ -31,6 +31,10 @@ namespace BirdTradingApp.Pages.Orders
             if (cartDetailsId is null) return;
             //
             CartDetails = await GenerateDetailListAsync(cartDetailsId);
+            if (CartDetails.Count() == 0)
+            {
+                TempData["msg"] = "The shop of this product is no longer exists";
+            }
             AddressList = await GetUserShippingInformationAsync();
             if (AddressList.Count() > 0) ShippingInformation = AddressList.First(x => x.IsDefaultAddress)!;
         }
@@ -191,10 +195,14 @@ namespace BirdTradingApp.Pages.Orders
             {
                 var id = int.Parse(item);
                 var cartDetail = await _unitOfWork.CartDetailRepository.GetByIdAsync(id);
-                if (cartDetail is not null)
+                if (cartDetail is not null && !cartDetail.Product.IsRemoved && !cartDetail.Product.Shop.IsBlocked)
                 {
                     detailList.Add(cartDetail);
                     currentTotal += (cartDetail.Product.OriginalPrice * cartDetail.Quantity);
+                }
+                else
+                {
+                    return new List<CartDetail>();
                 }
             }
             //

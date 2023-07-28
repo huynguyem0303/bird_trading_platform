@@ -17,15 +17,15 @@
         color: white;
     }
 
-    .shop-left img {
-         width: 90%;
-         height: 90%;
-         border-radius: 50%;
-    }
+        .shop-left img {
+            width: 90%;
+            height: 90%;
+            border-radius: 50%;
+        }
 
-    .shop-left h5 {
-        font-size: 20px;
-     }
+        .shop-left h5 {
+            font-size: 20px;
+        }
 
     .shop-left-top {
         margin-bottom: 10px;
@@ -147,7 +147,15 @@
         <div class="shop-left col-md-4">
             <div class="row shop-left-top">
                 <div class="col-xs-4">
-                    <img src="/@Model.Shop.AvatarUrl" style="margin-left:15px"/>
+
+                    @if (Model.Shop.AvatarUrl.StartsWith("img"))
+                    {
+                        <img src="/@Model.Shop.AvatarUrl" style="margin-left:15px" />
+                    }
+                    else
+                    {
+                        <img src="@Model.Shop.AvatarUrl" style="margin-left:15px" />
+                    }
                 </div>
                 <div class="col-xs-8" style="margin-left:75px">
                     <h5 style="color:white">@Model.Shop.Name</h5>
@@ -171,40 +179,48 @@
 
         <h4>GỢI Ý CHO BẠN</h4>
         <div class="row">
-        @foreach (var productList in Model.ProductBatch)
-        {
+            @foreach (var productList in Model.ProductBatch)
+            {
                 <div class="row suggest">
-               
+
                     @foreach (var product in productList)
                     {
-                            <div class="col-md-4">
-                                <div class="item">
-                                    <!-- Hiển thị thông tin sản phẩm -->
-                                    <img src="/@product.ImageUrl" />
-                                    <h4>@product.Name</h4>
-                                    <p>$@product.OriginalPrice</p>
-                                 <button><a href="/Products/Details?id=@product.Id" role="button">Buy now</a></button>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="item">
+                                <!-- Hiển thị thông tin sản phẩm -->
+                                @if (product.ImageUrl.StartsWith("img"))
+                                {
+                                    <img src="/@product.ImageUrl" style="width:250px;height:250px" />
+                                }
+                                else
+                                {
+                                    <img src="@product.ImageUrl" style="width:250px;height:250px" />
+                                }
+                                <h4>@product.Name</h4>
+                                <p>$@product.OriginalPrice</p>
+                                <button><a href="/Products/Details?id=@product.Id" role="button">Buy now</a></button>
                             </div>
+                        </div>
                     }
-           
+
                 </div>
-                <br/>
-        }
-        <div class="shop-info">
-            <h4>THÔNG TIN SHOP</h4>
-            <div class="row">
-                <div class="col-md-6 shop-info-banner">
-                    <img class="shop-info-img" src="/@Model.Shop.AvatarUrl" />
-                </div>
-                <div class="col-md-6">
-                    <p>
-                        <span style="font-weight:bold">@Model.Shop.Name</span> <br />
-                        @Model.Shop.Description<br />
-                   
-                    </p>
+                <br />
+            }
+            <div class="shop-info">
+                <h4>THÔNG TIN SHOP</h4>
+                <div class="row">
+                    <div class="col-md-6 shop-info-banner">
+                        <img class="shop-info-img" src="/@Model.Shop.AvatarUrl" />
+                    </div>
+                    <div class="col-md-6">
+                        <p>
+                            <span style="font-weight:bold">@Model.Shop.Name</span> <br />
+                            @Model.Shop.Description<br />
+
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+    </div>

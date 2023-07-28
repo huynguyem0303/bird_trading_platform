@@ -16,6 +16,7 @@ namespace BirdTrading.Repository.Repositories
             return await _context.Set<CartDetail>()
                 .Include(x => x.Cart)
                 .Include(x => x.Product)
+                .ThenInclude(x => x.Shop)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

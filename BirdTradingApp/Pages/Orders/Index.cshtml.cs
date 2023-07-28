@@ -20,6 +20,7 @@ namespace BirdTradingApp.Pages.Orders
         public async Task OnGetAsync()
         {
             var userId = GetCurrentUserId();
+            TempData["error"] = TempData["msg"];
             if (userId > 0) Carts = await _unitOfWork.CartRepository.GetUserCartAsync(userId);
         }
 
