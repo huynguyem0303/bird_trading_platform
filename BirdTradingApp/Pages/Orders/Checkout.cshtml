@@ -14,6 +14,12 @@
         Response.Redirect("Index");
         return;
     }
+    if (Model.AddressList.Count() == 0)
+    {
+        TempData["msg"] = "Please add your default address in order to continue transaction.";
+        Response.Redirect("/Users/Index");
+        return;
+    }
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />

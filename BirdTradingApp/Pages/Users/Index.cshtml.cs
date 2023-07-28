@@ -25,7 +25,7 @@ namespace BirdTradingApp.Pages.Users
         public IList<ShippingInformation> ShippingInformations { get; set; }
         public  async Task<IActionResult> OnGet()
         {
-            String role = HttpContext.Session.GetString("Role");
+            string role = HttpContext.Session.GetString("Role");
             int id = (int)HttpContext.Session.GetInt32("Id");
          
             if(role == null)
@@ -34,6 +34,7 @@ namespace BirdTradingApp.Pages.Users
             }
             UserLogin = await _unitOfWork.UserRepository.GetUserByIdAsync(id);
             SetAll(id, "personal-info-container", "");
+            TempData["error"] = TempData["msg"];
             return Page();
         }
 

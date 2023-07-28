@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" asp-page="/Products/Details"
+                        <a class="h6 text-decoration-none text-truncate text-wrap" asp-page="/Products/Details"
                        asp-route-id="@item.Id">@item.Name</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
@@ -203,7 +203,7 @@
                     <div class="product-img position-relative overflow-hidden">
                         @if (item.ImageUrl.StartsWith("img"))
                         {
-                            <img class="img-fluid w-100" src="~/@item.ImageUrl" alt="">
+                            <img class="img-fluid w-100" src="~/@item.ImageUrl" alt="" style="width: 200px; height: 200px;">
                         }
                         else
                         {
@@ -218,7 +218,7 @@
                         </div>
                     </div>
                     <div class="text-center py-4">
-                        <a class="h6 text-decoration-none text-truncate" asp-page="/Products/Details"
+                        <a class="h6 text-decoration-none text-truncate text-wrap" asp-page="/Products/Details"
                        asp-route-id="@item.Id">@item.Name</a>
                         <div class="d-flex align-items-center justify-content-center mt-2">
                             <h5>@StringUtils.FormatCurrency(item.OriginalPrice)</h5>
@@ -260,7 +260,14 @@
                 @foreach (var item in Model.Shops)
                 {
                     <div class="bg-light p-4">
-                        <img src="@item.AvatarUrl" alt="" width="100" height="100">
+                        @if (item.AvatarUrl.StartsWith("img"))
+                        {
+                            <img src="/@item.AvatarUrl" alt="" width="100" height="100">
+                        }
+                        else
+                        {
+                            <img src="@item.AvatarUrl" alt="" width="100" height="100">
+                        }
                     </div>
                 }
                 <div class="bg-light p-4">
