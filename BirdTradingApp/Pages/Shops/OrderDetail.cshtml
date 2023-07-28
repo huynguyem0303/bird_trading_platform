@@ -68,6 +68,9 @@
         <thead>
             <tr>
                 <th>
+                    @Html.DisplayNameFor(model => model.OrderDetail[0].Id)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.OrderDetail[0].Product.Name)
                 </th>
                 <th>
@@ -150,12 +153,12 @@
     {
         <form method="post">
             <input type="hidden" name="id" value="@Model.orderid" />
-            <button type="submit" class="btn btn-primary" asp-page-handler="OnDelivering" onclick="return confirm('Are you sure ?')">OnDelivering</button>
+            <button type="submit" class="btn btn-outline-danger" asp-page-handler="OnDelivering" onclick="return confirm('Are you sure ?')">OnDelivering</button>
 
         </form>
         <form method="post">
             <input type="hidden" name="id" value="@Model.orderid" />
-            <button type="submit" class="btn btn-primary" asp-page-handler="Cancel" onclick="return confirm('Do you want to Cancel this Order?')">Cancel</button>
+            <button type="submit" class="btn btn-outline-danger" asp-page-handler="Cancel" onclick="return confirm('Do you want to Cancel this Order?')">Cancel</button>
         </form>
 
     }
@@ -163,11 +166,11 @@
     {
         <form method="post">
             <input type="hidden" name="id" value="@Model.orderid"/>
-            <button type="submit" class="btn btn-primary" asp-page-handler="Delivered" onclick="return confirm('Are you sure ?')">Delivered</button>
+            <button type="submit" class="btn btn-outline-danger" asp-page-handler="Delivered" onclick="return confirm('Are you sure ?')">Delivered</button>
         </form>
         <form method="post">
             <input type="hidden" name="id" value="@Model.orderid" />
-            <button type="submit" class="btn btn-primary" asp-page-handler="Cancel" onclick="return confirm('Do you want to Cancel this Order?')">Cancel</button>
+            <button type="submit" class="btn btn-outline-danger" asp-page-handler="Cancel" onclick="return confirm('Do you want to Cancel this Order?')">Cancel</button>
         </form>
 
     }

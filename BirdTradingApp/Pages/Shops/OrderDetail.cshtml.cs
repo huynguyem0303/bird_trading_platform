@@ -55,7 +55,7 @@ namespace BirdTradingApp.Pages.Shops
             shippingsession.Description = "Waiting For Delivery";
   
             _unitOfWork.ShippingSessionRepository.CreateSessionAysnc(shippingsession);
-            return RedirectToPage("/Shops/WaitingForDelelivering");
+            return RedirectToPage("/Shops/WaitingConfirm");
         }
         public async Task<IActionResult> OnPostOnDelivering(int id)
         {
@@ -67,7 +67,7 @@ namespace BirdTradingApp.Pages.Shops
             shippingsession.Description = "On Delivering";
 
             _unitOfWork.ShippingSessionRepository.CreateSessionAysnc(shippingsession);
-            return RedirectToPage("/Shops/OnDelivering");
+            return RedirectToPage("/Shops/WaitingForDelelivering");
         }
         public async Task<IActionResult> OnPostDelivered(int id)
         {
@@ -79,7 +79,7 @@ namespace BirdTradingApp.Pages.Shops
             shippingsession.Description = "Delivered";
 
             _unitOfWork.ShippingSessionRepository.CreateSessionAysnc(shippingsession);
-            return RedirectToPage("/Shops/CompetedOrder");
+            return RedirectToPage("/Shops/OnDelivering");
         }
         public async Task<IActionResult> OnPostCancel(int id)
         {

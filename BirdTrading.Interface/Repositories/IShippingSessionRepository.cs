@@ -9,6 +9,6 @@ namespace BirdTrading.Interface.Repositories
         Task<List<ShippingSession>> CheckSession(int id, OrderStatus status);
         bool CheckStatus(int id, OrderStatus status);
         void CreateSessionAysnc(ShippingSession session);
-        Task<List<ShippingSession?>> GetByOrderDetailIdAndStatusAsync(int id, OrderStatus status);
+        Task<List<ShippingSession?>> GetByOrderIdAndStatusAsync(int id, OrderStatus status);
     }
 }
