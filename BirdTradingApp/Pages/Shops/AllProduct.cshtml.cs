@@ -26,14 +26,14 @@ namespace BirdTradingApp.Pages.Shops
             Session = HttpContext.Session.GetInt32("Id");
 
             var shopid = _unitOfWork.ShopRepository.GetShopsUserIdAysnc((int)Session).Result.Id;
-            Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p=>p.ShopId == shopid && p.IsRemoved==false).ToList();
+            Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(p=>p.ShopId == shopid && p.IsRemoved==false).OrderByDescending(p => p.Id).ToList();
        
             CurrentFilter = searchString;
 
             if (!String.IsNullOrEmpty(searchString))
             {
 
-                Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower()) && s.ShopId == shopid && s.IsRemoved == false).ToList();
+                Product = _unitOfWork.ProductRepository.GetProductsListAsync().Result.Where(s => s.Name.Trim().ToLower().Contains(searchString.Trim().ToLower()) && s.ShopId == shopid && s.IsRemoved == false).OrderByDescending(p => p.Id).ToList();
                
             }
             return Page();
