@@ -25,6 +25,7 @@ namespace BirdTradingApp.Pages.Shops
         public Shop Shop { get; set; }
         public User User { get; set; }
         public string Email { get; set; }
+        public string msg { get; set; }
         public string Img { get; set; }
         public int? Session { get; set; }
         public IActionResult OnGet()
@@ -46,8 +47,8 @@ namespace BirdTradingApp.Pages.Shops
             Boolean validate = true;
             if (image == null)
             {
-                ModelState.AddModelError("Product.ImageUrl", "img Url cannot be null or empty");
-                validate = false;
+                msg = "img Url cannot be null or empty";
+                return Page();
             }
             if (Shop.Name.IsEmpty() || Shop.Name == null)
             {

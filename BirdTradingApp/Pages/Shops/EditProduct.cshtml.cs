@@ -52,6 +52,7 @@ namespace BirdTradingApp.Pages.Shops
         }
         public async Task<IActionResult> OnPostSaveInfo()
         {
+            Session = HttpContext.Session.GetInt32("Id");
             Boolean validate = true;
             if (Product.Name.IsEmpty() || Product.Name == null)
             {
@@ -63,12 +64,12 @@ namespace BirdTradingApp.Pages.Shops
                 ModelState.AddModelError("Product.Name", "Name must be between 3-30 character");
                 validate = false;
             }
-            if (Product.OriginalPrice <= 0)
+            if (Product.OriginalPrice <= 0 || Product.OriginalPrice >= 1000000)
             {
-                ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (Ex:1000,1000.0)");
+                ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (OriginalPrice number is from 0-1000000)");
                 validate = false;
             }
-            if (Product.Quantity <= 0 || Product.Quantity > 1000000)
+            if (Product.Quantity <= 0 || Product.Quantity >= 1000000)
             {
                 ModelState.AddModelError("Product.Quantity", "Please input valid Quantity (Quantity number is from 0-1000000)");
                 validate = false;

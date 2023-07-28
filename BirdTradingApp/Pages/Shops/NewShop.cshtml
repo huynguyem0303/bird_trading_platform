@@ -92,10 +92,15 @@
                                 <div>
                                     <div class="W50dp5">
                                         <input name="image" class="bMWDYw" type="file" accept=".jpg,.jpeg,.png" value="@Model.Img"><br />
-                                        <span asp-validation-for="Shop.AvatarUrl" class="text-danger"></span>
                                     </div>
                                 </div>
-
+                                <div>
+                                    Maximum file size 1 MB
+                                </div>
+                                <div>
+                                    Format: .JPEG, .PNG
+                                </div>
+                                <span style="color:red">@Model.msg</span>
                             </td>
                         </tr>
                         <tr>

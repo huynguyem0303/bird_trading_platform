@@ -26,9 +26,11 @@ namespace BirdTradingApp.Pages.Products
         public List<SelectListItem> CategoryType { get; set; }
         public string SelectedCategory { get; set; }
         public List<SelectListItem> Category { get; set; }
+        public string msg { get; set; }
+        public int? Session { get; set; }
         public IActionResult OnGet(int id)
         {
-
+            Session = HttpContext.Session.GetInt32("Id");
             ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             return Page();
         }
@@ -36,18 +38,20 @@ namespace BirdTradingApp.Pages.Products
 
         public async Task<ActionResult> OnPostAsync(IFormFile image)
         {
+            Session = HttpContext.Session.GetInt32("Id");
             ViewData["Category"] = new SelectList(_unitOfWork.CategoryRepository.GetListAsync().Result, "Id", "Name");
             Boolean validate = true;
+            if (image == null)
+            {
+                msg = "img Url cannot be null or empty";
+                return Page();
+            }
             if (Product.Name.IsEmpty() || Product.Name == null)
             {
                 ModelState.AddModelError("Product.Name", "Please Name cannot be null or empty");
                 validate = false;
             }
-            if (image == null)
-            {
-                ModelState.AddModelError("Product.ImageUrl", "img Url cannot be null or empty");
-                validate = false;
-            }
+            
             if (Product.Name != null)
             {
                 if (Product.Name.Length < 3 || Product.Name.Length > 30)
@@ -56,13 +60,13 @@ namespace BirdTradingApp.Pages.Products
                     validate = false;
 
                 }
-                if (Product.OriginalPrice <= 0 || Product.OriginalPrice==null)
+                if (Product.OriginalPrice <= 0 || Product.OriginalPrice >= 1000000)
                 {
-                    ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (Ex:1000,1000.0)");
+                    ModelState.AddModelError("Product.OriginalPrice", "Please input valid Price (Price number is from 0-1000000)");
                     validate = false;
 
                 }
-                if (Product.Quantity <= 0 || Product.Quantity > 1000000)
+                if (Product.Quantity <= 0 || Product.Quantity >= 1000000)
                 {
                     ModelState.AddModelError("Product.Quantity", "Please input valid Quantity (Quantity number is from 0-1000000)");
                     validate = false;

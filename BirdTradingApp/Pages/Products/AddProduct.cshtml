@@ -6,6 +6,11 @@
     var role = context.Session.GetString("Role");
     var name = context.Session.GetString("Name");
     Layout = "";
+    if (Model.Session == null)
+    {
+        Response.Redirect("/Login");
+        return;
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -68,6 +73,7 @@
                                 </a>
                                 <div class="dropdown-menu bg-dark rounded-0 border-0 m-0">
                                     <a asp-page="/Users/Index" class="dropdown-item text-light">Profile</a>
+                                    <a asp-page="/Shops/EditShop" class="dropdown-item text-light">Shop Profile</a>
                                     <a asp-page="/Login/Logout" class="dropdown-item text-light">Logout</a>
                                 </div>
                             </div>
@@ -89,10 +95,16 @@
                             <td class="Tmj5Z6">
                                 <div>
                                     <div class="W50dp5">
-                                        <input name="image" class="bMWDYw" type="file" accept=".jpg,.jpeg,.png" ><br />
+                                        <input name="image" class="bMWDYw" type="file" accept=".jpg,.jpeg,.png"><br />
                                     </div>
                                 </div>
-
+                                <div>
+                                    Maximum file size 1 MB
+                                </div>
+                                <div>
+                                    Format: .JPEG, .PNG
+                                </div>
+                                <span style="color:red">@Model.msg</span>
                             </td>
                         </tr>
                         <tr>
@@ -101,7 +113,7 @@
                                 <div>
                                     <div class="W50dp5">
                                         <input asp-for="Product.Name" class="CMyrTJ" />
-                                       
+
                                     </div>
                                     <span asp-validation-for="Product.Name" class="text-danger"></span>
                                 </div>
@@ -115,7 +127,7 @@
                                 <div>
                                     <div class="W50dp5">
                                         <input asp-for="Product.OriginalPrice" type="number" class="CMyrTJ" />
-                                        
+
                                     </div>
                                     <span asp-validation-for="Product.OriginalPrice" class="text-danger"></span>
 
@@ -129,7 +141,7 @@
                                 <div>
                                     <div class="W50dp5">
                                         <input asp-for="Product.Quantity" class="CMyrTJ" />
-                                       
+
                                     </div>
                                     <span asp-validation-for="Product.Quantity" class="text-danger"></span>
                                 </div>
@@ -142,14 +154,14 @@
                                 <div>
                                     <div class="W50dp5">
                                         <input asp-for="Product.Description" class="CMyrTJ" />
-                                        
+
                                     </div>
                                     <span asp-validation-for="Product.Description" class="text-danger"></span>
                                 </div>
 
                             </td>
                         </tr>
-                      
+
                         <tr>
                             <td class="espR83 qQTY0O">Category</td>
                             <td class="Tmj5Z6">
@@ -161,13 +173,13 @@
 
                             </td>
                         </tr>
-             
+
                         <br />
                         <tr>
                             <td class="Tmj5Z6">
                                 <div>
                                     <input type="submit" class="btn btn-outline-danger" aria-disabled="false" value="Save" />
-                                 
+
                                 </div>
 
                             </td>
@@ -210,7 +222,7 @@
     <script src="~/shop-vendor//js/demo/chart-pie-demo.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     @section Scripts{
-            <script type="text/javascript" >
+        <script type="text/javascript">
             $("#myDropdown").change(function () {
                 var categorytype = $("#myDropdown").val();
                 $.ajax({

@@ -14,6 +14,7 @@ namespace BirdTrading.Domain.Models
         public string Phone { get; set; }
         [Required]
         public string Email { get; set; }
+        [Required]
         public string Description { get; set; }
         public bool IsBlocked { get; set; }
         public float Rating { get; set; }
