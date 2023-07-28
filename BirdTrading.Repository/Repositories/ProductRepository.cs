@@ -3,6 +3,7 @@ using BirdTrading.Domain.Models;
 using BirdTrading.Interface.Repositories;
 using BirdTrading.Utils.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace BirdTrading.Repository.Repositories
 {
@@ -36,20 +37,24 @@ namespace BirdTrading.Repository.Repositories
                 .Include(x => x.OrderDetails)
                 .ThenInclude(x => x.Order)
                 .ThenInclude(x => x.User)
-                .FirstOrDefaultAsync(x => x.Id == id);
+                .FirstOrDefaultAsync(x => x.Id == id && !x.Shop.IsBlocked && !x.IsRemoved);
         }
         public async Task<List<Product?>> GetProductsListAsync()
         {
             var list= await _context.Set<Product>()
                 .Include(x => x.Shop)
-                .Include(x => x.Category).ToListAsync();
+                .Include(x => x.Category)
+                .Where(x => !x.Shop.IsBlocked && !x.IsRemoved)
+                .ToListAsync();
             return list;
         }
 
         public override async Task<Pagination<Product>> GetPaginationsAsync(int pageIndex, int pageSize)
         {
-            var totalCount = await _context.Set<Product>().CountAsync();
-            var items = await _context.Set<Product>()
+            var source = _context.Set<Product>().Where(x => !x.Shop.IsBlocked && !x.IsRemoved);
+            //
+            var totalCount = await source.CountAsync();
+            var items = await source
                 .Include(x => x.OrderDetails)
                 .AsNoTracking()
                 .Skip(pageIndex * pageSize)
@@ -73,7 +78,7 @@ namespace BirdTrading.Repository.Repositories
         public async Task<Pagination<Product>> GetProductPagingByCategoryAsync(int category, int pageIndex, int pageSize)
         {
             var products = _context.Set<Product>()
-                .Where(x => x.CategoryId == category && x.IsRemoved == false)
+                .Where(x => x.CategoryId == category && x.IsRemoved == false && !x.Shop.IsBlocked)
                 .Include(x => x.Category)
                 .AsQueryable();
             //
@@ -95,7 +100,7 @@ namespace BirdTrading.Repository.Repositories
         public async Task<Pagination<Product>> GetProductPagingByCategoryTypeAsync(int categoryType, int pageIndex, int pageSize)
         {
             var products = _context.Set<Product>()
-                .Where(x => x.Category.TypeId == categoryType && x.IsRemoved == false)
+                .Where(x => x.Category.TypeId == categoryType && x.IsRemoved == false && !x.Shop.IsBlocked)
                 .Include(x => x.Category)
                 .AsQueryable();
             //
@@ -130,7 +135,7 @@ namespace BirdTrading.Repository.Repositories
         public async Task<Pagination<Product>> SearchProductPagingAsync(string search, int pageIndex, int pageSize)
         {
             var products = _context.Set<Product>()
-                .Where(x => x.Name.ToUpper().Contains(search.ToUpper()) && x.IsRemoved == false)
+                .Where(x => x.Name.ToUpper().Contains(search.ToUpper()) && x.IsRemoved == false && !x.Shop.IsBlocked)
                 .AsQueryable();
             //
             var totalCount = await products.CountAsync();
@@ -147,6 +152,26 @@ namespace BirdTrading.Repository.Repositories
             };
             return result;
         }
+
+        public override async Task<Pagination<Product>> GetDescendingPaginationAsync(Expression<Func<Product, int>> keySelector, int pageIndex, int pageSize)
+        {
+            var source = _context.Set<Product>().Where(x => x.IsRemoved == false && !x.Shop.IsBlocked);
+            //
+            var totalCount = await source.CountAsync();
+            var tempItems = source.OrderByDescending(keySelector).AsQueryable();
+            var items = await tempItems.AsNoTracking()
+                .Skip(pageIndex * pageSize).Take(pageSize).ToListAsync();
+
+            var result = new Pagination<Product>()
+            {
+                Items = items,
+                PageIndex = pageIndex,
+                PageSize = pageSize,
+                TotalItemsCount = totalCount
+            };
+            return result;
+        }
+
         public async Task<Product> UpdateImageAsync(string url, int userId)
         {
             var currentUser = await _context.Set<Product>().FirstOrDefaultAsync(u => u.Id == userId);
